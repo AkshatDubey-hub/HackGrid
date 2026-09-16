@@ -18,7 +18,7 @@ Despite substantial statutory funding, millions of intended beneficiaries remain
 
 ## 2. Proposed Solution
 
-**[Project Name]** is a zero-friction, conversational advisory engine powered by the Google Gemini API. It bridges the gap between citizens and institutional support by serving as an intelligent advisory layer.
+**FetchFunds** is a zero-friction, conversational advisory engine powered by the Google Gemini API. It bridges the gap between citizens and institutional support by serving as an intelligent advisory layer.
 
 Using a single natural language input (spoken vernacular or text), an individual can simply describe their background, location, social category, and requirement (e.g., *"I run a small tailoring shop in a semi-urban town, belong to an SC community, have no collateral, and need ₹50,000 for a commercial sewing machine"*).
 
