@@ -1,10 +1,13 @@
 import os
+from pathlib import Path
+
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from google.cloud import firestore
 
-# OPTIONAL: Set credentials directly in code if you didn't set the environment variable
-# os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "serviceAccountKey.json"
+credentials_path = Path(__file__).with_name("serviceAccountKey.json")
+if credentials_path.is_file() and "GOOGLE_APPLICATION_CREDENTIALS" not in os.environ:
+    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = str(credentials_path)
 
 # Initialize FastAPI app
 app = FastAPI(title="Firestore Integration API")
@@ -30,7 +33,7 @@ async def create_user(user: UserData):
         
         # Add a new document with an auto-generated ID
         # user.dict() converts the Pydantic model to a Python dictionary
-        update_time, doc_ref = users_ref.add(user.dict())
+        _, doc_ref = users_ref.add(user.model_dump())
         
         return {
             "status": "success",
