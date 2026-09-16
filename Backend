@@ -1,5 +1,6 @@
 import json
 import os
+import time
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -36,7 +37,7 @@ client = genai.Client(api_key=GEMINI_KEY)
 # Make sure 'serviceAccountKey.json' is in the same directory as this script.
 db = None
 try:
-    cred = credentials.Certificate("serviceAccountKey.json")
+    cred = credentials.Certificate("firebase_credentials.json")
     firebase_admin.initialize_app(cred)
     db = firestore.client()
     print("Successfully connected to Firestore.")
@@ -74,70 +75,79 @@ class LoanRecommendation(BaseModel):
 # -------------------------------------------------------------
 # 6. Single-Prompt GenAI Route
 # -------------------------------------------------------------
+def fetch_schemes_from_firestore(collection_name: str = "schemes") -> list[dict]:
+    """Retrieves all uploaded government scheme documents from Firestore."""
+    try:
+        docs = db.collection(collection_name).stream()
+        schemes = []
+        for doc in docs:
+            scheme_data = doc.to_dict()
+            scheme_data["id"] = doc.id
+            schemes.append(scheme_data)
+        return schemes
+    except Exception as e:
+        print(f"Firestore query failed: {e}")
+        return []
 @app.post("/api/match-loan", response_model=LoanRecommendation)
 def match_loan(user: ApplicantProfile):
-    # Single-prompt context: includes real Indian government loan scheme criteria
-    prompt = f"""
-    You are an expert advisor on Government of India and State Government welfare and financial credit schemes.
-    Evaluate the following applicant profile and select the single best subsidized loan scheme.
+    # 1. Fetch live records from Firestore
+    available_schemes = fetch_schemes_from_firestore(collection_name="schemes")
 
-    Applicant Profile:
+    if not available_schemes:
+        raise HTTPException(
+            status_code=500,
+            detail="No schemes found in Firebase. Check collection name or documents."
+        )
+
+    # 2. Format database records for the prompt
+    schemes_json_str = json.dumps(available_schemes, indent=2)
+
+    prompt = f"""
+    You are an expert advisor on Government of India and State financial schemes.
+    Evaluate the applicant against ONLY the authorized schemes provided below from our official database.
+
+    === APPLICANT PROFILE ===
     - Name: {user.name}
     - Age: {user.age}
     - Gender: {user.gender}
-    - Social Category (Caste): {user.caste_category}
+    - Caste / Category: {user.caste_category}
     - Occupation: {user.occupation}
-    - Annual Household Income: INR {user.annual_income}
-    - Requested Loan Amount: INR {user.requested_amount}
-    - Agricultural Land: {user.land_holding_acres} acres
+    - Annual Income: INR {user.annual_income}
+    - Requested Amount: INR {user.requested_amount}
+    - Land Holding: {user.land_holding_acres} acres
     - State: {user.state}
     - Purpose: {user.purpose}
 
-    Target Schemes Reference:
-    1. Kisan Credit Card (KCC): For active farmers with land. Limit up to INR 3 Lakhs, 3% interest subvention (effective 4%).
-    2. PMMY Mudra (Shishu <=50k, Kishore <=5L, Tarun <=10L): Collateral-free micro-credit for non-farm business & artisans.
-    3. Stand-Up India: Greenfield projects between 10L to 1 Crore strictly for SC, ST, or Women entrepreneurs.
-    4. PMEGP: Credit linked capital subsidy (up to 35% subsidy for SC/ST/OBC/Women) for setting up micro-enterprises.
-    5. NSFDC (SC Finance): Concessional 5% interest rate loans specifically for Scheduled Caste applicants.
-    6. NBCFDC: Subsidized finance schemes specifically for OBC individuals under specified income limits.
-    7. PM-SVANidhi: Micro working-capital credit up to INR 50,000 for urban street vendors and daily wage trades.
+    === AVAILABLE SCHEMES DATABASE (PULLED FROM FIREBASE) ===
+    {schemes_json_str}
 
-    Instructions:
-    - Prioritize social category (caste/gender) benefits, interest waivers, and capital subsidies.
-    - Pick the best single scheme and give a direct, realistic explanation.
+    === INSTRUCTIONS ===
+    1. Select the SINGLE BEST scheme from the provided Firebase list based on matching caste benefits, land criteria, occupation, and financial concessions.
+    2. Populate `firebase_scheme_id` with the exact `id` from the database.
+    3. Use the exact subsidy percentages and interest rate structures recorded in the scheme database.
+    4. Provide a clear eligibility verdict explaining why this specific scheme maximizes benefits for this applicant.
     """
 
-    try:
-        # Single prompt execution with strict JSON formatting enforced
-        response = client.models.generate_content(
-            model="gemini-3.6-flash", 
-            contents=prompt,
-            config=types.GenerateContentConfig(
-                response_mime_type="application/json",
-                response_schema=LoanRecommendation,
-                temperature=0.1,
-            ),
-        )
-        
-        recommendation_data = json.loads(response.text)
-
-        # Save the application and AI recommendation to Firestore
+    # 3. Call Gemini with retry handling
+    max_retries = 3
+    for attempt in range(max_retries):
         try:
-            if db is not None:
-                doc_data = {
-                    "applicant_profile": user.model_dump(),
-                    "recommendation": recommendation_data,
-                    "timestamp": firestore.SERVER_TIMESTAMP,
-                }
-                db.collection("loan_applications").add(doc_data)
-            else:
-                print("Warning: DB not initialized, skipping save.")
-            
-        except Exception as db_e:
-            # We print the error but don't fail the API call if the DB save fails
-            print(f"Warning: Could not save to Firestore: {str(db_e)}")
+            response = client.models.generate_content(
+                model="gemini-3.6-flash",
+                contents=prompt,
+                config=types.GenerateContentConfig(
+                    response_mime_type="application/json",
+                    response_schema=LoanRecommendation,
+                    temperature=0.1,
+                ),
+            )
+            return json.loads(response.text)
 
-        return recommendation_data
+        except Exception as e:
+            err_str = str(e)
+            if "503" in err_str or "high demand" in err_str.lower():
+                time.sleep(2)
+                continue
+            raise HTTPException(status_code=500, detail=f"Scheme matching failed: {err_str}")
 
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Scheme matching failed: {str(e)}")
+    raise HTTPException(status_code=503, detail="Model temporarily unavailable after retries.")
