@@ -1,1 +1,61 @@
+import os
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
+from google.cloud import firestore
 
+# OPTIONAL: Set credentials directly in code if you didn't set the environment variable
+# os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "serviceAccountKey.json"
+
+# Initialize FastAPI app
+app = FastAPI(title="Firestore Integration API")
+
+# Initialize Firestore Client
+# It automatically picks up the GOOGLE_APPLICATION_CREDENTIALS env variable
+db = firestore.Client()
+
+# Define the Pydantic model for user input validation
+class UserData(BaseModel):
+    name: str
+    email: str
+    age: int
+
+@app.post("/users/")
+async def create_user(user: UserData):
+    """
+    Accepts user data and stores it in the 'users' Firestore collection.
+    """
+    try:
+        # Reference to the 'users' collection
+        users_ref = db.collection('users')
+        
+        # Add a new document with an auto-generated ID
+        # user.dict() converts the Pydantic model to a Python dictionary
+        update_time, doc_ref = users_ref.add(user.dict())
+        
+        return {
+            "status": "success",
+            "message": "User added successfully",
+            "document_id": doc_ref.id
+        }
+    except Exception as e:
+        # Return a 500 Internal Server Error if something goes wrong
+        raise HTTPException(status_code=500, detail=f"Failed to add user: {str(e)}")
+
+@app.get("/users/")
+async def get_users():
+    """
+    Retrieves all users from the 'users' collection to verify the data was stored.
+    """
+    try:
+        users_ref = db.collection('users')
+        docs = users_ref.stream()
+        
+        users_list = []
+        for doc in docs:
+            user_dict = doc.to_dict()
+            user_dict['id'] = doc.id
+            users_list.append(user_dict)
+            
+        return {"users": users_list}
+    except Exception as e:
+         raise HTTPException(status_code=500, detail=f"Failed to fetch users: {str(e)}")
