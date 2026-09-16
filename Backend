@@ -1,1 +1,103 @@
+import json
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel, Field
+from google import genai
+from google.genai import types
 
+# -------------------------------------------------------------
+# 1. Initialize API & CORS
+# -------------------------------------------------------------
+app = FastAPI(title="Govt Loan Matcher - Hackathon API")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# PASTE YOUR GEMINI API KEY HERE:
+GEMINI_KEY = "AQ.Ab8RN6IB4LutyyXYzlLwnNw53ojtZKVShdofZ-wTpgnC-l5EfA"
+client = genai.Client(api_key=GEMINI_KEY)
+
+# -------------------------------------------------------------
+# 2. Input Data Model (What frontend sends)
+# -------------------------------------------------------------
+class ApplicantProfile(BaseModel):
+    name: str = Field(..., example="Ramesh Kumar")
+    age: int = Field(..., example=34)
+    gender: str = Field(..., example="Male")
+    caste_category: str = Field(..., example="SC")        # General, SC, ST, OBC
+    occupation: str = Field(..., example="Farmer")        # Farmer, Artisan, Small Business, Student
+    annual_income: float = Field(..., example=120000.0)
+    requested_amount: float = Field(..., example=150000.0)
+    land_holding_acres: float = Field(0.0, example=2.0)
+    purpose: str = Field(..., example="Purchase seeds and drip irrigation")
+    state: str = Field("Tamil Nadu", example="Tamil Nadu")
+
+# -------------------------------------------------------------
+# 3. Output Data Model (Structured JSON returned to frontend)
+# -------------------------------------------------------------
+class LoanRecommendation(BaseModel):
+    applicant_name: str
+    recommended_scheme: str
+    administering_ministry: str
+    subsidy_or_concession_details: str
+    interest_rate_structure: str
+    eligibility_verdict: str
+    key_documents_required: list[str]
+    alternative_options: list[str]
+
+# -------------------------------------------------------------
+# 4. Single-Prompt GenAI Route
+# -------------------------------------------------------------
+@app.post("/api/match-loan", response_model=LoanRecommendation)
+def match_loan(user: ApplicantProfile):
+    # Single-prompt context: includes real Indian government loan scheme criteria
+    prompt = f"""
+    You are an expert advisor on Government of India and State Government welfare and financial credit schemes.
+    Evaluate the following applicant profile and select the single best subsidized loan scheme.
+
+    Applicant Profile:
+    - Name: {user.name}
+    - Age: {user.age}
+    - Gender: {user.gender}
+    - Social Category (Caste): {user.caste_category}
+    - Occupation: {user.occupation}
+    - Annual Household Income: INR {user.annual_income}
+    - Requested Loan Amount: INR {user.requested_amount}
+    - Agricultural Land: {user.land_holding_acres} acres
+    - State: {user.state}
+    - Purpose: {user.purpose}
+
+    Target Schemes Reference:
+    1. Kisan Credit Card (KCC): For active farmers with land. Limit up to INR 3 Lakhs, 3% interest subvention (effective 4%).
+    2. PMMY Mudra (Shishu <=50k, Kishore <=5L, Tarun <=10L): Collateral-free micro-credit for non-farm business & artisans.
+    3. Stand-Up India: Greenfield projects between 10L to 1 Crore strictly for SC, ST, or Women entrepreneurs.
+    4. PMEGP: Credit linked capital subsidy (up to 35% subsidy for SC/ST/OBC/Women) for setting up micro-enterprises.
+    5. NSFDC (SC Finance): Concessional 5% interest rate loans specifically for Scheduled Caste applicants.
+    6. NBCFDC: Subsidized finance schemes specifically for OBC individuals under specified income limits.
+    7. PM-SVANidhi: Micro working-capital credit up to INR 50,000 for urban street vendors and daily wage trades.
+
+    Instructions:
+    - Prioritize social category (caste/gender) benefits, interest waivers, and capital subsidies.
+    - Pick the best single scheme and give a direct, realistic explanation.
+    """
+
+    try:
+        # Single prompt execution with strict JSON formatting enforced
+        response = client.models.generate_content(
+            model="gemini-3.8-flash",
+            contents=prompt,
+            config=types.GenerateContentConfig(
+                response_mime_type="application/json",
+                response_schema=LoanRecommendation,
+                temperature=0.1,
+            ),
+        )
+        return json.loads(response.text)
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Scheme matching failed: {str(e)}")
