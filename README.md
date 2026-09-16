@@ -128,3 +128,13 @@ The solution is intentionally designed for minimal infrastructure footprint and 
 - **Kiosk & Field Partner Tool:** Provide the system to Village Level Entrepreneurs (VLEs) and banking correspondents (*Bank Mitras*) as a rapid advisory reference.
 - **Priority Sector Lending (PSL) Enablement:** Offer banks and microfinance institutions pre-informed, document-ready applicants, reducing turnaround times and rejection rates.
 - **Open NGO / Welfare API:** Provide API access for micro-lending portals, non-profits, and livelihood missions to embed automated scheme matching into their operations.
+
+###Profitability:
+-- Bank PSL Sourcing / Origination Fees:
+1) Commercial and Regional Rural Banks (RRBs) are mandated by the Reserve Bank of India (RBI) to allocate 40% to 75% of their lending to Priority Sectors (MSMEs, street vendors, weaker sections, agriculture).- Banks routinely struggle to source viable, document-ready applicants from marginalized communities without heavy field-agent operational expenses.
+2) The platform monetizes by partnering with banks and Business Correspondents (BCs), earning an origination/referral fee (0.5%–1% of disbursed loan value) for delivering pre-qualified applicants equipped with complete checklists.
+--B2B API Licensing for FinTech & AgTech:
+1) FinTech apps (e.g., digital bookkeeping, merchant QR platforms, supply-chain apps) want to offer credit and grant discovery to keep users engaged.
+2) JanSetu licenses its single-prompt matching engine via a developer API, charging per-query API access fees.
+CSR & Livelihood Mission Grants:
+3) In the early stages, non-dilutive corporate social responsibility (CSR) grants under Schedule VII of the Companies Act fund inference infrastructure, specifically under financial inclusion and digital literacy mandates.
