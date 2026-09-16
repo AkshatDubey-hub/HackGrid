@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GovFund - Government Scheme Portal</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --accent-color: #27ae60;
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-main: #333333;
+            --text-light: #666666;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+
+        header p {
+            margin-top: 0.5rem;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* Container for the entire content */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* Top 3 Schemes Grid */
+        .top-schemes-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 4rem;
+        }
+
+        /* Base styles for the square cards */
+        .square-card {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--card-bg);
+            text-decoration: none;
+            color: var(--text-main);
+            width: 250px;
+            height: 250px; /* Forces the square shape */
+            padding: 1.5rem;
+            text-align: center;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-sizing: border-box;
+            border: 2px solid transparent;
+        }
+
+        .square-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            border-color: var(--accent-color);
+        }
+
+        .square-card h2 {
+            margin: 0 0 10px 0;
+            font-size: 1.3rem;
+            color: var(--primary-color);
+        }
+
+        .square-card p {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin: 0;
+        }
+
+        .rank-badge {
+            background-color: var(--accent-color);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        /* Making the 1st scheme (Middle) slightly larger to emphasize it */
+        .rank-1 {
+            transform: scale(1.1);
+            z-index: 2;
+            border: 2px solid var(--accent-color);
+        }
+        
+        .rank-1:hover {
+            transform: scale(1.1) translateY(-5px);
+        }
+
+        /* Section Title for the List */
+        .section-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--primary-color);
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 10px;
+        }
+
+        /* List Layout for remaining schemes */
+        .list-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding-bottom: 4rem;
+        }
+
+        .list-item {
+            display: flex;
+            align-items: center;
+            background-color: var(--card-bg);
+            text-decoration: none;
+            color: var(--text-main);
+            padding: 1.5rem 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: background-color 0.2s ease, transform 0.2s ease;
+            border-left: 5px solid var(--accent-color);
+        }
+
+        .list-item:hover {
+            background-color: #f1f8f5;
+            transform: translateX(5px);
+        }
+
+        .list-item-content h3 {
+            margin: 0 0 5px 0;
+            color: var(--primary-color);
+        }
+
+        .list-item-content p {
+            margin: 0;
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        /* Responsive design for smaller screens */
+        @media (max-width: 800px) {
+            .top-schemes-wrapper {
+                flex-direction: column;
+            }
+            .rank-1 {
+                transform: scale(1);
+                order: -1; /* Puts the 1st rank at the top on mobile */
+            }
+            .square-card {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>GovFund Portal</h1>
+        <p>Empowering Your Business and Farming Goals with Government Support</p>
+    </header>
+
+    <div class="container">
+        
+        <!-- TOP 3 SCHEMES -->
+        <!-- Order in HTML: Rank 2 (Left), Rank 1 (Middle), Rank 3 (Right) -->
+        <div class="top-schemes-wrapper">
+            
+            <!-- 2nd Rank (Left) -->
+            <a href="https://www.standupmitra.in/" target="_blank" class="square-card rank-2">
+                <div class="rank-badge">2</div>
+                <h2>Stand-Up India</h2>
+                <p>Loans from ₹10 lakh to ₹1 crore for SC/ST and women entrepreneurs.</p>
+            </a>
+
+            <!-- 1st Rank (Middle) - Emphasized with .rank-1 class -->
+            <a href="https://www.mudra.org.in/" target="_blank" class="square-card rank-1">
+                <div class="rank-badge">1</div>
+                <h2>PM MUDRA Yojana</h2>
+                <p>Micro-credit up to ₹10 lakh for non-corporate, non-farm small/micro enterprises.</p>
+            </a>
+
+            <!-- 3rd Rank (Right) -->
+            <a href="https://www.kviconline.gov.in/pmegpeportal/pmegphome/index.jsp" target="_blank" class="square-card rank-3">
+                <div class="rank-badge">3</div>
+                <h2>PMEGP Scheme</h2>
+                <p>Credit-linked subsidy program for generating employment in rural and urban areas.</p>
+            </a>
+
+        </div>
+
+        <h2 class="section-title">More Government Loan Schemes</h2>
+
+        <!-- SCROLLABLE LIST OF REMAINING SCHEMES -->
+        <div class="list-container">
+            
+            <a href="https://pmkisan.gov.in/" target="_blank" class="list-item">
+                <div class="list-item-content">
+                    <h3>4. Kisan Credit Card (KCC)</h3>
+                    <p>Provides farmers with timely access to credit for agricultural and allied expenses.</p>
+                </div>
+            </a>
+
+            <a href="https://www.cgtmse.in/" target="_blank" class="list-item">
+                <div class="list-item-content">
+                    <h3>5. CGTMSE Scheme</h3>
+                    <p>Collateral-free credit support to Micro and Small Enterprises (MSEs).</p>
+                </div>
+            </a>
+
+            <a href="https://pmsvanidhi.mohua.gov.in/" target="_blank" class="list-item">
+                <div class="list-item-content">
+                    <h3>6. PM SVANidhi</h3>
+                    <p>Special micro-credit facility for street vendors to resume their livelihoods.</p>
+                </div>
+            </a>
+
+            <a href="https://agriinfra.dac.gov.in/" target="_blank" class="list-item">
+                <div class="list-item-content">
+                    <h3>7. Agriculture Infrastructure Fund</h3>
+                    <p>Medium to long-term debt financing for post-harvest management infrastructure.</p>
+                </div>
+            </a>
+
+            <a href="https://nsfdc.nic.in/" target="_blank" class="list-item">
+                <div class="list-item-content">
+                    <h3>8. NSFDC Loan Schemes</h3>
+                    <p>Financial assistance for the economic empowerment of Scheduled Castes.</p>
+                </div>
+            </a>
+
+        </div>
+    </div>
+
+</body>
+</html>
