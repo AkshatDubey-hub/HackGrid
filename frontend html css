@@ -451,7 +451,7 @@
 
                         <div class="loan-card" onclick="selectLoan('machinery', this)">
                             <div class="loan-icon-wrap">
-                                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l-.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
                             </div>
                             <div class="loan-title">Machinery & Tech</div>
                             <div class="loan-desc">Upgrade equipment or manufacturing assets.</div>
@@ -546,6 +546,7 @@
     <script>
         let hasConsented = false;
         let selectedLoanType = null;
+        let isUserLoggedIn = false; // Tracks if the user came from the login flow
 
         function openLogin() {
             document.getElementById('view-home').classList.remove('active');
@@ -554,11 +555,16 @@
         }
 
         function submitLogin() {
+            isUserLoggedIn = true;
             document.getElementById('view-login').classList.remove('active');
             document.getElementById('centered-app-view').classList.add('active');
             document.body.classList.add('creme-bg');
             document.body.style.backgroundColor = ''; 
-            document.getElementById('consent-modal').classList.add('active');
+            
+            // If they haven't consented yet, show the modal popup
+            if (!hasConsented) {
+                document.getElementById('consent-modal').classList.add('active');
+            }
             window.scrollTo(0, 0);
         }
 
@@ -590,13 +596,15 @@
             document.getElementById('view-policy').classList.remove('active');
             document.getElementById('view-cookies').classList.remove('active');
 
-            if (hasConsented) {
+            // If the user is logged in (meaning they opened it from the popup), return to dashboard and reopen modal if unconsented
+            if (isUserLoggedIn) {
                 document.getElementById('centered-app-view').classList.add('active');
-            } else {
-                document.getElementById('view-home').classList.add('active');
-                if (document.getElementById('centered-app-view').classList.contains('active') && !hasConsented) {
+                if (!hasConsented) {
                     document.getElementById('consent-modal').classList.add('active');
                 }
+            } else {
+                // Otherwise they came from the home page footer
+                document.getElementById('view-home').classList.add('active');
             }
             window.scrollTo(0, 0);
         }
