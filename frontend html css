@@ -54,6 +54,9 @@
         .view-wrapper.active { display: flex; }
         #view-home.active { display: block; }
         
+        /* Smooth transition for form steps */
+        .fade-step { animation: fade-in 400ms ease-out forwards; }
+
         #view-login {
             background-color: #0B120C;
             background-image: repeating-linear-gradient(-45deg, #0B120C, #0B120C 20px, #111B13 20px, #111B13 40px);
@@ -112,28 +115,12 @@
             padding: 32px;
             backdrop-filter: blur(10px);
         }
-        .serve-card h4 {
-            color: #6EE7B7;
-            font-size: 20px;
-            font-weight: 700;
-            margin-bottom: 12px;
-        }
-        .serve-card p {
-            color: #95A89A;
-            font-size: 15px;
-            line-height: 1.6;
-            margin-bottom: 0;
-        }
+        .serve-card h4 { color: #6EE7B7; font-size: 20px; font-weight: 700; margin-bottom: 12px; }
+        .serve-card p { color: #95A89A; font-size: 15px; line-height: 1.6; margin-bottom: 0; }
 
         .quote-section {
-            text-align: center;
-            padding: 40px 20px;
-            margin: 60px 0;
-            font-style: italic;
-            font-size: 22px;
-            color: #A7F3D0;
-            font-family: 'Outfit', sans-serif;
-            letter-spacing: -0.01em;
+            text-align: center; padding: 40px 20px; margin: 60px 0; font-style: italic;
+            font-size: 22px; color: #A7F3D0; font-family: 'Outfit', sans-serif; letter-spacing: -0.01em;
         }
 
         .btn-enter {
@@ -144,55 +131,21 @@
 
         /* ================= HOME PAGE FOOTER WITH GRADIENT ANIMATION ================= */
         .home-footer-section {
-            background-color: #F4F6F4;
-            color: #708275;
-            padding: 90px 40px;
-            margin-top: 120px;
-            position: relative;
-            z-index: 2;
-            border-top: 1px solid #E2E8E4;
+            background-color: #F4F6F4; color: #708275; padding: 90px 40px; margin-top: 120px;
+            position: relative; z-index: 2; border-top: 1px solid #E2E8E4;
         }
-        .home-footer-grid {
-            max-width: 700px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 100px;
-        }
-        .home-footer-col h3 {
-            font-size: 13px;
-            font-weight: 800;
-            letter-spacing: 2.5px;
-            color: #5E7365;
-            margin-bottom: 32px;
-            text-transform: uppercase;
-        }
-        .home-footer-links {
-            display: flex;
-            flex-direction: column;
-            gap: 22px;
-        }
+        .home-footer-grid { max-width: 700px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 100px; }
+        .home-footer-col h3 { font-size: 13px; font-weight: 800; letter-spacing: 2.5px; color: #5E7365; margin-bottom: 32px; text-transform: uppercase; }
+        .home-footer-links { display: flex; flex-direction: column; gap: 22px; }
         .home-footer-link {
-            font-size: 20px;
-            font-weight: 700;
-            color: #708275;
-            cursor: pointer;
-            transition: color 0.3s ease;
-            width: fit-content;
-            letter-spacing: -0.01em;
-            text-decoration: none;
+            font-size: 20px; font-weight: 700; color: #708275; cursor: pointer; transition: color 0.3s ease;
+            width: fit-content; letter-spacing: -0.01em; text-decoration: none;
         }
         .home-footer-link:hover {
-            background: linear-gradient(to right, #9333ea, #db2777, #9333ea);
-            background-size: 200% auto;
-            color: transparent;
-            -webkit-background-clip: text;
-            background-clip: text;
-            animation: gradient-flow 2.5s linear infinite;
+            background: linear-gradient(to right, #9333ea, #db2777, #9333ea); background-size: 200% auto;
+            color: transparent; -webkit-background-clip: text; background-clip: text; animation: gradient-flow 2.5s linear infinite;
         }
-        @keyframes gradient-flow {
-            to { background-position: 200% center; }
-        }
+        @keyframes gradient-flow { to { background-position: 200% center; } }
 
         /* ================= 2. APP VIEW (CENTERED DASHBOARD CARD) ================= */
         #centered-app-view { flex-grow: 1; justify-content: center; align-items: center; padding: 60px 20px; position: relative; }
@@ -205,55 +158,40 @@
         .card-page.active { display: flex; flex-direction: column; }
 
         .loan-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 14px;
-            margin-bottom: 28px;
-            margin-top: 16px;
-            max-height: 400px;
-            overflow-y: auto;
-            padding-right: 4px;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+            margin-bottom: 28px; margin-top: 16px; max-height: 400px; overflow-y: auto; padding-right: 4px;
         }
         @media (max-width: 480px) { .loan-grid { grid-template-columns: 1fr; } }
         
         .loan-card {
-            border: 2px solid var(--border);
-            border-radius: 16px;
-            padding: 18px;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            background: #fdfdfd;
+            border: 2px solid var(--border); border-radius: 16px; padding: 18px; cursor: pointer; transition: all 0.25s ease;
+            display: flex; flex-direction: column; align-items: flex-start; background: #fdfdfd;
         }
-        .loan-card:hover {
-            border-color: #B4C4B9;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
-        }
-        .loan-card.active {
-            border-color: var(--primary);
-            background: #F0FDF4; 
-            box-shadow: 0 8px 20px rgba(61, 112, 77, 0.12);
-        }
+        .loan-card:hover { border-color: #B4C4B9; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.05); }
+        .loan-card.active { border-color: var(--primary); background: #F0FDF4; box-shadow: 0 8px 20px rgba(61, 112, 77, 0.12); }
         
         .loan-icon-wrap {
             width: 40px; height: 40px; border-radius: 10px; background: #E8ECE9; 
-            display: flex; align-items: center; justify-content: center; 
-            margin-bottom: 12px; color: var(--primary); transition: all 0.25s ease;
+            display: flex; align-items: center; justify-content: center; margin-bottom: 12px; color: var(--primary); transition: all 0.25s ease;
         }
         .loan-card.active .loan-icon-wrap { background: var(--primary); color: white; }
         
         .loan-title { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 15px; color: var(--text-main); margin-bottom: 4px; letter-spacing: -0.01em;}
         .loan-desc { font-size: 12px; color: var(--text-muted); line-height: 1.4; font-weight: 500; }
 
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; color: var(--text-muted); }
+        .form-group input, .form-group select { 
+            width: 100%; padding: 14px 16px; border: 1px solid var(--border); border-radius: 12px; font-size: 15px; outline: none; transition: all 0.2s;
+            font-family: inherit; font-weight: 600; color: var(--text-main); background: #fdfdfd;
+        }
+        .form-group input:focus, .form-group select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(61, 112, 77, 0.1); }
+
+
         /* ================= 3. CONSENT MODAL (POPUP) ================= */
         .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(11, 18, 12, 0.65); backdrop-filter: blur(8px);
-            display: none; justify-content: center; align-items: center; z-index: 100;
-            animation: fade-in 300ms ease-out forwards; padding: 20px;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(11, 18, 12, 0.65); backdrop-filter: blur(8px);
+            display: none; justify-content: center; align-items: center; z-index: 100; animation: fade-in 300ms ease-out forwards; padding: 20px;
         }
         .modal-overlay.active { display: flex; }
         .modal-content {
@@ -390,6 +328,7 @@
               <p class="text-xs sm:text-sm text-[#95A89A] mb-6 font-medium">Enter your unique account details below to unlock personalized funding options.</p>
       
               <form onsubmit="event.preventDefault(); submitLogin();" class="space-y-4">
+                
                 <div>
                   <label class="block text-[11px] font-bold uppercase tracking-[0.1em] text-[#8DA092] mb-1.5">USERNAME:</label>
                   <input type="text" placeholder="e.g. rahul_sharma99" class="w-full bg-[#1F2E22] text-white placeholder-[#5E7365] text-sm font-medium rounded-xl px-4 py-3 border border-[#2D4232] focus:outline-none focus:ring-2 focus:ring-[#3D704D] focus:bg-[#25382A] transition" />
@@ -398,6 +337,47 @@
                 <div>
                   <label class="block text-[11px] font-bold uppercase tracking-[0.1em] text-[#8DA092] mb-1.5">PASSWORD:</label>
                   <input type="password" placeholder="••••••••" class="w-full bg-[#1F2E22] text-white placeholder-[#5E7365] text-sm font-medium rounded-xl px-4 py-3 border border-[#2D4232] focus:outline-none focus:ring-2 focus:ring-[#3D704D] focus:bg-[#25382A] transition" />
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-[11px] font-bold uppercase tracking-[0.1em] text-[#8DA092] mb-1.5">AGE:</label>
+                    <input type="number" placeholder="e.g. 32" class="w-full bg-[#1F2E22] text-white placeholder-[#5E7365] text-sm font-medium rounded-xl px-4 py-3 border border-[#2D4232] focus:outline-none focus:ring-2 focus:ring-[#3D704D] focus:bg-[#25382A] transition" />
+                  </div>
+      
+                  <div>
+                    <label class="block text-[11px] font-bold uppercase tracking-[0.1em] text-[#8DA092] mb-1.5">GENDER:</label>
+                    <select class="w-full bg-[#1F2E22] text-white text-sm font-medium rounded-xl px-4 py-3 border border-[#2D4232] focus:outline-none focus:ring-2 focus:ring-[#3D704D] focus:bg-[#25382A] transition appearance-none cursor-pointer">
+                      <option value="" disabled selected class="bg-[#1F2E22] text-[#5E7365]">Select Gender</option>
+                      <option value="male" class="bg-[#1F2E22] text-white">Male</option>
+                      <option value="female" class="bg-[#1F2E22] text-white">Female</option>
+                      <option value="other" class="bg-[#1F2E22] text-white">Other</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label class="block text-[11px] font-bold uppercase tracking-[0.1em] text-[#8DA092] mb-1.5">CASTE CATEGORY:</label>
+                    <select class="w-full bg-[#1F2E22] text-white text-sm font-medium rounded-xl px-4 py-3 border border-[#2D4232] focus:outline-none focus:ring-2 focus:ring-[#3D704D] focus:bg-[#25382A] transition appearance-none cursor-pointer">
+                      <option value="" disabled selected class="bg-[#1F2E22] text-[#5E7365]">Select Category</option>
+                      <option value="general" class="bg-[#1F2E22] text-white">General / UR</option>
+                      <option value="obc" class="bg-[#1F2E22] text-white">OBC</option>
+                      <option value="sc" class="bg-[#1F2E22] text-white">SC</option>
+                      <option value="st" class="bg-[#1F2E22] text-white">ST</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label class="block text-[11px] font-bold uppercase tracking-[0.1em] text-[#8DA092] mb-1.5">REGION:</label>
+                    <select class="w-full bg-[#1F2E22] text-white text-sm font-medium rounded-xl px-4 py-3 border border-[#2D4232] focus:outline-none focus:ring-2 focus:ring-[#3D704D] focus:bg-[#25382A] transition appearance-none cursor-pointer">
+                      <option value="" disabled selected class="bg-[#1F2E22] text-[#5E7365]">Select State</option>
+                      <optgroup label="States" class="bg-[#1F2E22] text-[#6EE7B7]">
+                        <option value="Andhra Pradesh" class="bg-[#1F2E22] text-white">Andhra Pradesh</option>
+                        <option value="Karnataka" class="bg-[#1F2E22] text-white">Karnataka</option>
+                        <option value="Maharashtra" class="bg-[#1F2E22] text-white">Maharashtra</option>
+                        <option value="Tamil Nadu" class="bg-[#1F2E22] text-white">Tamil Nadu</option>
+                      </optgroup>
+                    </select>
+                  </div>
                 </div>
       
                 <button type="submit" class="font-heading w-full mt-4 bg-[#3D704D] hover:bg-[#49855C] text-white font-extrabold text-sm py-4 px-5 rounded-xl transition-all duration-300 shadow-lg shadow-[#3D704D]/30 flex items-center justify-center gap-2 group uppercase tracking-wider">
@@ -431,74 +411,102 @@
     </div>
 
 
-    <!-- ================= 2. APP VIEW (LOAN TYPE SELECTION) ================= -->
+    <!-- ================= 2. APP VIEW (MULTI-STEP DASHBOARD) ================= -->
     <div id="centered-app-view" class="view-wrapper">
         <div class="container">
 
             <div id="page-dashboard" class="card-page active">
-                <div style="flex-grow: 1;">
+                
+                <!-- STEP 1: FUNDING OBJECTIVE -->
+                <div id="step-objective" class="fade-step" style="flex-grow: 1;">
                     <h2 class="font-heading" style="font-size: 26px; margin-bottom: 6px;">Funding Objective</h2>
                     <p class="intro-text" style="margin-bottom: 12px; font-size: 14px;">Select the primary purpose of your funding to help our AI pinpoint the exact government schemes you qualify for.</p>
                     
                     <div class="loan-grid">
                         <div class="loan-card" onclick="selectLoan('working_capital', this)">
-                            <div class="loan-icon-wrap">
-                                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                            </div>
+                            <div class="loan-icon-wrap"><svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
                             <div class="loan-title">Working Capital</div>
                             <div class="loan-desc">Manage daily operations & inventory.</div>
                         </div>
-
                         <div class="loan-card" onclick="selectLoan('machinery', this)">
-                            <div class="loan-icon-wrap">
-                                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l-.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-                            </div>
+                            <div class="loan-icon-wrap"><svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
                             <div class="loan-title">Machinery & Tech</div>
                             <div class="loan-desc">Upgrade equipment or manufacturing assets.</div>
                         </div>
-
                         <div class="loan-card" onclick="selectLoan('agriculture', this)">
-                            <div class="loan-icon-wrap">
-                                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/><path d="M4 10h16"/></svg>
-                            </div>
+                            <div class="loan-icon-wrap"><svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/><path d="M4 10h16"/></svg></div>
                             <div class="loan-title">Agriculture Loan</div>
                             <div class="loan-desc">Farming, allied sectors, and rural agri-business.</div>
                         </div>
-
                         <div class="loan-card" onclick="selectLoan('raw_materials', this)">
-                            <div class="loan-icon-wrap">
-                                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
-                            </div>
+                            <div class="loan-icon-wrap"><svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></div>
                             <div class="loan-title">Raw Materials</div>
                             <div class="loan-desc">Bulk procurement of supplies and raw stock.</div>
                         </div>
-
                         <div class="loan-card" onclick="selectLoan('micro', this)">
-                            <div class="loan-icon-wrap">
-                                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22v-7l-2-2"/><path d="M17 8v.5a3.5 3.5 0 1 1-7 0V8a5 5 0 0 1 10 0v.5a3.5 3.5 0 1 1-7 0V8a5 5 0 0 1 10 0z"/></svg>
-                            </div>
+                            <div class="loan-icon-wrap"><svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22v-7l-2-2"/><path d="M17 8v.5a3.5 3.5 0 1 1-7 0V8a5 5 0 0 1 10 0v.5a3.5 3.5 0 1 1-7 0V8a5 5 0 0 1 10 0z"/></svg></div>
                             <div class="loan-title">Micro & Mudra</div>
                             <div class="loan-desc">Small ticket loans for micro-ventures.</div>
                         </div>
-
                         <div class="loan-card" onclick="selectLoan('infrastructure', this)">
-                            <div class="loan-icon-wrap">
-                                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"/><path d="M9 21v-4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v4"/></svg>
-                            </div>
+                            <div class="loan-icon-wrap"><svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"/><path d="M9 21v-4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v4"/></svg></div>
                             <div class="loan-title">Infrastructure</div>
                             <div class="loan-desc">Build or expand office and warehouses.</div>
                         </div>
-
                     </div>
 
-                    <button id="btn-fetch" class="btn font-heading" disabled onclick="submitLoanSelection()">
-                        Continue to Matchmaker →
+                    <button id="btn-continue-details" class="btn font-heading" disabled onclick="goToDetails()">
+                        Continue &rarr;
                     </button>
-
-                    <div id="results-area" style="display: none; margin-top: 24px; padding: 24px; background: #F6F8F6; border-radius: 12px; border: 1px solid var(--border);">
-                        <p style="text-align: center; font-weight: 700; color: var(--primary); line-height: 1.6; font-size: 15px;" id="loading-text">Analyzing profile against 100+ schemes...</p>
-                    </div>
                 </div>
+
+                <!-- STEP 2: ADDITIONAL DETAILS FORM -->
+                <div id="step-details" class="fade-step" style="display: none; flex-grow: 1;">
+                    <h2 class="font-heading" style="font-size: 26px; margin-bottom: 6px;">Additional Details</h2>
+                    <p class="intro-text" style="margin-bottom: 24px; font-size: 14px;">Provide a few more specifics to ensure our AI matches you with the highest-probability schemes.</p>
+                    
+                    <form onsubmit="submitFinalDetails(event)">
+                        
+                        <div class="form-group">
+                            <label>Requested Amount (in ₹)</label>
+                            <input type="number" id="req-amount" placeholder="e.g. 500000" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Occupation</label>
+                            <select id="occupation" required>
+                                <option value="" disabled selected>Select Occupation</option>
+                                <option value="farmer">Farmer / Agriculturist</option>
+                                <option value="business">Business Owner / Self-Employed</option>
+                                <option value="salaried">Salaried Professional</option>
+                                <option value="student">Student</option>
+                                <option value="unemployed">Unemployed</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Annual Income (in ₹)</label>
+                            <input type="number" id="annual-income" placeholder="e.g. 1200000" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Land Holding (in Acres)</label>
+                            <input type="number" id="land-holding" placeholder="e.g. 2.5" step="any" required>
+                        </div>
+
+                        <div style="display: flex; gap: 12px; margin-top: 30px;">
+                            <button type="button" class="btn font-heading" style="background: #F2F4F2; color: var(--text-muted); width: 30%; box-shadow: none;" onclick="goBackToObjective()">Back</button>
+                            <button type="submit" class="btn font-heading" style="width: 70%; margin-top: 10px;">Find My Matches ✨</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- STEP 3: RESULTS / LOADING AREA -->
+                <div id="results-area" class="fade-step" style="display: none; margin-top: 24px; padding: 32px 24px; background: #F6F8F6; border-radius: 12px; border: 1px solid var(--border);">
+                    <p style="text-align: center; font-weight: 700; color: var(--primary); line-height: 1.6; font-size: 15px;" id="loading-text">Analyzing profile against 100+ schemes...</p>
+                </div>
+
             </div>
         </div>
     </div>
@@ -546,7 +554,7 @@
     <script>
         let hasConsented = false;
         let selectedLoanType = null;
-        let isUserLoggedIn = false; // Tracks if the user came from the login flow
+        let isUserLoggedIn = false; 
 
         function openLogin() {
             document.getElementById('view-home').classList.remove('active');
@@ -561,7 +569,6 @@
             document.body.classList.add('creme-bg');
             document.body.style.backgroundColor = ''; 
             
-            // If they haven't consented yet, show the modal popup
             if (!hasConsented) {
                 document.getElementById('consent-modal').classList.add('active');
             }
@@ -596,33 +603,47 @@
             document.getElementById('view-policy').classList.remove('active');
             document.getElementById('view-cookies').classList.remove('active');
 
-            // If the user is logged in (meaning they opened it from the popup), return to dashboard and reopen modal if unconsented
             if (isUserLoggedIn) {
                 document.getElementById('centered-app-view').classList.add('active');
                 if (!hasConsented) {
                     document.getElementById('consent-modal').classList.add('active');
                 }
             } else {
-                // Otherwise they came from the home page footer
                 document.getElementById('view-home').classList.add('active');
             }
             window.scrollTo(0, 0);
         }
 
+        // STEP 1: Loan Selection
         function selectLoan(type, element) {
             selectedLoanType = type;
             const cards = document.querySelectorAll('.loan-card');
             cards.forEach(card => card.classList.remove('active'));
             element.classList.add('active');
-            document.getElementById('btn-fetch').disabled = false;
+            document.getElementById('btn-continue-details').disabled = false;
         }
 
-        function submitLoanSelection() {
+        // Move to Step 2
+        function goToDetails() {
             if (!selectedLoanType) return;
+            document.getElementById('step-objective').style.display = 'none';
+            document.getElementById('step-details').style.display = 'block';
+        }
+
+        // Move back to Step 1
+        function goBackToObjective() {
+            document.getElementById('step-details').style.display = 'none';
+            document.getElementById('step-objective').style.display = 'block';
+        }
+
+        // Final Submit
+        function submitFinalDetails(event) {
+            event.preventDefault(); 
             
-            document.querySelector('.loan-grid').style.display = 'none';
-            document.getElementById('btn-fetch').style.display = 'none';
+            // Hide the form
+            document.getElementById('step-details').style.display = 'none';
             
+            // Show the loading area
             const resultsArea = document.getElementById('results-area');
             const loadingText = document.getElementById('loading-text');
             
@@ -630,7 +651,7 @@
             loadingText.innerHTML = 'Connecting to AI Engine... <br><span style="font-size: 13px; color: var(--text-muted); font-weight: 600; margin-top: 6px; display: inline-block;">(Analyzing profile for ' + selectedLoanType.replace('_', ' ') + ' schemes)</span>';
 
             setTimeout(() => {
-                loadingText.innerHTML = '✅ <strong style="font-size: 18px;" class="font-heading">Matches Found!</strong><br><br><span style="color: var(--text-main); font-size: 20px; font-weight: 800;" class="font-heading">Top Pick: Government Scheme Match</span><br><span style="color: var(--text-muted); font-size: 14px; margin-top: 10px; display: block; font-weight: 500;">Your personalized LLM application strategy is ready.</span>';
+                loadingText.innerHTML = '✅ <strong style="font-size: 18px;" class="font-heading">Matches Found!</strong><br><br><span style="color: var(--text-main); font-size: 20px; font-weight: 800;" class="font-heading">Top Pick: Government Scheme Match</span>';
             }, 2500); 
         }
     </script>
