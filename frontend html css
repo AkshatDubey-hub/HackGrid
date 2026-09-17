@@ -608,18 +608,7 @@
           <div class="w-full md:w-[58%] xl:w-[55%] p-6 sm:p-10 flex flex-col justify-between relative bg-[#0d0d0d] animate-right delay-200">
             
             <header class="flex items-center justify-between w-full mb-6">
-              <div class="flex items-center gap-3 group cursor-pointer transition-transform duration-300 hover:scale-105" onclick="location.reload()">
-                <svg class="w-10 h-10 drop-shadow-md animate-float-subtle" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <defs><clipPath id="circleViewNavDark"><circle cx="100" cy="100" r="65" /></clipPath></defs>
-                  <g clip-path="url(#circleViewNavDark)">
-                    <circle cx="100" cy="100" r="65" fill="#FFFFFF" />
-                    <path d="M 25 100 A 65 65 0 0 1 175 100 Z" fill="#444444" />
-                    <rect x="71" y="102" width="14" height="65" fill="#0d0d0d" rx="1" />
-                  </g>
-                  <path d="M 32 114 C 65 114, 115 94, 144 60 C 124 86, 75 110, 32 114 Z" fill="#888888" />
-                </svg>
-                <span class="font-heading font-extrabold text-xl text-white tracking-tight">Fetch Funds</span>
-              </div>
+              <!-- Top-left logo and name removed completely -->
             </header>
        
             <div class="my-auto max-w-md w-full mx-auto md:mx-0">
@@ -721,25 +710,22 @@
               </form>
             </div>
        
-            <div class="mt-5 text-[11px] text-[#888888] font-semibold tracking-wide uppercase">Empowering Small Business • Access Funds</div>
+            <div></div>
           </div>
        
+          <!-- Right Column: Centered layout with logo on top (bigger) and name below -->
           <div class="w-full md:w-[42%] xl:w-[45%] bg-[#050505] relative overflow-hidden flex flex-col items-center justify-center p-8 sm:p-12 text-white border-t md:border-t-0 md:border-l border-[#262626] animate-left delay-300">
             <div class="absolute inset-0 overflow-hidden pointer-events-none">
               <div class="absolute -top-10 -right-10 w-48 h-[480px] bg-gradient-to-b from-[#161616] to-[#000000] rounded-full transform rotate-[35deg] opacity-80 shadow-2xl animate-float"></div>
               <div class="absolute bottom-[-20%] -left-10 w-64 h-[640px] bg-gradient-to-t from-[#111111] to-transparent rounded-full transform rotate-[-20deg] opacity-40 blur-3xl"></div>
             </div>
        
-            <div class="relative z-10 text-center max-w-xs space-y-5 animate-up delay-500">
-              <div class="w-24 h-24 mx-auto bg-white/5 backdrop-blur-xl rounded-3xl p-3 border border-white/10 shadow-2xl flex items-center justify-center hover:scale-110 hover:rotate-3 transition-transform duration-500 cursor-default">
-                <svg class="w-full h-full drop-shadow-lg animate-float-subtle" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M 32 114 C 65 114, 115 94, 144 60 C 124 86, 75 110, 32 114 Z" fill="#888888" />
-                  <path d="M 30 114 Q 95 106 145 58 C 137 74, 103 108 30 114 Z" fill="#ffffff" />
-                </svg>
+            <!-- Right Side Branding: Logo bigger on top, name stacked underneath -->
+            <div class="relative z-10 flex flex-col items-center justify-center gap-6 animate-up delay-500 my-auto text-center">
+              <div class="w-32 h-32 bg-white/5 backdrop-blur-xl rounded-3xl p-4 border border-white/10 shadow-2xl flex items-center justify-center hover:scale-105 hover:rotate-3 transition-transform duration-500 cursor-default">
+                <img src="logo.jpeg" alt="FetchFunds Logo" class="w-full h-full object-contain drop-shadow-lg animate-float-subtle" />
               </div>
-       
-              <h3 class="font-heading font-extrabold text-2xl sm:text-3xl text-white tracking-tight leading-tight">FETCH FUNDS</h3>
-              <p class="text-xs sm:text-sm text-neutral-400 font-medium leading-relaxed">Empowering Small Business.<br>Access Funds.<br>Grow Your Future.</p>
+              <h3 class="font-heading font-extrabold text-2xl sm:text-3xl text-white tracking-tight leading-none">FETCH FUNDS</h3>
             </div>
           </div>
         </div>
@@ -1194,7 +1180,7 @@
                 document.getElementById(docId).classList.add('active');
                 window.scrollTo(0, 0); 
             }, 300);
-        }
+            }
 
         function closeFullScreenDoc() {
             document.querySelectorAll('.full-screen-page').forEach(page => {
