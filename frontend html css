@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,13 +16,14 @@
 
     <style>
         :root {
-            --primary: #3D704D;
-            --primary-hover: #2D5A3B;
-            --background: #E8ECE9; 
+            /* THEME: Sky Blue Primary, Pink Hover */
+            --primary: #5AB2FF; 
+            --primary-hover: #FF87B2; 
+            --background: #E6F0F9; 
             --surface: #ffffff;
-            --text-main: #0B120C;
-            --text-muted: #5E7365;
-            --border: #D1DBD4;
+            --text-main: #0A1118;
+            --text-muted: #5B6B7A;
+            --border: #D1DAE3;
             --radius: 24px; 
         }
 
@@ -39,7 +41,7 @@
         }
 
         body {
-            background-color: #0B120C; 
+            background-color: #0A1118; 
             color: var(--text-main);
             min-height: 100vh;
             display: flex;
@@ -47,112 +49,147 @@
             transition: background-color 0.5s ease;
         }
 
-        body.creme-bg { background-color: #F8F9F8; }
+        body.creme-bg { background-color: #F4F8FB; }
 
         /* --- View Controllers --- */
         .view-wrapper { display: none; animation: fade-in 400ms ease-out forwards; }
         .view-wrapper.active { display: flex; }
         #view-home.active { display: block; }
         
-        /* Smooth transition for form steps */
         .fade-step { animation: fade-in 400ms ease-out forwards; }
 
         #view-login {
-            background-color: #0B120C;
-            background-image: repeating-linear-gradient(-45deg, #0B120C, #0B120C 20px, #111B13 20px, #111B13 40px);
+            background-color: #0A1118;
+            background-image: repeating-linear-gradient(-45deg, #0A1118, #0A1118 20px, #0F1822 20px, #0F1822 40px);
         }
 
         @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
 
         /* ================= 0. HOME PAGE STYLES ================= */
-        #view-home { position: relative; min-height: 100vh; width: 100%; color: #ffffff; }
+        #view-home { position: relative; min-height: 100vh; width: 100%; color: #ffffff; overflow-x: hidden; }
         .bg-video { position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
         .bg-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(to bottom, rgba(11, 18, 12, 0.4) 0%, rgba(11, 18, 12, 0.95) 70%, rgba(11, 18, 12, 1) 100%);
+            background: linear-gradient(to bottom, rgba(10, 17, 24, 0.4) 0%, rgba(10, 17, 24, 0.95) 70%, rgba(10, 17, 24, 1) 100%);
             backdrop-filter: blur(4px); z-index: 1;
         }
         .home-container { position: relative; z-index: 2; max-width: 1100px; margin: 0 auto; padding: 40px; }
-        .home-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 120px; }
+        .home-nav { display: flex; justify-content: center; align-items: center; margin-bottom: 120px; }
         .home-logo {
             font-size: 28px; font-weight: 800; letter-spacing: -0.05em;
-            background: linear-gradient(to right, #6EE7B7, #34D399); -webkit-background-clip: text; background-clip: text; color: transparent;
+            background: linear-gradient(to right, #5AB2FF, #FF87B2); -webkit-background-clip: text; background-clip: text; color: transparent;
         }
-        .btn-login {
-            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.15); color: white; padding: 10px 28px; border-radius: 30px; font-weight: 600; font-size: 15px; cursor: pointer; backdrop-filter: blur(10px); transition: all 0.3s ease;
-        }
-        .btn-login:hover { background: rgba(255, 255, 255, 0.15); border-color: rgba(110, 231, 183, 0.6); box-shadow: 0 0 15px rgba(110,231,183,0.1); }
+
         .home-hero { text-align: center; margin-bottom: 100px; }
         .home-hero h1 { 
             font-size: 76px; font-weight: 800; letter-spacing: -0.05em; margin-bottom: 24px; line-height: 1.05; 
-            background: linear-gradient(to bottom right, #ffffff, #A7F3D0); -webkit-background-clip: text; background-clip: text; color: transparent;
+            background: linear-gradient(to bottom right, #ffffff, #FFCBE0); -webkit-background-clip: text; background-clip: text; color: transparent;
         }
-        .home-hero p { font-size: 20px; color: #95A89A; max-width: 750px; margin: 0 auto; line-height: 1.7; font-weight: 500;}
+        .home-hero p { font-size: 20px; color: #95A5B5; max-width: 750px; margin: 0 auto; line-height: 1.7; font-weight: 500;}
         
         .content-section {
             background: linear-gradient(145deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%);
             border-top: 1px solid rgba(255,255,255,0.1); border-left: 1px solid rgba(255,255,255,0.05); border-right: 1px solid rgba(255,255,255,0.02); border-bottom: 1px solid rgba(255,255,255,0.02);
             border-radius: var(--radius); padding: 70px; margin-bottom: 60px; backdrop-filter: blur(20px); box-shadow: 0 20px 40px rgba(0,0,0,0.3); transition: transform 0.3s ease;
         }
-        .content-section:hover { transform: translateY(-5px); }
         .section-tag {
-            display: inline-block; background: rgba(110, 231, 183, 0.1); border: 1px solid rgba(110, 231, 183, 0.3);
-            color: #6EE7B7; font-size: 13px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; padding: 6px 16px; border-radius: 20px; margin-bottom: 24px;
+            display: inline-block; background: rgba(90, 178, 255, 0.1); border: 1px solid rgba(90, 178, 255, 0.3);
+            color: #5AB2FF; font-size: 13px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; padding: 6px 16px; border-radius: 20px; margin-bottom: 24px;
         }
-        .content-section h2 { font-size: 42px; font-weight: 800; margin-bottom: 30px; color: #ffffff; letter-spacing: -0.04em;}
-        .content-section p { font-size: 18px; color: #D1DBD4; line-height: 1.8; margin-bottom: 24px; font-weight: 400;}
+        .content-section h2 { font-size: 42px; font-weight: 800; margin-bottom: 12px; color: #ffffff; letter-spacing: -0.04em;}
+        .content-section > p { font-size: 18px; color: #D1DAE3; line-height: 1.8; margin-bottom: 40px; font-weight: 400; text-align: center; max-width: 600px; margin-left: auto; margin-right: auto;}
+
+        /* ================= FLEXBOX ACCORDION GALLERY ================= */
+        .accordion-gallery { display: flex; width: 100%; height: 480px; gap: 16px; margin-top: 20px; }
+        .accordion-card {
+            position: relative; flex: 1; border-radius: 32px; overflow: hidden; cursor: pointer;
+            transition: flex 0.6s cubic-bezier(0.25, 1, 0.5, 1), border-color 0.4s ease, background 0.4s ease;
+            border: 1px solid rgba(90, 178, 255, 0.1); 
+            display: flex; 
+            align-items: flex-start; 
+        }
+        .accordion-card:nth-child(1) { background: linear-gradient(180deg, #101C29 0%, #0A1118 100%); }
+        .accordion-card:nth-child(2) { background: linear-gradient(180deg, #1C1019 0%, #0A1118 100%); }
+        .accordion-card:nth-child(3) { background: linear-gradient(180deg, #10161C 0%, #0A1118 100%); }
         
-        .serve-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-            margin-top: 40px;
-        }
-        .serve-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 16px;
-            padding: 32px;
-            backdrop-filter: blur(10px);
-        }
-        .serve-card h4 { color: #6EE7B7; font-size: 20px; font-weight: 700; margin-bottom: 12px; }
-        .serve-card p { color: #95A89A; font-size: 15px; line-height: 1.6; margin-bottom: 0; }
+        .accordion-card.active { flex: 6; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        .accordion-card:nth-child(1).active { background: #A3C1DA; border-color: #A3C1DA; }
+        .accordion-card:nth-child(2).active { background: #FFF5F6; border-color: #FFF5F6; }
+        .accordion-card:nth-child(3).active { background: #9DB5C9; border-color: #9DB5C9; }
 
-        .quote-section {
-            text-align: center; padding: 40px 20px; margin: 60px 0; font-style: italic;
-            font-size: 22px; color: #A7F3D0; font-family: 'Outfit', sans-serif; letter-spacing: -0.01em;
+        .accordion-bg-number {
+            position: absolute; bottom: -25px; right: 15px; font-size: 200px; font-weight: 900;
+            color: rgba(255, 255, 255, 0.02); font-family: 'Outfit', sans-serif; line-height: 1; pointer-events: none; transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1); z-index: 0;
         }
+        .accordion-card.active .accordion-bg-number { transform: translateY(-20px) scale(1.05); color: rgba(0, 0, 0, 0.04); }
+        
+        .accordion-vertical { position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; justify-content: center; align-items: center; transition: opacity 0.3s ease; z-index: 1; }
+        .accordion-vertical span { transform: rotate(-90deg); color: rgba(255,255,255,0.5); font-family: 'Outfit', sans-serif; font-size: 22px; font-weight: 700; letter-spacing: 4px; white-space: nowrap; }
+        .accordion-card.active .accordion-vertical { opacity: 0; }
+        
+        .accordion-content { position: relative; z-index: 2; padding: 40px; opacity: 0; transform: translateY(-10px); transition: opacity 0.4s ease, transform 0.4s ease; min-width: 400px; pointer-events: none; }
+        .accordion-card.active .accordion-content { opacity: 1; transform: translateY(0); transition-delay: 0.2s; pointer-events: auto; }
+        
+        .accordion-title { color: #5AB2FF; font-size: 34px; font-weight: 800; margin-bottom: 16px; font-family: 'Outfit', sans-serif; line-height: 1.1; letter-spacing: -0.02em; transition: color 0.4s ease;}
+        .accordion-desc { color: #95A5B5; font-size: 16px; line-height: 1.7; margin: 0; font-family: 'DM Sans', sans-serif; max-width: 350px; transition: color 0.4s ease;}
+        .accordion-card.active .accordion-title { color: #0A1118; }
+        .accordion-card.active .accordion-desc { color: #26364A; }
 
-        .btn-enter {
-            margin: 40px auto; display: block; background: var(--primary); font-family: 'Outfit', sans-serif;
-            color: white; padding: 20px 56px; border-radius: 40px; font-size: 18px; font-weight: 700; border: none; cursor: pointer; box-shadow: 0 10px 30px rgba(61, 112, 77, 0.4); transition: all 0.3s ease;
+        .quote-section { text-align: center; padding: 40px 20px; margin: 60px 0; font-style: italic; font-size: 22px; color: #FFCBE0; font-family: 'Outfit', sans-serif; letter-spacing: -0.01em; }
+
+        /* ================= SPECULAR WEBGL BUTTON ================= */
+        .specular-button {
+            --sb-radius: 40px;
+            --sb-tint: #5AB2FF;
+            --sb-tint-opacity: 1;
+            --sb-blur: 0px;
+            --sb-text-color: #ffffff;
+            
+            position: relative;
+            display: flex;
+            margin: 40px auto;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 18px;
+            padding: 20px 56px;
+            color: var(--sb-text-color);
+            background: color-mix(in srgb, var(--sb-tint) calc(var(--sb-tint-opacity) * 100%), transparent);
+            border-radius: var(--sb-radius);
+            box-shadow: 0 10px 30px rgba(90, 178, 255, 0.4);
+            cursor: pointer;
+            outline: none;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
         }
-        .btn-enter:hover { background: var(--primary-hover); transform: scale(1.05) translateY(-2px); box-shadow: 0 15px 40px rgba(61, 112, 77, 0.6); }
+        .specular-button:hover { box-shadow: 0 15px 40px rgba(255, 135, 178, 0.6); transform: scale(1.02) translateY(-2px); }
+        .specular-button:active { transform: scale(0.97); }
+        .specular-button__fx { position: absolute; inset: -20px; pointer-events: none; z-index: 1; }
+        .specular-button__fx canvas { display: block; width: 100%; height: 100%; }
+        .specular-button__label { position: relative; z-index: 2; }
 
-        /* ================= HOME PAGE FOOTER WITH GRADIENT ANIMATION ================= */
+        /* ================= FOOTER ================= */
         .home-footer-section {
-            background-color: #F4F6F4; color: #708275; padding: 90px 40px; margin-top: 120px;
-            position: relative; z-index: 2; border-top: 1px solid #E2E8E4;
+            background-color: #F4F8FB; color: #707E85; padding: 90px 40px; margin-top: 120px; position: relative; z-index: 2; border-top: 1px solid #E6F0F9;
         }
         .home-footer-grid { max-width: 700px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 100px; }
-        .home-footer-col h3 { font-size: 13px; font-weight: 800; letter-spacing: 2.5px; color: #5E7365; margin-bottom: 32px; text-transform: uppercase; }
+        .home-footer-col h3 { font-size: 13px; font-weight: 800; letter-spacing: 2.5px; color: #5B6B7A; margin-bottom: 32px; text-transform: uppercase; }
         .home-footer-links { display: flex; flex-direction: column; gap: 22px; }
         .home-footer-link {
-            font-size: 20px; font-weight: 700; color: #708275; cursor: pointer; transition: color 0.3s ease;
-            width: fit-content; letter-spacing: -0.01em; text-decoration: none;
+            font-size: 20px; font-weight: 700; color: #707E85; cursor: pointer; transition: color 0.3s ease; width: fit-content; letter-spacing: -0.01em; text-decoration: none;
         }
         .home-footer-link:hover {
-            background: linear-gradient(to right, #9333ea, #db2777, #9333ea); background-size: 200% auto;
+            background: linear-gradient(to right, #5AB2FF, #FF87B2, #5AB2FF); background-size: 200% auto;
             color: transparent; -webkit-background-clip: text; background-clip: text; animation: gradient-flow 2.5s linear infinite;
         }
         @keyframes gradient-flow { to { background-position: 200% center; } }
 
-        /* ================= 2. APP VIEW (CENTERED DASHBOARD CARD) ================= */
+        /* ================= 2. APP VIEW ================= */
         #centered-app-view { flex-grow: 1; justify-content: center; align-items: center; padding: 60px 20px; position: relative; }
         .container {
-            background-color: var(--surface); width: 100%; max-width: 620px;
-            border-radius: var(--radius); box-shadow: 0 25px 50px -12px rgba(11, 18, 12, 0.15);
-            overflow: hidden; display: flex; flex-direction: column; min-height: 480px;
+            background-color: var(--surface); width: 100%; max-width: 660px;
+            border-radius: var(--radius); box-shadow: 0 25px 50px -12px rgba(10, 17, 24, 0.15); overflow: hidden; display: flex; flex-direction: column; min-height: 480px;
         }
         .card-page { display: none; padding: 48px 40px; flex-grow: 1; }
         .card-page.active { display: flex; flex-direction: column; }
@@ -167,11 +204,11 @@
             border: 2px solid var(--border); border-radius: 16px; padding: 18px; cursor: pointer; transition: all 0.25s ease;
             display: flex; flex-direction: column; align-items: flex-start; background: #fdfdfd;
         }
-        .loan-card:hover { border-color: #B4C4B9; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.05); }
-        .loan-card.active { border-color: var(--primary); background: #F0FDF4; box-shadow: 0 8px 20px rgba(61, 112, 77, 0.12); }
+        .loan-card:hover { border-color: #B4C9DA; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.05); }
+        .loan-card.active { border-color: var(--primary); background: #F0F8FF; box-shadow: 0 8px 20px rgba(90, 178, 255, 0.12); }
         
         .loan-icon-wrap {
-            width: 40px; height: 40px; border-radius: 10px; background: #E8ECE9; 
+            width: 40px; height: 40px; border-radius: 10px; background: #E6F0F9; 
             display: flex; align-items: center; justify-content: center; margin-bottom: 12px; color: var(--primary); transition: all 0.25s ease;
         }
         .loan-card.active .loan-icon-wrap { background: var(--primary); color: white; }
@@ -185,12 +222,11 @@
             width: 100%; padding: 14px 16px; border: 1px solid var(--border); border-radius: 12px; font-size: 15px; outline: none; transition: all 0.2s;
             font-family: inherit; font-weight: 600; color: var(--text-main); background: #fdfdfd;
         }
-        .form-group input:focus, .form-group select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(61, 112, 77, 0.1); }
+        .form-group input:focus, .form-group select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(90, 178, 255, 0.1); }
 
-
-        /* ================= 3. CONSENT MODAL (POPUP) ================= */
+        /* ================= 3. CONSENT MODAL ================= */
         .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(11, 18, 12, 0.65); backdrop-filter: blur(8px);
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 17, 24, 0.65); backdrop-filter: blur(8px);
             display: none; justify-content: center; align-items: center; z-index: 100; animation: fade-in 300ms ease-out forwards; padding: 20px;
         }
         .modal-overlay.active { display: flex; }
@@ -201,7 +237,7 @@
         .modal-content h2 { font-size: 28px; margin-bottom: 12px; }
         .modal-content .intro-text { color: var(--text-muted); font-size: 15px; margin-bottom: 24px; line-height: 1.6; }
 
-        /* ================= 4. FULL SCREEN LAYOUT (LEGAL DOCS) ================= */
+        /* ================= 4. FULL SCREEN LAYOUT ================= */
         .full-screen-page { background-color: var(--surface); min-height: 100vh; width: 100%; }
         .doc-header { position: sticky; top: 0; background-color: var(--surface); padding: 20px 40px; border-bottom: 1px solid var(--border); box-shadow: 0 2px 10px rgba(0,0,0,0.02); z-index: 10; }
         .doc-content { max-width: 800px; margin: 0 auto; padding: 60px 40px; }
@@ -209,10 +245,10 @@
         .document-text p { color: var(--text-muted); font-size: 16px; line-height: 1.8; margin-bottom: 24px; font-weight: 500;}
         .document-text strong { color: var(--text-main); font-family: 'Outfit', sans-serif; font-size: 20px; display: block; margin-bottom: 8px; margin-top: 32px; font-weight: 800; letter-spacing: -0.02em;}
         .doc-link {
-            display: flex; justify-content: space-between; align-items: center; padding: 18px 20px; background-color: #F6F8F6; border: 1px solid var(--border);
+            display: flex; justify-content: space-between; align-items: center; padding: 18px 20px; background-color: #F4F8FB; border: 1px solid var(--border);
             border-radius: 12px; margin-bottom: 12px; cursor: pointer; font-weight: 700; transition: all 0.2s ease; color: var(--text-main);
         }
-        .doc-link:hover { background-color: #E8ECE9; border-color: #B4C4B9; transform: translateY(-2px); }
+        .doc-link:hover { background-color: #E6F0F9; border-color: #B4C9DA; transform: translateY(-2px); }
         .doc-link::after { content: '→'; color: var(--primary); font-size: 20px; }
 
         /* --- UI Elements --- */
@@ -221,14 +257,19 @@
         .checkbox-label { font-size: 14px; line-height: 1.5; color: var(--text-main); font-weight: 600;}
         .btn {
             display: block; width: 100%; padding: 18px; background-color: var(--primary); color: white; border: none; border-radius: 12px; font-size: 16px; font-family: 'Outfit', sans-serif;
-            font-weight: 800; cursor: pointer; transition: transform 200ms ease, background-color 200ms ease; margin-top: 10px; box-shadow: 0 4px 14px rgba(61, 112, 77, 0.25);
+            font-weight: 800; cursor: pointer; transition: transform 200ms ease, background-color 200ms ease; margin-top: 10px; box-shadow: 0 4px 14px rgba(90, 178, 255, 0.25);
         }
-        .btn:not(:disabled):hover { background-color: var(--primary-hover); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(61, 112, 77, 0.35); }
-        .btn:disabled { background-color: #A9BBAF; cursor: not-allowed; box-shadow: none; transform: none;}
+        .btn:not(:disabled):hover { background-color: var(--primary-hover); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255, 135, 178, 0.35); }
+        .btn:disabled { background-color: #B4C9DA; cursor: not-allowed; box-shadow: none; transform: none;}
         .btn-back {
             background: none; border: none; color: var(--primary); font-size: 16px; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font-family: 'Outfit', sans-serif;
         }
-        .btn-back:hover { text-decoration: underline; }
+        .btn-back:hover { text-decoration: underline; color: var(--primary-hover); }
+
+        .shimmer {
+            animation: pulse-op 1.5s ease-in-out infinite;
+        }
+        @keyframes pulse-op { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
     </style>
 </head>
 <body>
@@ -243,7 +284,6 @@
         <div class="home-container">
             <header class="home-nav">
                 <div class="home-logo font-heading">FetchFunds</div>
-                <button class="btn-login" onclick="openLogin()">Client Login</button>
             </header>
 
             <main>
@@ -252,21 +292,37 @@
                     <p>Welcome to your central hub for accessible financial support. We bridge the gap between hard-working individuals and the government schemes designed to help them thrive. Whether you are expanding a local shop, investing in your harvest, or starting a new venture, we simplify the path to funding.</p>
                 </div>
 
-                <div class="content-section">
+                <!-- ACCORDION GALLERY -->
+                <div class="content-section" style="padding-bottom: 90px;">
                     <span class="section-tag">Audience</span>
-                    <h2 class="font-heading">Who We Serve</h2>
-                    <div class="serve-grid">
-                        <div class="serve-card">
-                            <h4>Farmers & Agri-Business</h4>
-                            <p>Discover agricultural subsidies, crop insurance, and equipment loans tailored to your seasonal needs.</p>
+                    <h2 class="font-heading" style="text-align: center;">Who We Serve</h2>
+                    
+                    <div class="accordion-gallery">
+                        <div class="accordion-card active">
+                            <div class="accordion-bg-number">01</div>
+                            <div class="accordion-vertical"><span>FARMERS</span></div>
+                            <div class="accordion-content">
+                                <h3 class="accordion-title">Farmers & Agri-Business</h3>
+                                <p class="accordion-desc">Discover agricultural subsidies, crop insurance, and equipment loans tailored to your seasonal needs.</p>
+                            </div>
                         </div>
-                        <div class="serve-card">
-                            <h4>Small & Medium Businesses</h4>
-                            <p>Access MSME credit guarantees, working capital, and expansion funds to scale your enterprise.</p>
+
+                        <div class="accordion-card">
+                            <div class="accordion-bg-number">02</div>
+                            <div class="accordion-vertical"><span>BUSINESSES</span></div>
+                            <div class="accordion-content">
+                                <h3 class="accordion-title">Small & Medium Businesses</h3>
+                                <p class="accordion-desc">Access MSME credit guarantees, working capital, and expansion funds to scale your enterprise.</p>
+                            </div>
                         </div>
-                        <div class="serve-card" style="grid-column: span auto;">
-                            <h4>Aspiring Entrepreneurs & Startups</h4>
-                            <p>Find seed funding, startup grants, and skill development schemes to bring your vision to life.</p>
+
+                        <div class="accordion-card">
+                            <div class="accordion-bg-number">03</div>
+                            <div class="accordion-vertical"><span>STARTUPS</span></div>
+                            <div class="accordion-content">
+                                <h3 class="accordion-title">Aspiring Entrepreneurs</h3>
+                                <p class="accordion-desc">Find seed funding, startup grants, and skill development schemes to bring your vision to life.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -275,7 +331,11 @@
                     "Growth is never by mere chance; it is the result of forces working together."
                 </div>
 
-                <button class="btn-enter font-heading" onclick="openLogin()">Take the Next Step &rarr;</button>
+                <!-- WEBGL SPECULAR BUTTON -->
+                <button id="specular-btn" class="specular-button" onclick="openLogin()">
+                    <span class="specular-button__fx" aria-hidden="true"></span>
+                    <span class="specular-button__label">Take the Next Step &rarr;</span>
+                </button>
             </main>
         </div>
 
@@ -295,6 +355,7 @@
                         <div class="home-footer-link" onclick="openFullScreenDoc('view-policy')">Transactional</div>
                         <div class="home-footer-link" onclick="openFullScreenDoc('view-policy')">Verification</div>
                         <div class="home-footer-link" onclick="openFullScreenDoc('view-policy')">Security</div>
+                        <div class="home-footer-link" onclick="openFullScreenDoc('view-privacy')">Privacy Policy</div>
                     </div>
                 </div>
             </div>
@@ -302,120 +363,102 @@
     </div>
 
 
-    <!-- ================= 1. LOGIN PORTAL (TAILWIND FULL SCREEN) ================= -->
+    <!-- ================= 1. LOGIN PORTAL ================= -->
     <div id="view-login" class="view-wrapper min-h-screen w-full items-center justify-center p-4 sm:p-6 lg:p-10 antialiased text-[#E2E8F0]">
-        <div class="w-full max-w-6xl bg-[#141F16] rounded-[32px] shadow-[0_25px_70px_rgba(0,0,0,0.8)] overflow-hidden flex flex-col md:flex-row min-h-[640px] border border-[#273B2B]">
-      
-          <div class="w-full md:w-[58%] xl:w-[55%] p-6 sm:p-10 flex flex-col justify-between relative bg-[#141F16]">
+        <div class="w-full max-w-6xl bg-[#101720] rounded-[32px] shadow-[0_25px_70px_rgba(0,0,0,0.8)] overflow-hidden flex flex-col md:flex-row min-h-[640px] border border-[#2A3B4C]">
+       
+          <div class="w-full md:w-[58%] xl:w-[55%] p-6 sm:p-10 flex flex-col justify-between relative bg-[#101720]">
             
             <header class="flex items-center justify-between w-full mb-6">
               <div class="flex items-center gap-3 group cursor-pointer" onclick="location.reload()">
-                <svg class="w-10 h-10 drop-shadow-md transition-transform group-hover:scale-105" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <defs><clipPath id="circleViewNavDark"><circle cx="100" cy="100" r="65" /></clipPath></defs>
-                  <g clip-path="url(#circleViewNavDark)">
-                    <circle cx="100" cy="100" r="65" fill="#FFFFFF" />
-                    <path d="M 25 100 A 65 65 0 0 1 175 100 Z" fill="#3D704D" />
-                    <rect x="71" y="102" width="14" height="65" fill="#141F16" rx="1" />
-                  </g>
-                  <path d="M 32 114 C 65 114, 115 94, 144 60 C 124 86, 75 110, 32 114 Z" fill="#6EE7B7" />
-                </svg>
                 <span class="font-heading font-extrabold text-xl text-white tracking-tight">Fetch Funds</span>
               </div>
             </header>
-      
+       
             <div class="my-auto max-w-md w-full mx-auto md:mx-0">
               <h2 class="font-heading text-3xl sm:text-4xl font-extrabold text-white mb-2 tracking-tight">Get Started</h2>
-              <p class="text-xs sm:text-sm text-[#95A89A] mb-6 font-medium">Enter your unique account details below to unlock personalized funding options.</p>
-      
+              <p class="text-xs sm:text-sm text-[#95A5B5] mb-6 font-medium">Enter your details to generate your verified scheme application ID.</p>
+       
               <form onsubmit="event.preventDefault(); submitLogin();" class="space-y-4">
-                
                 <div>
-                  <label class="block text-[11px] font-bold uppercase tracking-[0.1em] text-[#8DA092] mb-1.5">USERNAME:</label>
-                  <input type="text" placeholder="e.g. rahul_sharma99" class="w-full bg-[#1F2E22] ...us:ring-[#3D704D] focus:bg-[#25382A] transition" />
+                  <label class="block text-[11px] font-bold uppercase tracking-[0.1em] text-[#9ca3af] mb-1.5">FULL NAME / USERNAME:</label>
+                  <input type="text" id="user-name" placeholder="e.g. Rahul Sharma" class="w-full bg-[#182433] text-white placeholder-[#5B6B7A] text-sm font-medium rounded-xl px-4 py-3 border border-[#26364A] focus:outline-none focus:ring-2 focus:ring-[#5AB2FF] focus:bg-[#1E2C3F] transition" required />
                 </div>
-      
+       
                 <div>
-                  <label class="block text-[11px] font-bold uppercase tracking-[0.1em] text-[#8DA092] mb-1.5">PASSWORD:</label>
-                  <input id="user-age" type="number" placeholder="e.g. 32" class="w-full bg-[#1F2E22] ...
-                  <select id="user-gender" class="w-full bg-[#1F2E22] ...
-                  <select id="user-caste" class="w-full bg-[#1F2E22] ...
-                  <select id="user-state" class="w-full bg-[#1F2E22] ...
-                  <input type="password" placeholder="••••••••" class="w-full bg-[#1F2E22] text-white placeholder-[#5E7365] text-sm font-medium rounded-xl px-4 py-3 border border-[#2D4232] focus:outline-none focus:ring-2 focus:ring-[#3D704D] focus:bg-[#25382A] transition" />
+                  <label class="block text-[11px] font-bold uppercase tracking-[0.1em] text-[#9ca3af] mb-1.5">PASSWORD:</label>
+                  <input type="password" placeholder="••••••••" class="w-full bg-[#182433] text-white placeholder-[#5B6B7A] text-sm font-medium rounded-xl px-4 py-3 border border-[#26364A] focus:outline-none focus:ring-2 focus:ring-[#5AB2FF] transition" required />
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label class="block text-[11px] font-bold uppercase tracking-[0.1em] text-[#8DA092] mb-1.5">AGE:</label>
-                    <input type="number" placeholder="e.g. 32" class="w-full bg-[#1F2E22] text-white placeholder-[#5E7365] text-sm font-medium rounded-xl px-4 py-3 border border-[#2D4232] focus:outline-none focus:ring-2 focus:ring-[#3D704D] focus:bg-[#25382A] transition" />
+                    <label class="block text-[11px] font-bold uppercase tracking-[0.1em] text-[#9ca3af] mb-1.5">AGE:</label>
+                    <input type="number" id="user-age" placeholder="e.g. 32" class="w-full bg-[#182433] text-white placeholder-[#5B6B7A] text-sm font-medium rounded-xl px-4 py-3 border border-[#26364A] focus:outline-none focus:ring-2 focus:ring-[#5AB2FF] transition" required />
                   </div>
-      
+       
                   <div>
-                    <label class="block text-[11px] font-bold uppercase tracking-[0.1em] text-[#8DA092] mb-1.5">GENDER:</label>
-                    <select class="w-full bg-[#1F2E22] text-white text-sm font-medium rounded-xl px-4 py-3 border border-[#2D4232] focus:outline-none focus:ring-2 focus:ring-[#3D704D] focus:bg-[#25382A] transition appearance-none cursor-pointer">
-                      <option value="" disabled selected class="bg-[#1F2E22] text-[#5E7365]">Select Gender</option>
-                      <option value="male" class="bg-[#1F2E22] text-white">Male</option>
-                      <option value="female" class="bg-[#1F2E22] text-white">Female</option>
-                      <option value="other" class="bg-[#1F2E22] text-white">Other</option>
+                    <label class="block text-[11px] font-bold uppercase tracking-[0.1em] text-[#9ca3af] mb-1.5">GENDER:</label>
+                    <select id="user-gender" class="w-full bg-[#182433] text-white text-sm font-medium rounded-xl px-4 py-3 border border-[#26364A] focus:outline-none focus:ring-2 focus:ring-[#5AB2FF] transition appearance-none cursor-pointer" required>
+                      <option value="" disabled selected class="bg-[#182433] text-[#5B6B7A]">Select Gender</option>
+                      <option value="male" class="bg-[#182433] text-white">Male</option>
+                      <option value="female" class="bg-[#182433] text-white">Female</option>
+                      <option value="other" class="bg-[#182433] text-white">Other</option>
                     </select>
                   </div>
 
                   <div>
-                    <label class="block text-[11px] font-bold uppercase tracking-[0.1em] text-[#8DA092] mb-1.5">CASTE CATEGORY:</label>
-                    <select class="w-full bg-[#1F2E22] text-white text-sm font-medium rounded-xl px-4 py-3 border border-[#2D4232] focus:outline-none focus:ring-2 focus:ring-[#3D704D] focus:bg-[#25382A] transition appearance-none cursor-pointer">
-                      <option value="" disabled selected class="bg-[#1F2E22] text-[#5E7365]">Select Category</option>
-                      <option value="general" class="bg-[#1F2E22] text-white">General / UR</option>
-                      <option value="obc" class="bg-[#1F2E22] text-white">OBC</option>
-                      <option value="sc" class="bg-[#1F2E22] text-white">SC</option>
-                      <option value="st" class="bg-[#1F2E22] text-white">ST</option>
+                    <label class="block text-[11px] font-bold uppercase tracking-[0.1em] text-[#9ca3af] mb-1.5">CASTE CATEGORY:</label>
+                    <select id="user-caste" class="w-full bg-[#182433] text-white text-sm font-medium rounded-xl px-4 py-3 border border-[#26364A] focus:outline-none focus:ring-2 focus:ring-[#5AB2FF] transition appearance-none cursor-pointer" required>
+                      <option value="" disabled selected class="bg-[#182433] text-[#5B6B7A]">Select Category</option>
+                      <option value="General" class="bg-[#182433] text-white">General / UR</option>
+                      <option value="OBC" class="bg-[#182433] text-white">OBC</option>
+                      <option value="SC" class="bg-[#182433] text-white">SC</option>
+                      <option value="ST" class="bg-[#182433] text-white">ST</option>
                     </select>
                   </div>
 
                   <div>
-                    <label class="block text-[11px] font-bold uppercase tracking-[0.1em] text-[#8DA092] mb-1.5">REGION:</label>
-                    <select class="w-full bg-[#1F2E22] text-white text-sm font-medium rounded-xl px-4 py-3 border border-[#2D4232] focus:outline-none focus:ring-2 focus:ring-[#3D704D] focus:bg-[#25382A] transition appearance-none cursor-pointer">
-                      <option value="" disabled selected class="bg-[#1F2E22] text-[#5E7365]">Select State</option>
-                      <optgroup label="States" class="bg-[#1F2E22] text-[#6EE7B7]">
-                        <option value="Andhra Pradesh" class="bg-[#1F2E22] text-white">Andhra Pradesh</option>
-                        <option value="Karnataka" class="bg-[#1F2E22] text-white">Karnataka</option>
-                        <option value="Maharashtra" class="bg-[#1F2E22] text-white">Maharashtra</option>
-                        <option value="Tamil Nadu" class="bg-[#1F2E22] text-white">Tamil Nadu</option>
+                    <label class="block text-[11px] font-bold uppercase tracking-[0.1em] text-[#9ca3af] mb-1.5">REGION:</label>
+                    <select id="user-region" class="w-full bg-[#182433] text-white text-sm font-medium rounded-xl px-4 py-3 border border-[#26364A] focus:outline-none focus:ring-2 focus:ring-[#5AB2FF] transition appearance-none cursor-pointer" required>
+                      <option value="" disabled selected class="bg-[#182433] text-[#5B6B7A]">Select State</option>
+                      <optgroup label="States" class="bg-[#182433] text-[#5AB2FF]">
+                        <option value="Andhra Pradesh" class="bg-[#182433] text-white">Andhra Pradesh</option>
+                        <option value="Assam" class="bg-[#182433] text-white">Assam</option>
+                        <option value="Bihar" class="bg-[#182433] text-white">Bihar</option>
+                        <option value="Gujarat" class="bg-[#182433] text-white">Gujarat</option>
+                        <option value="Karnataka" class="bg-[#182433] text-white">Karnataka</option>
+                        <option value="Maharashtra" class="bg-[#182433] text-white">Maharashtra</option>
+                        <option value="Punjab" class="bg-[#182433] text-white">Punjab</option>
+                        <option value="Rajasthan" class="bg-[#182433] text-white">Rajasthan</option>
+                        <option value="Tamil Nadu" class="bg-[#182433] text-white">Tamil Nadu</option>
+                        <option value="Uttar Pradesh" class="bg-[#182433] text-white">Uttar Pradesh</option>
+                        <option value="West Bengal" class="bg-[#182433] text-white">West Bengal</option>
                       </optgroup>
                     </select>
                   </div>
                 </div>
-      
-                <button type="submit" class="font-heading w-full mt-4 bg-[#3D704D] hover:bg-[#49855C] text-white font-extrabold text-sm py-4 px-5 rounded-xl transition-all duration-300 shadow-lg shadow-[#3D704D]/30 flex items-center justify-center gap-2 group uppercase tracking-wider">
-                  <span>Login Securely</span>
+       
+                <button type="submit" id="btn-login-submit" class="font-heading w-full mt-4 bg-[#5AB2FF] hover:bg-[#FF87B2] text-[#0A1118] font-extrabold text-sm py-4 px-5 rounded-xl transition-all duration-300 shadow-lg shadow-[#5AB2FF]/30 flex items-center justify-center gap-2 group uppercase tracking-wider">
+                  <span>Continue Securely</span>
                   <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                 </button>
               </form>
             </div>
-      
-            <div class="mt-5 text-[11px] text-[#697E6E] font-semibold tracking-wide uppercase">Empowering Small Business • Access Funds</div>
+       
+            <div class="mt-5 text-[11px] text-[#5B6B7A] font-semibold tracking-wide uppercase">Empowering Small Business • Access Funds</div>
           </div>
-      
-          <div class="w-full md:w-[42%] xl:w-[45%] bg-[#0D150E] relative overflow-hidden flex flex-col items-center justify-center p-8 sm:p-12 text-white border-t md:border-t-0 md:border-l border-[#273B2B]">
-            <div class="absolute inset-0 overflow-hidden pointer-events-none">
-              <div class="absolute -top-10 -right-10 w-48 h-[480px] bg-[#162419] rounded-full transform rotate-[35deg] opacity-80 shadow-2xl"></div>
-            </div>
-      
+       
+          <div class="w-full md:w-[42%] xl:w-[45%] bg-[#090E14] relative overflow-hidden flex flex-col items-center justify-center p-8 sm:p-12 text-white border-t md:border-t-0 md:border-l border-[#2A3B4C]">
             <div class="relative z-10 text-center max-w-xs space-y-5">
-              <div class="w-24 h-24 mx-auto bg-white/10 backdrop-blur-md rounded-3xl p-3 border border-white/15 shadow-2xl flex items-center justify-center">
-                <svg class="w-full h-full drop-shadow-md" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M 32 114 C 65 114, 115 94, 144 60 C 124 86, 75 110, 32 114 Z" fill="#6EE7B7" />
-                  <path d="M 30 114 Q 95 106 145 58 C 137 74, 103 108 30 114 Z" fill="#34D399" />
-                </svg>
-              </div>
-      
               <h3 class="font-heading font-extrabold text-2xl sm:text-3xl text-white tracking-tight leading-tight">FETCH FUNDS</h3>
-              <p class="text-xs sm:text-sm text-emerald-100/70 font-medium leading-relaxed">Empowering Small Business.<br>Access Funds.<br>Grow Your Future.</p>
+              <p class="text-xs sm:text-sm text-blue-100/70 font-medium leading-relaxed">AI Matching Engine.<br>Personalized Pitch Script.<br>Application Document Checklist.</p>
             </div>
           </div>
         </div>
     </div>
 
 
-    <!-- ================= 2. APP VIEW (MULTI-STEP DASHBOARD) ================= -->
+    <!-- ================= 2. APP VIEW ================= -->
     <div id="centered-app-view" class="view-wrapper">
         <div class="container">
 
@@ -424,38 +467,28 @@
                 <!-- STEP 1: FUNDING OBJECTIVE -->
                 <div id="step-objective" class="fade-step" style="flex-grow: 1;">
                     <h2 class="font-heading" style="font-size: 26px; margin-bottom: 6px;">Funding Objective</h2>
-                    <p class="intro-text" style="margin-bottom: 12px; font-size: 14px;">Select the primary purpose of your funding to help our AI pinpoint the exact government schemes you qualify for.</p>
+                    <p class="intro-text" style="margin-bottom: 12px; font-size: 14px;">Select what best matches your capital requirement.</p>
                     
                     <div class="loan-grid">
-                        <div class="loan-card" onclick="selectLoan('working_capital', this)">
-                            <div class="loan-icon-wrap"><svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+                        <div class="loan-card" onclick="selectLoan('Working Capital for inventory & operations', this)">
+                            <div class="loan-icon-wrap"><svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
                             <div class="loan-title">Working Capital</div>
                             <div class="loan-desc">Manage daily operations & inventory.</div>
                         </div>
-                        <div class="loan-card" onclick="selectLoan('machinery', this)">
-                            <div class="loan-icon-wrap"><svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
+                        <div class="loan-card" onclick="selectLoan('Machinery and Technology upgrade', this)">
+                            <div class="loan-icon-wrap"><svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
                             <div class="loan-title">Machinery & Tech</div>
-                            <div class="loan-desc">Upgrade equipment or manufacturing assets.</div>
+                            <div class="loan-desc">Upgrade manufacturing assets.</div>
                         </div>
-                        <div class="loan-card" onclick="selectLoan('agriculture', this)">
-                            <div class="loan-icon-wrap"><svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/><path d="M4 10h16"/></svg></div>
+                        <div class="loan-card" onclick="selectLoan('Agricultural expansion and allied sector', this)">
+                            <div class="loan-icon-wrap"><svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/><path d="M4 10h16"/></svg></div>
                             <div class="loan-title">Agriculture Loan</div>
-                            <div class="loan-desc">Farming, allied sectors, and rural agri-business.</div>
+                            <div class="loan-desc">Farming, allied, & rural infra.</div>
                         </div>
-                        <div class="loan-card" onclick="selectLoan('raw_materials', this)">
-                            <div class="loan-icon-wrap"><svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></div>
-                            <div class="loan-title">Raw Materials</div>
-                            <div class="loan-desc">Bulk procurement of supplies and raw stock.</div>
-                        </div>
-                        <div class="loan-card" onclick="selectLoan('micro', this)">
-                            <div class="loan-icon-wrap"><svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22v-7l-2-2"/><path d="M17 8v.5a3.5 3.5 0 1 1-7 0V8a5 5 0 0 1 10 0v.5a3.5 3.5 0 1 1-7 0V8a5 5 0 0 1 10 0z"/></svg></div>
+                        <div class="loan-card" onclick="selectLoan('Micro-enterprise scaling and Mudra credit', this)">
+                            <div class="loan-icon-wrap"><svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path d="M12 22v-7l-2-2"/><path d="M17 8v.5a3.5 3.5 0 1 1-7 0V8a5 5 0 0 1 10 0v.5a3.5 3.5 0 1 1-7 0V8a5 5 0 0 1 10 0z"/></svg></div>
                             <div class="loan-title">Micro & Mudra</div>
-                            <div class="loan-desc">Small ticket loans for micro-ventures.</div>
-                        </div>
-                        <div class="loan-card" onclick="selectLoan('infrastructure', this)">
-                            <div class="loan-icon-wrap"><svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"/><path d="M9 21v-4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v4"/></svg></div>
-                            <div class="loan-title">Infrastructure</div>
-                            <div class="loan-desc">Build or expand office and warehouses.</div>
+                            <div class="loan-desc">Small loans for retail & vendors.</div>
                         </div>
                     </div>
 
@@ -467,10 +500,9 @@
                 <!-- STEP 2: ADDITIONAL DETAILS FORM -->
                 <div id="step-details" class="fade-step" style="display: none; flex-grow: 1;">
                     <h2 class="font-heading" style="font-size: 26px; margin-bottom: 6px;">Additional Details</h2>
-                    <p class="intro-text" style="margin-bottom: 24px; font-size: 14px;">Provide a few more specifics to ensure our AI matches you with the highest-probability schemes.</p>
+                    <p class="intro-text" style="margin-bottom: 24px; font-size: 14px;">Our AI compares these parameters directly against Firestore scheme requirements.</p>
                     
                     <form onsubmit="submitFinalDetails(event)">
-                        
                         <div class="form-group">
                             <label>Requested Amount (in ₹)</label>
                             <input type="number" id="req-amount" placeholder="e.g. 500000" required>
@@ -480,12 +512,11 @@
                             <label>Occupation</label>
                             <select id="occupation" required>
                                 <option value="" disabled selected>Select Occupation</option>
-                                <option value="farmer">Farmer / Agriculturist</option>
-                                <option value="business">Business Owner / Self-Employed</option>
-                                <option value="salaried">Salaried Professional</option>
-                                <option value="student">Student</option>
-                                <option value="unemployed">Unemployed</option>
-                                <option value="other">Other</option>
+                                <option value="Farmer">Farmer / Agriculturist</option>
+                                <option value="Small Vendor / Retailer">Small Vendor / Retailer</option>
+                                <option value="Micro Business Owner">Micro Business Owner</option>
+                                <option value="Artisan / Craftsman">Artisan / Craftsman</option>
+                                <option value="Self-Employed">Self-Employed</option>
                             </select>
                         </div>
 
@@ -496,19 +527,83 @@
 
                         <div class="form-group">
                             <label>Land Holding (in Acres)</label>
-                            <input type="number" id="land-holding" placeholder="e.g. 2.5" step="any" required>
+                            <input type="number" id="land-holding" placeholder="0 if no land" step="any" value="0" required>
                         </div>
 
                         <div style="display: flex; gap: 12px; margin-top: 30px;">
-                            <button type="button" class="btn font-heading" style="background: #F2F4F2; color: var(--text-muted); width: 30%; box-shadow: none;" onclick="goBackToObjective()">Back</button>
-                            <button type="submit" class="btn font-heading" style="width: 70%; margin-top: 10px;">Find My Matches ✨</button>
+                            <button type="button" class="btn font-heading" style="background: #E6F0F9; color: var(--text-muted); width: 30%; box-shadow: none;" onclick="goBackToObjective()">Back</button>
+                            <button type="submit" id="btn-submit-match" class="btn font-heading" style="width: 70%; margin-top: 10px;">Find My Matches ✨</button>
                         </div>
                     </form>
                 </div>
 
-                <!-- STEP 3: RESULTS / LOADING AREA -->
-                <div id="results-area" class="fade-step" style="display: none; margin-top: 24px; padding: 32px 24px; background: #F6F8F6; border-radius: 12px; border: 1px solid var(--border);">
-                    <p style="text-align: center; font-weight: 700; color: var(--primary); line-height: 1.6; font-size: 15px;" id="loading-text">Analyzing profile against 100+ schemes...</p>
+                <!-- STEP 3: RESULTS / AI RECOMMENDATION & PITCH MODULE -->
+                <div id="results-area" class="fade-step" style="display: none; margin-top: 20px; padding: 28px 24px; background: #F4F8FB; border-radius: 16px; border: 1px solid var(--border);">
+                    <div id="results-loading" style="text-align: center;">
+                        <p style="font-weight: 700; color: var(--primary); font-size: 16px;" class="shimmer">Connecting to Gemini AI Matchmaker...</p>
+                        <span style="font-size: 13px; color: var(--text-muted); font-weight: 600; margin-top: 6px; display: inline-block;">Matching against official Firebase schemes database...</span>
+                    </div>
+
+                    <!-- Populated after Gemini responds -->
+                    <div id="results-content" style="display: none;">
+                        <div style="text-align: center; margin-bottom: 24px; border-bottom: 1px solid #E2E8F0; padding-bottom: 16px;">
+                            <span style="background: #E6F0F9; color: #5AB2FF; font-size: 11px; font-weight: 800; padding: 5px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px;">Top Recommended Scheme</span>
+                            <h3 id="res-scheme-name" class="font-heading" style="font-size: 24px; font-weight: 800; color: var(--text-main); margin-top: 10px; margin-bottom: 4px;"></h3>
+                            <p id="res-ministry" style="font-size: 13px; font-weight: 600; color: var(--primary); margin-bottom: 6px;"></p>
+                            <p id="res-verdict" style="font-size: 13.5px; color: var(--text-muted); max-width: 520px; margin: 0 auto; line-height: 1.5;"></p>
+                        </div>
+
+                        <!-- Concessions & Rates Grid -->
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px;">
+                            <div style="background: #ffffff; border: 1px solid var(--border); border-radius: 10px; padding: 12px;">
+                                <span style="font-size: 10px; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Subsidy / Concession</span>
+                                <p id="res-subsidy" style="font-size: 13px; font-weight: 700; color: #10B981; margin-top: 4px;"></p>
+                            </div>
+                            <div style="background: #ffffff; border: 1px solid var(--border); border-radius: 10px; padding: 12px;">
+                                <span style="font-size: 10px; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Interest Structure</span>
+                                <p id="res-interest" style="font-size: 13px; font-weight: 700; color: var(--text-main); margin-top: 4px;"></p>
+                            </div>
+                        </div>
+
+                        <!-- 1. Interactive Required Documents Checklist -->
+                        <div style="background: #ffffff; border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 16px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                <h4 class="font-heading" style="font-size: 16px; font-weight: 700; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
+                                    <span>📄</span> Required Documents
+                                </h4>
+                                <span id="doc-progress-badge" style="background: #E6F0F9; color: var(--primary); font-size: 11px; font-weight: 800; padding: 3px 8px; border-radius: 12px;">0% Ready</span>
+                            </div>
+                            <div id="documents-list" style="display: flex; flex-direction: column; gap: 8px;">
+                                <!-- Dynamic check items -->
+                            </div>
+                        </div>
+
+                        <!-- 2. Small Vendor Pitching & Talking Points -->
+                        <div style="background: #ffffff; border: 1px solid var(--border); border-radius: 14px; padding: 20px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                <h4 class="font-heading" style="font-size: 16px; font-weight: 700; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
+                                    <span>🗣️</span> Loan Officer Pitch Guide
+                                </h4>
+                                <button id="copy-pitch-btn" onclick="copyPitchScript()" style="background: #E6F0F9; border: none; border-radius: 8px; padding: 4px 10px; font-size: 12px; font-weight: 700; cursor: pointer; color: var(--primary); transition: 0.2s;">
+                                    Copy Script
+                                </button>
+                            </div>
+
+                            <div style="margin-bottom: 14px;">
+                                <span style="font-size: 11px; text-transform: uppercase; font-weight: 800; color: var(--text-muted); letter-spacing: 0.5px;">60-Second Elevator Pitch</span>
+                                <div id="res-pitch" style="margin-top: 6px; background: #F8FAFC; border-left: 3px solid var(--primary); border-radius: 4px; padding: 12px; font-size: 13.5px; color: #1E293B; line-height: 1.5; font-style: italic;">
+                                </div>
+                            </div>
+
+                            <div>
+                                <span style="font-size: 11px; text-transform: uppercase; font-weight: 800; color: var(--text-muted); letter-spacing: 0.5px;">Repayment Strategy Tip</span>
+                                <p id="res-repayment" style="margin: 6px 0 0 0; font-size: 13px; color: #475569; line-height: 1.5; background: #F8FAFC; padding: 10px; border-radius: 8px; border: 1px solid #EEF2F6;">
+                                </p>
+                            </div>
+                        </div>
+
+                        <button class="btn font-heading" style="margin-top: 20px;" onclick="resetMatchmaker()">Start Another Match</button>
+                    </div>
                 </div>
 
             </div>
@@ -541,7 +636,14 @@
 
     <div id="view-privacy" class="view-wrapper full-screen-page">
         <div class="doc-header"><button class="btn-back font-heading" onclick="closeFullScreenDoc()">← Back</button></div>
-        <div class="doc-content"><h2 class="font-heading">Privacy Policy</h2><div class="document-text"><p><strong>Data Handling</strong><br>We securely process your business demographics to find matching financial schemes. We use bank-level encryption.</p></div></div>
+        <div class="doc-content">
+            <h2 class="font-heading">Privacy Policy</h2>
+            <div class="document-text">
+                <p><strong>Data We Keep</strong><br>We collect business demographics, financial indicators (such as requested amount and annual turnover), and basic personal identifiers necessary for scheme matching.</p>
+                <p><strong>What Is Done With Data</strong><br>Your information is processed exclusively by our secure AI engine to evaluate eligibility against thousands of government financial schemes and mandates.</p>
+                <p><strong>Data Sharing Policy</strong><br>We do not sell your proprietary business data to third-party marketing algorithms. Information is only shared with verified lending partners or government portals upon your explicit request.</p>
+            </div>
+        </div>
     </div>
 
     <div id="view-policy" class="view-wrapper full-screen-page">
@@ -555,10 +657,219 @@
     </div>
 
     <!-- ================= JAVASCRIPT LOGIC ================= -->
+    <script type="module">
+        import { Renderer, Program, Mesh, Triangle, Color } from 'https://esm.sh/ogl@1.0.10';
+
+        const PAD = 20;
+
+        const VERT = `#version 300 es
+        in vec2 position;
+        void main() {
+            gl_Position = vec4(position, 0.0, 1.0);
+        }
+        `;
+
+        const FRAG = `#version 300 es
+        precision highp float;
+
+        uniform vec2 uCenter;
+        uniform vec2 uHalfSize;
+        uniform float uRadius;
+        uniform float uAngle;
+        uniform float uPx;
+        uniform vec3 uLineColor;
+        uniform vec3 uBaseColor;
+        uniform float uIntensity;
+        uniform float uShineSize;
+        uniform float uShineFade;
+        uniform float uThickness;
+        uniform float uBaseWidth;
+
+        out vec4 fragColor;
+
+        float sdRoundedRect(vec2 p, vec2 b, float r) {
+            vec2 q = abs(p) - b + r;
+            return length(max(q, 0.0)) + min(max(q.x, q.y), 0.0) - r;
+        }
+
+        float shapeSDF(vec2 p) { return sdRoundedRect(p, uHalfSize, uRadius); }
+
+        float gaussianLine(float d, float sigma) {
+            float x = d / (sigma + 1e-6);
+            float k = mix(1.0, 1.6, smoothstep(0.0, 1.5, x));
+            return exp(-k * x * x);
+        }
+
+        void main() {
+            vec2 p = gl_FragCoord.xy - uCenter;
+            float d = shapeSDF(p);
+            vec2 L = vec2(cos(uAngle), sin(uAngle));
+
+            float base = (1.0 - smoothstep(0.0, uBaseWidth, abs(d))) * 0.45;
+
+            vec2 nEll = normalize(p / (uHalfSize * uHalfSize) + 1e-6);
+            float phi = acos(clamp(abs(dot(nEll, L)), 0.0, 1.0));
+            float rim = 1.0 - smoothstep(uShineSize - uShineFade, uShineSize + uShineFade + 1e-4, phi);
+            float line = gaussianLine(d, uThickness);
+            float edgeClamp = 1.0 - smoothstep(0.5 * uPx, 3.0 * uPx, abs(d));
+            float hi = line * rim * edgeClamp * uIntensity;
+
+            vec3 col = uBaseColor * base + uLineColor * hi;
+            float a = clamp(base + hi, 0.0, 1.0);
+            fragColor = vec4(col, a);
+        }
+        `;
+
+        class SpecularButton {
+            constructor(btn, props) {
+                this.btn = btn;
+                this.fx = btn.querySelector('.specular-button__fx');
+                this.props = props;
+
+                const dpr = window.devicePixelRatio || 1;
+                this.renderer = new Renderer({ alpha: true, premultipliedAlpha: true, antialias: true, dpr });
+                const gl = this.renderer.gl;
+                gl.clearColor(0, 0, 0, 0);
+                gl.enable(gl.BLEND);
+                gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+
+                const geometry = new Triangle(gl);
+                if (geometry.attributes.uv) delete geometry.attributes.uv;
+
+                const lineC = new Color(props.lineColor);
+                const baseC = new Color(props.baseColor);
+
+                this.program = new Program(gl, {
+                    vertex: VERT,
+                    fragment: FRAG,
+                    uniforms: {
+                        uCenter: { value: [0, 0] },
+                        uHalfSize: { value: [1, 1] },
+                        uRadius: { value: 0 },
+                        uAngle: { value: 2.4 },
+                        uPx: { value: dpr },
+                        uLineColor: { value: [lineC.r, lineC.g, lineC.b] },
+                        uBaseColor: { value: [baseC.r, baseC.g, baseC.b] },
+                        uIntensity: { value: 0 },
+                        uShineSize: { value: (props.shineSize * Math.PI) / 180 },
+                        uShineFade: { value: (props.shineFade * Math.PI) / 180 },
+                        uThickness: { value: props.thickness * dpr },
+                        uBaseWidth: { value: dpr }
+                    }
+                });
+
+                this.mesh = new Mesh(gl, { geometry, program: this.program });
+                this.fx.appendChild(gl.canvas);
+
+                this.size = { w: 1, h: 1 };
+                this.resize = () => {
+                    const rect = this.btn.getBoundingClientRect();
+                    const w = rect.width;
+                    const h = rect.height;
+                    this.size.w = w;
+                    this.size.h = h;
+                    this.renderer.setSize(w + PAD * 2, h + PAD * 2);
+                    this.program.uniforms.uCenter.value = [(PAD + w / 2) * dpr, (PAD + h / 2) * dpr];
+                    this.program.uniforms.uHalfSize.value = [(w / 2) * dpr, (h / 2) * dpr];
+                    this.program.uniforms.uRadius.value = Math.min(props.radius, Math.min(w, h) / 2) * dpr;
+                };
+
+                this.ro = new ResizeObserver(this.resize);
+                this.ro.observe(this.btn);
+                this.resize();
+
+                this.pointerAngle = null;
+                this.proximityT = 0;
+                this.onPointerMove = (e) => {
+                    const rect = this.btn.getBoundingClientRect();
+                    const cx = rect.left + rect.width / 2;
+                    const cy = rect.top + rect.height / 2;
+                    const dx = Math.max(rect.left - e.clientX, 0, e.clientX - rect.right);
+                    const dy = Math.max(rect.top - e.clientY, 0, e.clientY - rect.bottom);
+                    const dist = Math.hypot(dx, dy);
+
+                    if (dist === 0) {
+                        const nx = (e.clientX - cx) / (rect.width / 2);
+                        const ny = (cy - e.clientY) / (rect.height / 2);
+                        this.pointerAngle = Math.atan2(2 / rect.height, -2 / rect.width) + nx * 0.3 + ny * 0.15;
+                    } else {
+                        this.pointerAngle = Math.atan2(cy - e.clientY, e.clientX - cx);
+                    }
+                    const t = Math.max(0, 1 - dist / Math.max(props.proximity, 1));
+                    this.proximityT = t * t * (3 - 2 * t);
+                };
+                window.addEventListener('pointermove', this.onPointerMove);
+
+                this.angle = 2.4;
+                this.idleAngle = 2.4;
+                this.bright = 0;
+                this.lastT = performance.now();
+
+                this.update = (now) => {
+                    this.raf = requestAnimationFrame(this.update);
+                    const dt = Math.min((now - this.lastT) / 1000, 0.05);
+                    this.lastT = now;
+
+                    this.idleAngle += props.speed * dt;
+                    const steer = props.followMouse && this.pointerAngle !== null && (!props.autoAnimate || this.proximityT > 0);
+                    const target = steer ? this.pointerAngle : this.idleAngle;
+                    const diff = ((target - this.angle + Math.PI * 3) % (Math.PI * 2)) - Math.PI;
+                    this.angle += diff * (1 - Math.exp(-dt * 7));
+
+                    const brightTarget = props.autoAnimate ? 1 : this.proximityT;
+                    this.bright += (brightTarget - this.bright) * (1 - Math.exp(-dt * 8));
+
+                    this.program.uniforms.uAngle.value = this.angle;
+                    this.program.uniforms.uIntensity.value = props.intensity * this.bright;
+
+                    this.renderer.render({ scene: this.mesh });
+                };
+                this.raf = requestAnimationFrame(this.update);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const btnElement = document.getElementById('specular-btn');
+            if (btnElement) {
+                new SpecularButton(btnElement, {
+                    radius: 40,
+                    lineColor: '#FF87B2', 
+                    baseColor: '#101C29', 
+                    intensity: 1.5, 
+                    shineSize: 10,
+                    shineFade: 40,
+                    thickness: 2,
+                    speed: 0.35,
+                    followMouse: true,
+                    proximity: 250,
+                    autoAnimate: false
+                });
+            }
+        });
+    </script>
+    
     <script>
+        // FastAPI Backend URL (Update if using a different port or deployment domain)
+        const BACKEND_URL = "http://127.0.0.1:8000";
+
+        let currentApplicationId = null;
         let hasConsented = false;
         let selectedLoanType = null;
         let isUserLoggedIn = false; 
+
+        // User Data Store
+        let userProfile = {
+            username: '',
+            age: '',
+            gender: '',
+            caste: '',
+            region: '',
+            loanObjective: '',
+            requestedAmount: '',
+            occupation: '',
+            annualIncome: '',
+            landHolding: ''
+        };
 
         function openLogin() {
             document.getElementById('view-home').classList.remove('active');
@@ -566,17 +877,60 @@
             window.scrollTo(0, 0);
         }
 
-        function submitLogin() {
-            isUserLoggedIn = true;
-            document.getElementById('view-login').classList.remove('active');
-            document.getElementById('centered-app-view').classList.add('active');
-            document.body.classList.add('creme-bg');
-            document.body.style.backgroundColor = ''; 
-            
-            if (!hasConsented) {
-                document.getElementById('consent-modal').classList.add('active');
+        async function submitLogin() {
+            const loginBtn = document.getElementById('btn-login-submit');
+            loginBtn.innerText = "Creating Profile...";
+            loginBtn.disabled = true;
+
+            userProfile.username = document.getElementById('user-name').value;
+            userProfile.age = parseInt(document.getElementById('user-age').value) || 25;
+            userProfile.gender = document.getElementById('user-gender').value;
+            userProfile.caste = document.getElementById('user-caste').value;
+            userProfile.region = document.getElementById('user-region').value;
+
+            const step1Data = {
+                name: userProfile.username,
+                age: userProfile.age,
+                gender: userProfile.gender,
+                caste_category: userProfile.caste,
+                state: userProfile.region
+            };
+
+            try {
+                // Call FastAPI Step 1 to save to Firestore & get Application ID
+                const response = await fetch(`${BACKEND_URL}/api/application/step1`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(step1Data)
+                });
+
+                if (!response.ok) throw new Error("Step 1 failed on backend");
+                const result = await response.json();
+                currentApplicationId = result.application_id;
+
+                isUserLoggedIn = true;
+                document.getElementById('view-login').classList.remove('active');
+                document.getElementById('centered-app-view').classList.add('active');
+                document.body.classList.add('creme-bg');
+                
+                if (!hasConsented) {
+                    document.getElementById('consent-modal').classList.add('active');
+                }
+            } catch (err) {
+                console.warn("Backend unavailable, using mock session:", err);
+                currentApplicationId = "demo-app-session";
+                isUserLoggedIn = true;
+                document.getElementById('view-login').classList.remove('active');
+                document.getElementById('centered-app-view').classList.add('active');
+                document.body.classList.add('creme-bg');
+                if (!hasConsented) {
+                    document.getElementById('consent-modal').classList.add('active');
+                }
+            } finally {
+                loginBtn.innerText = "Continue Securely";
+                loginBtn.disabled = false;
+                window.scrollTo(0, 0);
             }
-            window.scrollTo(0, 0);
         }
 
         function validateForm() {
@@ -618,60 +972,171 @@
             window.scrollTo(0, 0);
         }
 
-        // STEP 1: Loan Selection
         function selectLoan(type, element) {
             selectedLoanType = type;
+            userProfile.loanObjective = type;
             const cards = document.querySelectorAll('.loan-card');
             cards.forEach(card => card.classList.remove('active'));
             element.classList.add('active');
             document.getElementById('btn-continue-details').disabled = false;
         }
 
-        // Move to Step 2
         function goToDetails() {
             if (!selectedLoanType) return;
             document.getElementById('step-objective').style.display = 'none';
             document.getElementById('step-details').style.display = 'block';
         }
 
-        // Move back to Step 1
         function goBackToObjective() {
             document.getElementById('step-details').style.display = 'none';
             document.getElementById('step-objective').style.display = 'block';
         }
-        function submitFinalDetails(event) {
-    event.preventDefault();
 
-    // Hide input step and show the loading/results container
-    document.getElementById('step-details').style.display = 'none';
-    const resultsArea = document.getElementById('results-area');
-    resultsArea.style.display = 'block';
+        async function submitFinalDetails(event) {
+            event.preventDefault(); 
+            
+            userProfile.requestedAmount = parseFloat(document.getElementById('req-amount').value) || 0;
+            userProfile.occupation = document.getElementById('occupation').value;
+            userProfile.annualIncome = parseFloat(document.getElementById('annual-income').value) || 0;
+            userProfile.landHolding = parseFloat(document.getElementById('land-holding').value) || 0;
 
-    // Retrieve input values
-    const amount = document.getElementById('req-amount').value;
-    const occupation = document.getElementById('occupation').value;
-    const income = document.getElementById('annual-income').value;
-    const land = document.getElementById('land-holding').value;
+            document.getElementById('step-details').style.display = 'none';
+            
+            const resultsArea = document.getElementById('results-area');
+            const loadingArea = document.getElementById('results-loading');
+            const contentArea = document.getElementById('results-content');
+            
+            resultsArea.style.display = 'block';
+            loadingArea.style.display = 'block';
+            contentArea.style.display = 'none';
 
-    // Display suggested loan scheme
-    resultsArea.innerHTML = `
-        <div style="text-align: left;">
-            <span style="background: #D1FAE5; color: #065F46; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 20px; text-transform: uppercase;">Top Recommended Match</span>
-            <h3 style="font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 20px; color: #0B120C; margin-top: 10px;">PM Mudra Yojana / Credit Guarantee Scheme</h3>
-            <p style="color: #5E7365; font-size: 14px; margin-top: 6px; line-height: 1.5;">
-                Matched for <strong>${occupation.toUpperCase()}</strong> track requesting ₹${Number(amount).toLocaleString('en-IN')}.
-            </p>
-            <div style="margin-top: 14px; padding: 12px; background: #ffffff; border-radius: 8px; border: 1px solid #D1DBD4; font-size: 13px; color: #0B120C;">
-                ✔ Eligible for collateral-free credit support<br>
-                ✔ Subsidized interest rate based on annual income criteria
-            </div>
-        </div>
-    `;
-}
+            await fetchBackendGuidance(userProfile);
+        }
 
-        // Final Submit
-        
+        async function fetchBackendGuidance(profile) {
+            const step2Payload = {
+                occupation: profile.occupation,
+                annual_income: profile.annualIncome,
+                requested_amount: profile.requestedAmount,
+                land_holding_acres: profile.landHolding,
+                purpose: profile.loanObjective || "Working Capital"
+            };
+
+            try {
+                const appId = currentApplicationId || "demo-app-session";
+                const response = await fetch(`${BACKEND_URL}/api/match-loan/${appId}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(step2Payload)
+                });
+
+                if (!response.ok) throw new Error("Match call failed on backend: " + response.status);
+
+                const data = await response.json();
+                renderResults(data);
+            } catch (err) {
+                console.warn("Backend error, displaying fallback preview:", err);
+                renderResults({
+                    recommended_scheme: "PM SVANidhi Scheme",
+                    administering_ministry: "Ministry of Housing and Urban Affairs",
+                    eligibility_verdict: `Optimal scheme match for ₹${profile.requestedAmount.toLocaleString('en-IN')}. Provides collateral-free micro-credit with interest subvention.`,
+                    subsidy_or_concession_details: "7% Interest Subsidy + digital cashbacks",
+                    interest_rate_structure: "Subsidized priority rates (~7-9% p.a.)",
+                    key_documents_required: [
+                        { name: "Aadhaar Card linked with Mobile", tag: "Mandatory KYC" },
+                        { name: "PAN Card / Form 60", tag: "Taxation" },
+                        { name: "Udyam Registration or Vending Certificate", tag: "Business Proof" },
+                        { name: "Bank Statement / Passbook (Last 6 Months)", tag: "Financial" }
+                    ],
+                    vendor_pitch_script: `I am requesting ₹${profile.requestedAmount.toLocaleString('en-IN')} to directly procure inventory and equipment. This injection will increase our daily turnover by 30%, which easily covers our monthly installment.`,
+                    repayment_strategy: "Operating turnover easily services the monthly EMI, with punctual repayment unlocking higher consecutive tranches."
+                });
+            }
+        }
+
+        function renderResults(data) {
+            document.getElementById('results-loading').style.display = 'none';
+            const contentArea = document.getElementById('results-content');
+            contentArea.style.display = 'block';
+
+            document.getElementById('res-scheme-name').innerText = data.recommended_scheme;
+            document.getElementById('res-ministry').innerText = data.administering_ministry || "Government of India";
+            document.getElementById('res-verdict').innerText = data.eligibility_verdict;
+            document.getElementById('res-subsidy').innerText = data.subsidy_or_concession_details || "Applicable Capital Subsidy";
+            document.getElementById('res-interest').innerText = data.interest_rate_structure || "Priority Lending Structure";
+            
+            document.getElementById('res-pitch').innerText = `"${data.vendor_pitch_script || "Presenting my application with projected cash flows to service EMI."}"`;
+            document.getElementById('res-repayment').innerText = data.repayment_strategy || "Daily turnover comfortably covers installments with zero strain on cash flow.";
+
+            // Render interactive document checklist
+            const docContainer = document.getElementById('documents-list');
+            docContainer.innerHTML = '';
+            
+            const docs = data.key_documents_required || [];
+            docs.forEach((doc) => {
+                const docName = typeof doc === 'string' ? doc : doc.name;
+                const docTag = typeof doc === 'string' ? 'Required' : doc.tag;
+
+                const label = document.createElement('label');
+                label.style = "display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; cursor: pointer;";
+                label.innerHTML = `
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <input type="checkbox" onchange="updateDocProgress()" style="accent-color: var(--primary); width: 16px; height: 16px; margin: 0;">
+                        <span style="font-size: 13.5px; font-weight: 600; color: #1E293B;">${docName}</span>
+                    </div>
+                    <span style="font-size: 10.5px; font-weight: 700; color: #64748B; background: #E2E8F0; padding: 2px 8px; border-radius: 6px;">${docTag}</span>
+                `;
+                docContainer.appendChild(label);
+            });
+
+            updateDocProgress();
+        }
+
+        function updateDocProgress() {
+            const checkboxes = document.querySelectorAll('#documents-list input[type="checkbox"]');
+            const checked = document.querySelectorAll('#documents-list input[type="checkbox"]:checked');
+            const pct = checkboxes.length ? Math.round((checked.length / checkboxes.length) * 100) : 0;
+            
+            const badge = document.getElementById('doc-progress-badge');
+            badge.innerText = `${pct}% Ready`;
+            if (pct === 100) {
+                badge.style.background = '#DCFCE7';
+                badge.style.color = '#16A34A';
+            } else {
+                badge.style.background = '#E6F0F9';
+                badge.style.color = 'var(--primary)';
+            }
+        }
+
+        function copyPitchScript() {
+            const pitch = document.getElementById('res-pitch').innerText.replace(/^"|"$/g, '');
+            navigator.clipboard.writeText(pitch);
+            const btn = document.getElementById('copy-pitch-btn');
+            btn.innerText = 'Copied! ✓';
+            setTimeout(() => { btn.innerText = 'Copy Script'; }, 2000);
+        }
+
+        function resetMatchmaker() {
+            document.getElementById('results-area').style.display = 'none';
+            document.getElementById('step-objective').style.display = 'block';
+            document.querySelectorAll('.loan-card').forEach(c => c.classList.remove('active'));
+            document.getElementById('btn-continue-details').disabled = true;
+            selectedLoanType = null;
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const accordionCards = document.querySelectorAll('.accordion-card');
+            if (accordionCards.length > 0) {
+                accordionCards.forEach(card => {
+                    card.addEventListener('mouseenter', () => {
+                        accordionCards.forEach(c => c.classList.remove('active'));
+                        card.classList.add('active');
+                    });
+                });
+            }
+        });
     </script>
 </body>
 </html>
 
+```
