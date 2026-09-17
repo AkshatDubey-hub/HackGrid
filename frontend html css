@@ -1,1 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FetchFunds - AI Matchmaker</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
 
+    <!-- Elite Fintech Font Pairing: Outfit (Headings) & DM Sans (Body) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #3D704D;
+            --primary-hover: #2D5A3B;
+            --background: #E8ECE9; 
+            --surface: #ffffff;
+            --text-main: #0B120C;
+            --text-muted: #5E7365;
+            --border: #D1DBD4;
+            --radius: 24px; 
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'DM Sans', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        h1, h2, h3, h4, .font-heading, .home-logo {
+            font-family: 'Outfit', sans-serif;
+            letter-spacing: -0.03em;
+        }
+
+        body {
+            background-color: #0B120C; 
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            transition: background-color 0.5s ease;
+        }
+
+        body.creme-bg { background-color: #F8F9F8; }
+
+        /* --- View Controllers --- */
+        .view-wrapper { display: none; animation: fade-in 400ms ease-out forwards; }
+        .view-wrapper.active { display: flex; }
+        #view-home.active { display: block; }
+        
+        .fade-step { animation: fade-in 400ms ease-out forwards; }
+
+        #view-login {
+            background-color: #0B120C;
+            background-image: repeating-linear-gradient(-45deg, #0B120C, #0B120C 20px, #111B13 20px, #111B13 40px);
+        }
+
+        @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+
+        /* ================= 0. HOME PAGE STYLES ================= */
+        #view-home { position: relative; min-height: 100vh; width: 100%; color: #ffffff; overflow-x: hidden; }
+        .bg-video { position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
+        .bg-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to bottom, rgba(11, 18, 12, 0.4) 0%, rgba(11, 18, 12, 0.95) 70%, rgba(11, 18, 12, 1) 100%);
+            backdrop-filter: blur(4px); z-index: 1;
+        }
+        .home-container { position: relative; z-index: 2; max-width: 1100px; margin: 0 auto; padding: 40px; }
+        .home-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 120px; }
+        .home-logo {
+            font-size: 28px; font-weight: 800;
+            background: linear-gradient(to right, #6EE7B7, #34D399);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .btn-login {
+            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.15); color: white; padding: 10px 28px; border-radius: 30px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;
+        }
+        .btn-login:hover { background: rgba(255, 255, 255, 0.15); border-color: rgba(110, 231, 183, 0.6); }
+        
+        .home-hero { text-align: center; margin-bottom: 100px; }
+        .home-hero h1 { 
+            font-size: 76px; font-weight: 800; margin-bottom: 24px; line-height: 1.05; 
+            background: linear-gradient(to bottom right, #ffffff, #A7F3D0);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .home-hero p { font-size: 20px; color: #95A89A; max-width: 750px; margin: 0 auto; line-height: 1.7; font-weight: 500;}
+        
+        .btn-enter {
+            margin: 40px auto; display: block; background: var(--primary); font-family: 'Outfit', sans-serif;
+            color: white; padding: 20px 56px; border-radius: 40px; font-size: 18px; font-weight: 700; border: none; cursor: pointer; box-shadow: 0 10px 30px rgba(61, 112, 77, 0.4); transition: all 0.3s ease;
+        }
+        .btn-enter:hover { background: var(--primary-hover); transform: scale(1.05) translateY(-2px); }
+
+        /* ================= APP DASHBOARD STYLES ================= */
+        #centered-app-view { flex-grow: 1; justify-content: center; align-items: flex-start; padding: 40px 20px; position: relative; }
+        .container {
+            background-color: var(--surface); width: 100%; max-width: 700px; margin: 0 auto;
+            border-radius: var(--radius); box-shadow: 0 25px 50px -12px rgba(11, 18, 12, 0.15);
+            overflow: hidden; display: flex; flex-direction: column; min-height: 480px; transition: max-width 0.4s ease;
+        }
+        /* When results are shown, we make the container wider */
+        .container.results-mode { max-width: 900px; }
+        
+        .card-page { display: none; padding: 48px 40px; flex-grow: 1; }
+        .card-page.active { display: flex; flex-direction: column; }
+
+        .loan-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+            margin-bottom: 28px; margin-top: 16px;
+        }
+        
+        .loan-card {
+            border: 2px solid var(--border); border-radius: 16px; padding: 18px; cursor: pointer; transition: all 0.25s ease; background: #fdfdfd;
+        }
+        .loan-card:hover { border-color: #B4C4B9; transform: translateY(-2px); }
+        .loan-card.active { border-color: var(--primary); background: #F0FDF4; }
+        
+        .loan-icon-wrap {
+            width: 40px; height: 40px; border-radius: 10px; background: #E8ECE9; 
+            display: flex; align-items: center; justify-content: center; margin-bottom: 12px; color: var(--primary);
+        }
+        .loan-card.active .loan-icon-wrap { background: var(--primary); color: white; }
+        
+        .loan-title { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 15px; margin-bottom: 4px; }
+        .loan-desc { font-size: 12px; color: var(--text-muted); line-height: 1.4; font-weight: 500; }
+
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-size: 13px; font-weight: 700; text-transform: uppercase; margin-bottom: 8px; color: var(--text-muted); }
+        .form-group input, .form-group select { 
+            width: 100%; padding: 14px 16px; border: 1px solid var(--border); border-radius: 12px; font-size: 15px; outline: none; transition: all 0.2s; background: #fdfdfd;
+        }
+        .form-group input:focus, .form-group select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(61, 112, 77, 0.1); }
+
+        .btn {
+            display: block; width: 100%; padding: 18px; background-color: var(--primary); color: white; border: none; border-radius: 12px; font-size: 16px; font-family: 'Outfit', sans-serif;
+            font-weight: 800; cursor: pointer; transition: transform 200ms ease, background-color 200ms ease;
+        }
+        .btn:not(:disabled):hover { background-color: var(--primary-hover); transform: translateY(-2px); }
+        .btn:disabled { background-color: #A9BBAF; cursor: not-allowed; }
+
+        /* Modal / Legal Modals */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(11, 18, 12, 0.65); backdrop-filter: blur(8px);
+            display: none; justify-content: center; align-items: center; z-index: 100; padding: 20px;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal-content {
+            background: var(--surface); width: 100%; max-width: 480px; padding: 40px; border-radius: var(--radius);
+        }
+
+        /* Result Report Specific Styling */
+        .report-section { background: white; border: 1px solid var(--border); border-radius: 16px; padding: 24px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.02); }
+        .report-label { font-size: 11px; text-transform: uppercase; color: var(--primary); letter-spacing: 0.05em; font-weight: 700; margin-bottom: 6px; display: block; }
+        .report-value { font-size: 15px; color: var(--text-main); line-height: 1.5; font-weight: 500; }
+        .doc-list li { margin-bottom: 12px; padding-left: 24px; position: relative; }
+        .doc-list li::before { content: "📄"; position: absolute; left: 0; top: 0; font-size: 14px; }
+    </style>
+</head>
+<body>
+
+    <!-- ================= 0. HOME PAGE ================= -->
+    <div id="view-home" class="view-wrapper active">
+        <video autoplay loop muted playsinline class="bg-video">
+            <source src="bg-video.mp4.webm" type="video/webm">
+        </video>
+        <div class="bg-overlay"></div>
+        <div class="home-container">
+            <header class="home-nav">
+                <div class="home-logo font-heading">FetchFunds</div>
+                <button class="btn-login" onclick="openLogin()">Client Login</button>
+            </header>
+            <main>
+                <div class="home-hero">
+                    <h1 class="font-heading">Empowering Your Growth with Government Schemes.</h1>
+                    <p>Welcome to your central hub for accessible financial support. We bridge the gap between hard-working individuals and the government schemes designed to help them thrive.</p>
+                </div>
+                <button class="btn-enter font-heading" onclick="openLogin()">Take the Next Step &rarr;</button>
+            </main>
+        </div>
+    </div>
+
+
+    <!-- ================= 1. INTERACTIVE LOGIN PORTAL ================= -->
+    <div id="view-login" class="view-wrapper items-center justify-center min-h-screen p-4">
+        <div class="bg-[#111B13] p-8 md:p-10 rounded-[28px] border border-[#2D4232] w-full max-w-md shadow-2xl relative overflow-hidden">
+            <!-- Decorative blur -->
+            <div class="absolute top-[-50px] right-[-50px] w-40 h-40 bg-[#3D704D] rounded-full blur-[80px] opacity-30 pointer-events-none"></div>
+
+            <h2 class="font-heading text-white text-3xl mb-2">Create Profile</h2>
+            <p class="text-[#95A89A] text-sm mb-8 font-medium">Let's start with the basics to personalize your scheme matching experience.</p>
+            
+            <form onsubmit="saveLoginAndNext(event)" class="space-y-5 relative z-10">
+                <!-- Username -->
+                <div>
+                    <label class="block text-[11px] uppercase tracking-wider text-[#6EE7B7] font-bold mb-2">Full Name</label>
+                    <input type="text" id="login-name" required placeholder="e.g. Rahul Sharma" class="w-full bg-[#1F2E22] text-white placeholder-[#5E7365] text-sm font-medium rounded-xl px-4 py-3.5 border border-[#2D4232] focus:outline-none focus:ring-2 focus:ring-[#3D704D] focus:bg-[#25382A] transition" />
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <!-- Age -->
+                    <div>
+                        <label class="block text-[11px] uppercase tracking-wider text-[#6EE7B7] font-bold mb-2">Age</label>
+                        <input type="number" id="login-age" required placeholder="e.g. 32" class="w-full bg-[#1F2E22] text-white placeholder-[#5E7365] text-sm font-medium rounded-xl px-4 py-3.5 border border-[#2D4232] focus:outline-none focus:ring-2 focus:ring-[#3D704D] focus:bg-[#25382A] transition" />
+                    </div>
+                    <!-- Gender -->
+                    <div>
+                        <label class="block text-[11px] uppercase tracking-wider text-[#6EE7B7] font-bold mb-2">Gender</label>
+                        <select id="login-gender" required class="w-full bg-[#1F2E22] text-white text-sm font-medium rounded-xl px-4 py-3.5 border border-[#2D4232] focus:outline-none focus:ring-2 focus:ring-[#3D704D] focus:bg-[#25382A] transition appearance-none cursor-pointer">
+                            <option value="" disabled selected class="text-[#5E7365]">Select</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Caste Category -->
+                <div>
+                    <label class="block text-[11px] uppercase tracking-wider text-[#6EE7B7] font-bold mb-2">Social Category</label>
+                    <select id="login-caste" required class="w-full bg-[#1F2E22] text-white text-sm font-medium rounded-xl px-4 py-3.5 border border-[#2D4232] focus:outline-none focus:ring-2 focus:ring-[#3D704D] focus:bg-[#25382A] transition appearance-none cursor-pointer">
+                        <option value="" disabled selected class="text-[#5E7365]">Required for specialized schemes</option>
+                        <option value="General">General / UR</option>
+                        <option value="OBC">OBC</option>
+                        <option value="SC">SC</option>
+                        <option value="ST">ST</option>
+                    </select>
+                </div>
+
+                <!-- Region/State -->
+                <div>
+                    <label class="block text-[11px] uppercase tracking-wider text-[#6EE7B7] font-bold mb-2">State of Operation</label>
+                    <select id="login-state" required class="w-full bg-[#1F2E22] text-white text-sm font-medium rounded-xl px-4 py-3.5 border border-[#2D4232] focus:outline-none focus:ring-2 focus:ring-[#3D704D] focus:bg-[#25382A] transition appearance-none cursor-pointer">
+                        <option value="" disabled selected class="text-[#5E7365]">Select State</option>
+                        <option value="Andhra Pradesh">Andhra Pradesh</option>
+                        <option value="Karnataka">Karnataka</option>
+                        <option value="Maharashtra">Maharashtra</option>
+                        <option value="Tamil Nadu">Tamil Nadu</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="w-full mt-6 bg-[#3D704D] hover:bg-[#2D5A3B] text-white font-heading font-bold text-lg rounded-xl py-4 shadow-[0_4px_14px_rgba(61,112,77,0.4)] transition-all hover:translate-y-[-2px]">
+                    Save & Next →
+                </button>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- ================= 2. APP DASHBOARD (OBJECTIVE & DETAILS) ================= -->
+    <div id="centered-app-view" class="view-wrapper">
+        <div class="container" id="main-container">
+            <div id="page-dashboard" class="card-page active">
+                
+                <!-- STEP 1: FUNDING OBJECTIVE -->
+                <div id="step-objective" class="fade-step" style="flex-grow: 1;">
+                    <h2 class="font-heading" style="font-size: 26px; margin-bottom: 6px;">Funding Objective</h2>
+                    <p class="text-muted" style="margin-bottom: 12px; font-size: 14px;">Select the primary purpose of your funding to help our AI pinpoint the exact government schemes.</p>
+                    
+                    <div class="loan-grid">
+                        <div class="loan-card" onclick="selectLoan('working_capital', this)">
+                            <div class="loan-icon-wrap">💼</div>
+                            <div class="loan-title">Working Capital</div>
+                            <div class="loan-desc">Manage daily operations & inventory.</div>
+                        </div>
+                        <div class="loan-card" onclick="selectLoan('machinery', this)">
+                            <div class="loan-icon-wrap">⚙️</div>
+                            <div class="loan-title">Machinery & Tech</div>
+                            <div class="loan-desc">Upgrade equipment assets.</div>
+                        </div>
+                        <div class="loan-card" onclick="selectLoan('agriculture', this)">
+                            <div class="loan-icon-wrap">🌾</div>
+                            <div class="loan-title">Agriculture Loan</div>
+                            <div class="loan-desc">Farming & allied sectors.</div>
+                        </div>
+                        <div class="loan-card" onclick="selectLoan('micro', this)">
+                            <div class="loan-icon-wrap">🏪</div>
+                            <div class="loan-title">Micro & Mudra</div>
+                            <div class="loan-desc">Small ticket loans for micro-ventures.</div>
+                        </div>
+                    </div>
+
+                    <button id="btn-continue-details" class="btn font-heading" disabled onclick="goToDetails()">Continue &rarr;</button>
+                </div>
+
+                <!-- STEP 2: ADDITIONAL DETAILS -->
+                <div id="step-details" class="fade-step" style="display: none; flex-grow: 1;">
+                    <h2 class="font-heading" style="font-size: 26px; margin-bottom: 6px;">Additional Details</h2>
+                    <p class="text-muted" style="margin-bottom: 24px; font-size: 14px;">Provide a few more specifics to ensure our AI matches you accurately.</p>
+                    
+                    <form onsubmit="submitFinalDetails(event)">
+                        <div class="form-group">
+                            <label>Requested Amount (in ₹)</label>
+                            <input type="number" id="req-amount" placeholder="e.g. 500000" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Occupation</label>
+                            <select id="occupation" required>
+                                <option value="" disabled selected>Select Occupation</option>
+                                <option value="farmer">Farmer / Agriculturist</option>
+                                <option value="business">Business Owner</option>
+                                <option value="salaried">Salaried Professional</option>
+                                <option value="unemployed">Unemployed / Startup</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Annual Income (in ₹)</label>
+                            <input type="number" id="annual-income" placeholder="e.g. 1200000" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Land Holding (in Acres)</label>
+                            <input type="number" id="land-holding" placeholder="e.g. 2.5 (Enter 0 if none)" step="any" required>
+                        </div>
+
+                        <div style="display: flex; gap: 12px; margin-top: 30px;">
+                            <button type="button" class="btn font-heading" style="background: #F2F4F2; color: var(--text-muted); width: 30%; box-shadow: none;" onclick="goBackToObjective()">Back</button>
+                            <button type="submit" class="btn font-heading" style="width: 70%;">Analyze & Match ✨</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- STEP 3: RESULTS / CONTINUATION PAGE -->
+                <div id="step-results" class="fade-step" style="display: none;">
+                    <div id="loading-area" style="text-align: center; padding: 60px 20px;">
+                        <div class="animate-spin inline-block w-10 h-10 border-[4px] border-current border-t-transparent text-[#3D704D] rounded-full mb-4" role="status" aria-label="loading"></div>
+                        <h3 class="font-heading text-xl text-[#0B120C]">Analyzing Profile...</h3>
+                        <p class="text-[#5E7365] text-sm mt-2">Evaluating against 100+ Government schemes, calculating subsidies, and drafting strategies.</p>
+                    </div>
+                    
+                    <!-- JSON Data Injected Here -->
+                    <div id="results-content" style="display: none;"></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- CONSENT MODAL -->
+    <div id="consent-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h2 class="font-heading text-2xl mb-2">Legal & Privacy</h2>
+            <p class="text-sm text-[#5E7365] mb-6">Please agree to data processing terms before generating matches.</p>
+            <label class="flex items-start gap-3 cursor-pointer mb-6">
+                <input type="checkbox" id="consent-checkbox" onchange="validateForm()" class="mt-1 w-5 h-5 accent-[#3D704D]">
+                <span class="text-sm font-semibold text-[#0B120C]">I acknowledge and agree to the Terms & Conditions and Privacy Policy.</span>
+            </label>
+            <button id="btn-accept" class="btn font-heading" disabled onclick="acceptConsent()">Accept & Continue</button>
+        </div>
+    </div>
+
+    <!-- ================= JAVASCRIPT LOGIC ================= -->
+    <script>
+        let hasConsented = false;
+        let selectedLoanType = null;
+        let userDataStore = {}; // Holds data from Login Portal
+
+        // Show Login Portal
+        function openLogin() {
+            document.getElementById('view-home').classList.remove('active');
+            document.getElementById('view-login').classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        // Handle Login Save & API Post
+        async function saveLoginAndNext(event) {
+            event.preventDefault();
+            
+            // Collect user data
+            userDataStore = {
+                name: document.getElementById('login-name').value,
+                age: document.getElementById('login-age').value,
+                gender: document.getElementById('login-gender').value,
+                caste: document.getElementById('login-caste').value,
+                state: document.getElementById('login-state').value
+            };
+
+            // Attempt to send data to backend to store
+            try {
+                // Change URL to your real backend endpoint
+                await fetch('http://127.0.0.1:8000/api/save-user', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(userDataStore)
+                });
+                console.log("User data saved to backend:", userDataStore);
+            } catch (error) {
+                console.warn("Backend not reachable. Proceeding with local state.", error);
+            }
+
+            // Transition to Dashboard
+            document.getElementById('view-login').classList.remove('active');
+            document.getElementById('centered-app-view').classList.add('active');
+            document.body.classList.add('creme-bg');
+            
+            if (!hasConsented) {
+                document.getElementById('consent-modal').classList.add('active');
+            }
+            window.scrollTo(0, 0);
+        }
+
+        // Modal Logic
+        function validateForm() {
+            document.getElementById('btn-accept').disabled = !document.getElementById('consent-checkbox').checked;
+        }
+        function acceptConsent() {
+            hasConsented = true;
+            document.getElementById('consent-modal').classList.remove('active');
+        }
+
+        // Dashboard Step Navigation
+        function selectLoan(type, element) {
+            selectedLoanType = type;
+            document.querySelectorAll('.loan-card').forEach(c => c.classList.remove('active'));
+            element.classList.add('active');
+            document.getElementById('btn-continue-details').disabled = false;
+        }
+        function goToDetails() {
+            document.getElementById('step-objective').style.display = 'none';
+            document.getElementById('step-details').style.display = 'block';
+        }
+        function goBackToObjective() {
+            document.getElementById('step-details').style.display = 'none';
+            document.getElementById('step-objective').style.display = 'block';
+        }
+
+        // Final Submission & Rendering Continuation Page
+        async function submitFinalDetails(event) {
+            event.preventDefault(); 
+            
+            // UI Transition to Loading State
+            document.getElementById('step-details').style.display = 'none';
+            document.getElementById('step-results').style.display = 'block';
+            document.getElementById('loading-area').style.display = 'block';
+            document.getElementById('results-content').style.display = 'none';
+            
+            // Widen the container for the report
+            document.getElementById('main-container').classList.add('results-mode');
+
+            // Combine Login data and Details data
+            const requestPayload = {
+                ...userDataStore,
+                occupation: document.getElementById('occupation').value,
+                annual_income: parseFloat(document.getElementById('annual-income').value),
+                requested_amount: parseFloat(document.getElementById('req-amount').value),
+                land_holding_acres: parseFloat(document.getElementById('land-holding').value) || 0,
+                purpose: selectedLoanType
+            };
+
+            try {
+                const response = await fetch('http://127.0.0.1:8000/api/match-loan', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(requestPayload)
+                });
+
+                let data;
+                if (!response.ok) {
+                    throw new Error(`Server returned ${response.status}`);
+                } else {
+                    data = await response.json();
+                }
+
+                renderContinuationPage(data);
+
+            } catch (error) {
+                console.error("API Error, rendering mock data instead.", error);
+                // Mock data matching the new advanced prompt output for demonstration
+                const mockData = {
+                    "primary_scheme": {
+                        "name": "Prime Minister's Employment Generation Programme (PMEGP)",
+                        "eligibility_verdict": `Because of your ${userDataStore.caste || 'category'} status and location, you qualify for maximum subvention under PMEGP.`,
+                        "msme_benefits": "Up to 35% capital subsidy. Collateral-free up to ₹10 Lakhs via CGTMSE.",
+                        "subsidy_details": "Margin money subsidy of 35% (Rural) or 25% (Urban).",
+                        "interest_rate": "Standard bank lending rate (approx 9.5% - 11.5%).",
+                        "application_workflow": ["Register on PMEGP e-Portal", "Submit Detailed Project Report (DPR)", "District Task Force Committee Interview", "Bank Appraisal and Sanction"]
+                    },
+                    "secondary_scheme": {
+                        "name": "MUDRA Yojana (Tarun Category)",
+                        "contingency": "If your project report is rejected due to high estimated project costs under PMEGP.",
+                        "differences": "MUDRA does not offer capital subsidy but has a faster processing time and requires no margin money."
+                    },
+                    "document_checklist_and_generation": [
+                        { "document": "Detailed Project Report (DPR)", "how_to_generate": "Use CA services or automated tools like ClearTax for 5-year financial projections and DSCR calculations." },
+                        { "document": "Udyam Registration", "how_to_generate": "Self-generate for free on the official Udyam portal using your Aadhar linked phone number." }
+                    ],
+                    "pitch_strategy": "Focus your bank interview on employment generation. Banks favor PMEGP applications that clearly show how the fund will hire local workers.",
+                    "fund_implementation": "Deploy 60% of funds strictly towards machinery (CAPEX) to satisfy subsidy rules, keeping 40% for working capital."
+                };
+                renderContinuationPage(mockData);
+            }
+        }
+
+        function renderContinuationPage(data) {
+            document.getElementById('loading-area').style.display = 'none';
+            const content = document.getElementById('results-content');
+
+            if (!data?.primary_scheme || !data?.secondary_scheme ||
+                !Array.isArray(data.primary_scheme.application_workflow) ||
+                !Array.isArray(data.document_checklist_and_generation)) {
+                content.innerHTML = `
+                    <div class="report-section">
+                        <span class="report-label">Unable to display results</span>
+                        <p class="report-value">The backend returned an incomplete report. Please try again.</p>
+                        <button class="btn mt-6" type="button" onclick="location.reload()">Try Again</button>
+                    </div>`;
+                content.style.display = 'block';
+                return;
+            }
+            
+            // Build the Workflows list
+            const workflowHTML = data.primary_scheme.application_workflow.map((step, index) => 
+                `<div style="display: flex; gap: 12px; margin-bottom: 12px; align-items: flex-start;">
+                    <div style="background: var(--primary); color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; flex-shrink: 0;">${index + 1}</div>
+                    <div style="font-size: 14px; color: var(--text-main); font-weight: 600; padding-top: 2px;">${step}</div>
+                </div>`
+            ).join('');
+
+            // Build Documents list
+            const docsHTML = data.document_checklist_and_generation.map(doc => 
+                `<li style="margin-bottom: 16px;">
+                    <strong style="color: var(--text-main); font-size: 15px;">${doc.document}</strong>
+                    <p style="font-size: 13px; color: var(--text-muted); margin-top: 4px; line-height: 1.4;">💡 <em>How to get it:</em> ${doc.how_to_generate}</p>
+                </li>`
+            ).join('');
+
+            content.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 24px;">
+                    <div>
+                        <span class="report-label">AI Matchmaker Report</span>
+                        <h2 class="font-heading" style="font-size: 28px; color: var(--primary);">Funding Strategy Ready</h2>
+                    </div>
+                    <button class="btn font-heading" style="width: auto; padding: 12px 24px; font-size: 14px;" onclick="window.print()">Save PDF</button>
+                </div>
+
+                <!-- PRIMARY SCHEME -->
+                <div class="report-section" style="border-top: 4px solid var(--primary);">
+                    <span class="report-label">Primary Match (Highest Probability)</span>
+                    <h3 class="font-heading" style="font-size: 22px; margin-bottom: 12px;">${data.primary_scheme.name}</h3>
+                    
+                    <div style="background: #F0FDF4; padding: 16px; border-radius: 12px; margin-bottom: 20px;">
+                        <span class="report-label">Eligibility Verdict</span>
+                        <p class="report-value">${data.primary_scheme.eligibility_verdict}</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        <div>
+                            <span class="report-label">MSME Benefits & Subsidy</span>
+                            <p class="report-value">${data.primary_scheme.msme_benefits} <br><span style="color: var(--text-muted); font-size: 13px;">${data.primary_scheme.subsidy_details}</span></p>
+                        </div>
+                        <div>
+                            <span class="report-label">Interest Structure</span>
+                            <p class="report-value">${data.primary_scheme.interest_rate}</p>
+                        </div>
+                    </div>
+
+                    <span class="report-label">Application Workflow</span>
+                    <div style="margin-top: 12px;">${workflowHTML}</div>
+                </div>
+
+                <!-- SECONDARY / BACKUP SCHEME -->
+                <div class="report-section" style="background: #FAFAFA;">
+                    <span class="report-label" style="color: #F59E0B;">Backup Scheme (Contingency)</span>
+                    <h3 class="font-heading" style="font-size: 18px; margin-bottom: 8px;">${data.secondary_scheme.name}</h3>
+                    <p class="report-value" style="font-size: 14px; margin-bottom: 8px;"><strong>When to pivot:</strong> ${data.secondary_scheme.contingency}</p>
+                    <p class="report-value" style="font-size: 14px; color: var(--text-muted);"><strong>Key Differences:</strong> ${data.secondary_scheme.differences}</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <!-- DOCUMENTS -->
+                    <div class="report-section mb-0">
+                        <span class="report-label">Document Generation Guide</span>
+                        <ul class="doc-list mt-4">${docsHTML}</ul>
+                    </div>
+
+                    <!-- STRATEGY -->
+                    <div class="report-section mb-0" style="background: #111B13; color: white;">
+                        <span class="report-label" style="color: #6EE7B7;">Pitch & Implementation Strategy</span>
+                        
+                        <div style="margin-top: 16px; margin-bottom: 20px;">
+                            <strong style="font-size: 14px; color: white;">Bank Pitch Strategy:</strong>
+                            <p style="font-size: 13px; color: #95A89A; margin-top: 6px; line-height: 1.5;">${data.pitch_strategy}</p>
+                        </div>
+
+                        <div>
+                            <strong style="font-size: 14px; color: white;">Fund Deployment:</strong>
+                            <p style="font-size: 13px; color: #95A89A; margin-top: 6px; line-height: 1.5;">${data.fund_implementation}</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="btn mt-6" style="background: #E8ECE9; color: var(--text-main); box-shadow: none;" onclick="location.reload()">Start New Application</button>
+            `;
+            content.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
