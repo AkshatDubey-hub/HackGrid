@@ -26,7 +26,6 @@ app.add_middleware(
 # -------------------------------------------------------------
 # 2. Initialize Gemini API
 # -------------------------------------------------------------
-# Load environment variables from .env file
 load_dotenv()  
 GEMINI_KEY = os.environ.get("GEMINI_API_KEY")
 client = genai.Client(api_key=GEMINI_KEY)
@@ -34,10 +33,9 @@ client = genai.Client(api_key=GEMINI_KEY)
 # -------------------------------------------------------------
 # 3. Initialize Firebase & Firestore
 # -------------------------------------------------------------
-# Make sure 'serviceAccountKey.json' is in the same directory as this script.
 db = None
 try:
-    cred = credentials.Certificate("firebase_credentials.json")
+    cred = credentials.Certificate("serviceAccountKey.json")
     firebase_admin.initialize_app(cred)
     db = firestore.client()
     print("Successfully connected to Firestore.")
@@ -45,19 +43,21 @@ except Exception as e:
     print(f"Error initializing Firebase: {e}")
 
 # -------------------------------------------------------------
-# 4. Input Data Model (What frontend sends)
+# 4. Input Data Models (Split into Two Steps)
 # -------------------------------------------------------------
-class ApplicantProfile(BaseModel):
-    name: str = Field(..., example="Ramesh Kumar")
-    age: int = Field(..., example=34)
-    gender: str = Field(..., example="Male")
-    caste_category: str = Field(..., example="SC")        # General, SC, ST, OBC
-    occupation: str = Field(..., example="Farmer")        # Farmer, Artisan, Small Business, Student
-    annual_income: float = Field(..., example=120000.0)
-    requested_amount: float = Field(..., example=150000.0)
-    land_holding_acres: float = Field(0.0, example=2.0)
-    purpose: str = Field(..., example="Purchase seeds and drip irrigation")
-    state: str = Field("Tamil Nadu", example="Tamil Nadu")
+class ApplicantStep1(BaseModel):
+    name: str = Field(...)
+    age: int = Field(...)
+    gender: str = Field(...)
+    caste_category: str = Field(...)
+    state: str = Field(...)
+
+class ApplicantStep2(BaseModel):
+    occupation: str = Field(...)
+    annual_income: float = Field(...)
+    requested_amount: float = Field(...)
+    land_holding_acres: float = Field(0.0)
+    purpose: str = Field(...)
 
 # -------------------------------------------------------------
 # 5. Output Data Model (Structured JSON returned to frontend)
@@ -65,6 +65,7 @@ class ApplicantProfile(BaseModel):
 class LoanRecommendation(BaseModel):
     applicant_name: str
     recommended_scheme: str
+    firebase_scheme_id: str  # Added this field based on your prompt instructions
     administering_ministry: str
     subsidy_or_concession_details: str
     interest_rate_structure: str
@@ -73,10 +74,12 @@ class LoanRecommendation(BaseModel):
     alternative_options: list[str]
 
 # -------------------------------------------------------------
-# 6. Single-Prompt GenAI Route
+# 6. Helper: Fetch Schemes from Database
 # -------------------------------------------------------------
 def fetch_schemes_from_firestore(collection_name: str = "schemes") -> list[dict]:
     """Retrieves all uploaded government scheme documents from Firestore."""
+    if db is None:
+        return []
     try:
         docs = db.collection(collection_name).stream()
         schemes = []
@@ -88,52 +91,94 @@ def fetch_schemes_from_firestore(collection_name: str = "schemes") -> list[dict]
     except Exception as e:
         print(f"Firestore query failed: {e}")
         return []
-@app.post("/api/match-loan", response_model=LoanRecommendation)
-def match_loan(user: ApplicantProfile):
-    # 1. Fetch live records from Firestore
+
+# -------------------------------------------------------------
+# 7. Routes
+# -------------------------------------------------------------
+@app.post("/api/application/step1")
+def save_step1(user_initial: ApplicantStep1):
+    if db is None:
+        raise HTTPException(status_code=500, detail="Database not initialized")
+    
+    try:
+        doc_ref = db.collection("loan_applications").document()
+        doc_data = {
+            "step1_data": user_initial.model_dump() if hasattr(user_initial, 'model_dump') else user_initial.dict(),
+            "status": "draft",
+            "timestamp": firestore.SERVER_TIMESTAMP
+        }
+        doc_ref.set(doc_data)
+        
+        return {
+            "message": "Step 1 saved successfully", 
+            "application_id": doc_ref.id
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to save step 1: {str(e)}")
+
+
+@app.post("/api/match-loan/{application_id}", response_model=LoanRecommendation)
+def match_loan(application_id: str, user_final: ApplicantStep2):
+    if db is None:
+        raise HTTPException(status_code=500, detail="Database not initialized")
+    
+    # 1. Fetch Step 1 data
+    doc_ref = db.collection("loan_applications").document(application_id)
+    doc_snap = doc_ref.get()
+    if not doc_snap.exists:
+        raise HTTPException(status_code=404, detail="Application ID not found. Complete step 1 first.")
+    
+    db_data = doc_snap.to_dict()
+    step1_data = db_data.get("step1_data", {})
+
+    # 2. Fetch Schemes
     available_schemes = fetch_schemes_from_firestore(collection_name="schemes")
-
     if not available_schemes:
-        raise HTTPException(
-            status_code=500,
-            detail="No schemes found in Firebase. Check collection name or documents."
-        )
+        raise HTTPException(status_code=500, detail="No schemes found in Firebase. Ensure the 'schemes' collection is populated.")
 
-    # 2. Format database records for the prompt
     schemes_json_str = json.dumps(available_schemes, indent=2)
 
+    # 3. Build Prompt (Fixed Variables)
     prompt = f"""
     You are an expert advisor on Government of India and State financial schemes.
     Evaluate the applicant against ONLY the authorized schemes provided below from our official database.
 
-    === APPLICANT PROFILE ===
-    - Name: {user.name}
-    - Age: {user.age}
-    - Gender: {user.gender}
-    - Caste / Category: {user.caste_category}
-    - Occupation: {user.occupation}
-    - Annual Income: INR {user.annual_income}
-    - Requested Amount: INR {user.requested_amount}
-    - Land Holding: {user.land_holding_acres} acres
-    - State: {user.state}
-    - Purpose: {user.purpose}
+=== APPLICANT PROFILE ===
+- Name: {step1_data.get('name')}
+- Age: {step1_data.get('age')}
+- Gender: {step1_data.get('gender')}
+- Caste / Category: {step1_data.get('caste_category')}
+- Occupation: {user_final.occupation}
+- Annual Income: INR {user_final.annual_income}
+- Requested Amount: INR {user_final.requested_amount}
+- Land Holding: {user_final.land_holding_acres} acres
+- State: {step1_data.get('state')}
+- Purpose: {user_final.purpose}
 
-    === AVAILABLE SCHEMES DATABASE (PULLED FROM FIREBASE) ===
-    {schemes_json_str}
+=== AVAILABLE SCHEMES DATABASE (PULLED FROM FIREBASE) ===
+{schemes_json_str}
 
-    === INSTRUCTIONS ===
-    1. Select the SINGLE BEST scheme from the provided Firebase list based on matching caste benefits, land criteria, occupation, and financial concessions.
-    2. Populate `firebase_scheme_id` with the exact `id` from the database.
-    3. Use the exact subsidy percentages and interest rate structures recorded in the scheme database.
-    4. Provide a clear eligibility verdict explaining why this specific scheme maximizes benefits for this applicant.
+=== INSTRUCTIONS ===
+1. **Scheme Selection:** Select the BEST PRIMARY scheme and a viable SECONDARY (backup) scheme from the provided Firebase list based on matching caste benefits, land criteria, occupation, and financial concessions. Populate `primary_firebase_scheme_id` and `secondary_firebase_scheme_id` with the exact `id`s from the database.
+2. **Financial Precision:** Use the exact subsidy percentages, margin money requirements, and interest rate structures recorded in the scheme database for both selected schemes.
+3. **Eligibility Verdict & Contingency:** Provide a clear eligibility verdict explaining exactly why the primary scheme maximizes benefits. Then, define the specific scenarios or rejection reasons under which the applicant should pivot to the secondary scheme.
+4. **MSME Benefits:** Outline the relevant points of the primary scheme that directly benefit the MSME (e.g., collateral-free guarantees, capital subsidies). Briefly note how the secondary scheme's benefits differ.
+5. **Application Workflow:** Provide a clear, step-by-step pathway of the application process for the primary scheme. Highlight any major workflow differences if the applicant has to fall back to the secondary scheme.
+6. **Document Checklist & Generation:** 
+    *   List all mandatory documents necessary to apply for both schemes, clearly separating any documents unique to the backup scheme. 
+    *   Provide a practical guide on how to generate or draft complex documents that aren't ready (e.g., using CA services or automated tools for Detailed Project Reports, 5-year financial projections, CMA data, Udyam Registration, and DSCR calculations).
+7. **Pitch & Proposal Strategy:** Outline key themes for the company to pitch to maximize approval chances (e.g., highlighting employment generation, rural development). If the backup scheme has a different focus (e.g., technology upgrade vs. employment), specify how the pitch must change.
+8. **Fund Implementation:** Provide actionable recommendations on how to effectively deploy the secured fund amount to ensure business growth, regulatory compliance, and seamless loan repayment.
     """
-
-    # 3. Call Gemini with retry handling
+    
+    # 4. Call Gemini with Retry Logic
     max_retries = 3
+    recommendation_data = None
+    
     for attempt in range(max_retries):
         try:
             response = client.models.generate_content(
-                model="gemini-3.6-flash",
+                model="gemini-3.6-flash", # Updated to current stable version
                 contents=prompt,
                 config=types.GenerateContentConfig(
                     response_mime_type="application/json",
@@ -141,13 +186,29 @@ def match_loan(user: ApplicantProfile):
                     temperature=0.1,
                 ),
             )
-            return json.loads(response.text)
-
+            recommendation_data = json.loads(response.text)
+            break # Success, exit retry loop
+            
         except Exception as e:
             err_str = str(e)
-            if "503" in err_str or "high demand" in err_str.lower():
+            if "503" in err_str or "high demand" in err_str.lower() or "429" in err_str:
                 time.sleep(2)
                 continue
             raise HTTPException(status_code=500, detail=f"Scheme matching failed: {err_str}")
 
-    raise HTTPException(status_code=503, detail="Model temporarily unavailable after retries.")
+    if not recommendation_data:
+        raise HTTPException(status_code=503, detail="Model temporarily unavailable after retries.")
+
+    # 5. Update Firestore with Final Data
+    try:
+        step2_dict = user_final.model_dump() if hasattr(user_final, 'model_dump') else user_final.dict()
+        doc_ref.update({
+            "step2_data": step2_dict,
+            "recommendation": recommendation_data,
+            "status": "completed",
+            "completed_timestamp": firestore.SERVER_TIMESTAMP,
+        })
+    except Exception as db_err:
+        print(f"Database Update Error: {db_err}")
+
+    return recommendation_data
