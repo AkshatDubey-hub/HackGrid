@@ -8,7 +8,7 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- Elite Fintech Font Pairing: Outfit (Headings) & DM Sans (Body) -->
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
@@ -47,12 +47,26 @@
             transition: background-color 0.5s ease;
         }
 
-        body.creme-bg { background-color: #F4F8FB; }
+        /* App View Background with Light Sky Blue Glow */
+        body.creme-bg { 
+            background-color: #F4F8FB; 
+            background-image: radial-gradient(circle at center, rgba(147, 197, 253, 0.5) 0%, transparent 70%);
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+        }
 
         /* --- View Controllers --- */
-        .view-wrapper { display: none; animation: fade-in 400ms ease-out forwards; }
-        .view-wrapper.active { display: flex; }
-        #view-home.active { display: block; }
+        .view-wrapper { 
+            display: none !important; 
+            animation: fade-in 400ms ease-out forwards; 
+        }
+        .view-wrapper.active { 
+            display: flex !important; 
+        }
+        #view-home.active,
+        .full-screen-page.active { 
+            display: block !important; 
+        }
         
         .fade-step { animation: fade-in 400ms ease-out forwards; }
 
@@ -97,23 +111,18 @@
         .content-section h2 { font-size: 42px; font-weight: 800; margin-bottom: 12px; color: #ffffff; letter-spacing: -0.04em;}
         .content-section > p { font-size: 18px; color: #D1DAE3; line-height: 1.8; margin-bottom: 40px; font-weight: 400; text-align: center; max-width: 600px; margin-left: auto; margin-right: auto;}
 
-        /* ================= FLEXBOX ACCORDION GALLERY ================= */
-        .accordion-gallery { 
-            display: flex; width: 100%; max-width: 1000px; height: 480px; gap: 16px; margin: 30px auto 0; 
-        }
+        /* ACCORDION GALLERY */
+        .accordion-gallery { display: flex; width: 100%; height: 480px; gap: 16px; margin-top: 20px; }
         .accordion-card {
             position: relative; flex: 1; border-radius: 32px; overflow: hidden; cursor: pointer;
             transition: flex 0.6s cubic-bezier(0.25, 1, 0.5, 1), border-color 0.4s ease, background 0.4s ease;
-            border: 1px solid rgba(90, 178, 255, 0.1); 
-            display: flex; 
-            align-items: flex-start; 
+            border: 1px solid rgba(90, 178, 255, 0.1); display: flex; align-items: flex-start; 
         }
         .accordion-card:nth-child(1) { background: linear-gradient(180deg, #101C29 0%, #0A1118 100%); }
         .accordion-card:nth-child(2) { background: linear-gradient(180deg, #1C1019 0%, #0A1118 100%); }
         .accordion-card:nth-child(3) { background: linear-gradient(180deg, #10161C 0%, #0A1118 100%); }
         
         .accordion-card.active { flex: 6; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
-        
         .accordion-card:nth-child(1).active { background: #A3C1DA; border-color: #A3C1DA; }
         .accordion-card:nth-child(2).active { background: #FFF5F6; border-color: #FFF5F6; }
         .accordion-card:nth-child(3).active { background: #9DB5C9; border-color: #9DB5C9; }
@@ -137,42 +146,19 @@
         .accordion-card.active .accordion-title { color: #0A1118; }
         .accordion-card.active .accordion-desc { color: #26364A; }
 
-        @media (max-width: 768px) {
-            .accordion-gallery { flex-direction: column; height: auto; }
-            .accordion-card { min-height: 100px; width: 100%; }
-            .accordion-card.active { flex: none; min-height: 320px; }
-            .accordion-content { min-width: 100%; padding: 24px; }
-            .accordion-vertical { display: none; }
-            .home-hero h1 { font-size: 42px; }
-            .content-section { padding: 32px 20px; }
-        }
-
         .quote-section { text-align: center; padding: 40px 20px; margin: 60px 0; font-style: italic; font-size: 22px; color: #FFCBE0; font-family: 'Outfit', sans-serif; letter-spacing: -0.01em; }
 
-        /* ================= SPECULAR WEBGL BUTTON ================= */
+        /* SPECULAR BUTTON */
         .specular-button {
             --sb-radius: 40px;
             --sb-tint: #5AB2FF;
             --sb-tint-opacity: 1;
-            --sb-blur: 0px;
             --sb-text-color: #ffffff;
             
-            position: relative;
-            display: flex;
-            margin: 40px auto;
-            align-items: center;
-            justify-content: center;
-            border: none;
-            font-family: 'Outfit', sans-serif;
-            font-weight: 700;
-            font-size: 18px;
-            padding: 20px 56px;
-            color: var(--sb-text-color);
-            background: color-mix(in srgb, var(--sb-tint) calc(var(--sb-tint-opacity) * 100%), transparent);
-            border-radius: var(--sb-radius);
-            box-shadow: 0 10px 30px rgba(90, 178, 255, 0.4);
-            cursor: pointer;
-            outline: none;
+            position: relative; display: flex; margin: 40px auto; align-items: center; justify-content: center;
+            border: none; font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 18px; padding: 20px 56px;
+            color: var(--sb-text-color); background: color-mix(in srgb, var(--sb-tint) calc(var(--sb-tint-opacity) * 100%), transparent);
+            border-radius: var(--sb-radius); box-shadow: 0 10px 30px rgba(90, 178, 255, 0.4); cursor: pointer; outline: none;
             transition: transform 0.15s ease, box-shadow 0.15s ease;
         }
         .specular-button:hover { box-shadow: 0 15px 40px rgba(255, 135, 178, 0.6); transform: scale(1.02) translateY(-2px); }
@@ -181,67 +167,58 @@
         .specular-button__fx canvas { display: block; width: 100%; height: 100%; }
         .specular-button__label { position: relative; z-index: 2; }
 
-        /* ================= HOME PAGE FOOTER ================= */
-        .home-footer-section {
-            background-color: #F4F8FB; color: #707E85; padding: 90px 40px; margin-top: 120px; position: relative; z-index: 2; border-top: 1px solid #E6F0F9;
-        }
+        /* HOME FOOTER */
+        .home-footer-section { background-color: #F4F8FB; color: #707E85; padding: 90px 40px; margin-top: 120px; position: relative; z-index: 2; border-top: 1px solid #E6F0F9; }
         .home-footer-grid { max-width: 700px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 100px; }
         .home-footer-col h3 { font-size: 13px; font-weight: 800; letter-spacing: 2.5px; color: #5B6B7A; margin-bottom: 32px; text-transform: uppercase; }
         .home-footer-links { display: flex; flex-direction: column; gap: 22px; }
-        .home-footer-link {
-            font-size: 20px; font-weight: 700; color: #707E85; cursor: pointer; transition: color 0.3s ease; width: fit-content; letter-spacing: -0.01em; text-decoration: none;
-        }
-        .home-footer-link:hover {
-            background: linear-gradient(to right, #5AB2FF, #FF87B2, #5AB2FF); background-size: 200% auto;
-            color: transparent; -webkit-background-clip: text; background-clip: text; animation: gradient-flow 2.5s linear infinite;
-        }
+        .home-footer-link { font-size: 20px; font-weight: 700; color: #707E85; cursor: pointer; transition: color 0.3s ease; width: fit-content; letter-spacing: -0.01em; text-decoration: none; }
+        .home-footer-link:hover { background: linear-gradient(to right, #5AB2FF, #FF87B2, #5AB2FF); background-size: 200% auto; color: transparent; -webkit-background-clip: text; background-clip: text; animation: gradient-flow 2.5s linear infinite; }
         @keyframes gradient-flow { to { background-position: 200% center; } }
 
-        /* ================= 2. PAGE 3: APP VIEW (DASHBOARD) STYLES ================= */
+        /* APP VIEW */
         #centered-app-view { 
             flex-grow: 1; 
-            flex-direction: column;
             justify-content: center; 
             align-items: center; 
-            padding: 40px 20px 60px; 
+            padding: 60px 20px; 
             position: relative; 
-            min-height: 100vh;
-            /* Enhanced Custom Ambient Background for Page 3 */
-            background-color: #F0F5FA;
-            background-image: 
-                radial-gradient(at 10% 15%, rgba(90, 178, 255, 0.18) 0px, transparent 45%),
-                radial-gradient(at 90% 85%, rgba(255, 135, 178, 0.18) 0px, transparent 45%),
-                radial-gradient(at 50% 50%, rgba(255, 255, 255, 0.8) 0px, transparent 100%),
-                linear-gradient(to right, rgba(209, 218, 227, 0.3) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(209, 218, 227, 0.3) 1px, transparent 1px);
-            background-size: 100% 100%, 100% 100%, 100% 100%, 36px 36px, 36px 36px;
+            overflow: hidden;
         }
-        .container {
-            background-color: var(--surface); width: 100%; max-width: 620px;
-            border-radius: var(--radius); box-shadow: 0 25px 60px -12px rgba(10, 17, 24, 0.12); overflow: hidden; display: flex; flex-direction: column; min-height: 480px;
-            border: 1px solid rgba(209, 218, 227, 0.6);
-            backdrop-filter: blur(10px);
+
+        .radial-glow-bg {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            background: radial-gradient(circle at center, #93c5fd 0%, transparent 70%);
+            opacity: 0.65;
+        }
+
+        .container { 
+            position: relative;
+            z-index: 10;
+            background-color: var(--surface); 
+            width: 100%; 
+            max-width: 620px; 
+            border-radius: var(--radius); 
+            box-shadow: 0 25px 50px -12px rgba(10, 17, 24, 0.15); 
+            overflow: hidden; 
+            display: flex; 
+            flex-direction: column; 
+            min-height: 480px; 
         }
         .card-page { display: none; padding: 48px 40px; flex-grow: 1; }
         .card-page.active { display: flex; flex-direction: column; }
 
-        .loan-grid {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
-            margin-bottom: 28px; margin-top: 16px; max-height: 400px; overflow-y: auto; padding-right: 4px;
-        }
+        .loan-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 28px; margin-top: 16px; max-height: 400px; overflow-y: auto; padding-right: 4px; }
         @media (max-width: 480px) { .loan-grid { grid-template-columns: 1fr; } }
         
-        .loan-card {
-            border: 2px solid var(--border); border-radius: 16px; padding: 18px; cursor: pointer; transition: all 0.25s ease;
-            display: flex; flex-direction: column; align-items: flex-start; background: #fdfdfd;
-        }
+        .loan-card { border: 2px solid var(--border); border-radius: 16px; padding: 18px; cursor: pointer; transition: all 0.25s ease; display: flex; flex-direction: column; align-items: flex-start; background: #fdfdfd; }
         .loan-card:hover { border-color: #B4C9DA; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.05); }
         .loan-card.active { border-color: var(--primary); background: #F0F8FF; box-shadow: 0 8px 20px rgba(90, 178, 255, 0.12); }
         
-        .loan-icon-wrap {
-            width: 40px; height: 40px; border-radius: 10px; background: #E6F0F9; 
-            display: flex; align-items: center; justify-content: center; margin-bottom: 12px; color: var(--primary); transition: all 0.25s ease;
-        }
+        .loan-icon-wrap { width: 40px; height: 40px; border-radius: 10px; background: #E6F0F9; display: flex; align-items: center; justify-content: center; margin-bottom: 12px; color: var(--primary); transition: all 0.25s ease; }
         .loan-card.active .loan-icon-wrap { background: var(--primary); color: white; }
         
         .loan-title { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 15px; color: var(--text-main); margin-bottom: 4px; letter-spacing: -0.01em;}
@@ -249,58 +226,40 @@
 
         .form-group { margin-bottom: 20px; }
         .form-group label { display: block; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; color: var(--text-muted); }
-        .form-group input, .form-group select { 
-            width: 100%; padding: 14px 16px; border: 1px solid var(--border); border-radius: 12px; font-size: 15px; outline: none; transition: all 0.2s;
-            font-family: inherit; font-weight: 600; color: var(--text-main); background: #fdfdfd;
-        }
+        .form-group input, .form-group select { width: 100%; padding: 14px 16px; border: 1px solid var(--border); border-radius: 12px; font-size: 15px; outline: none; transition: all 0.2s; font-family: inherit; font-weight: 600; color: var(--text-main); background: #fdfdfd; }
         .form-group input:focus, .form-group select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(90, 178, 255, 0.1); }
 
-        /* ================= 3. CONSENT MODAL ================= */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 17, 24, 0.65); backdrop-filter: blur(8px);
-            display: none; justify-content: center; align-items: center; z-index: 100; animation: fade-in 300ms ease-out forwards; padding: 20px;
-        }
+        /* CONSENT MODAL */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 17, 24, 0.65); backdrop-filter: blur(8px); display: none; justify-content: center; align-items: center; z-index: 100; animation: fade-in 300ms ease-out forwards; padding: 20px; }
         .modal-overlay.active { display: flex; }
-        .modal-content {
-            background: var(--surface); width: 100%; max-width: 480px; padding: 40px;
-            border-radius: var(--radius); box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3); display: flex; flex-direction: column;
-        }
+        .modal-content { background: var(--surface); width: 100%; max-width: 480px; padding: 40px; border-radius: var(--radius); box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3); display: flex; flex-direction: column; }
         .modal-content h2 { font-size: 28px; margin-bottom: 12px; }
         .modal-content .intro-text { color: var(--text-muted); font-size: 15px; margin-bottom: 24px; line-height: 1.6; }
 
-        /* ================= 4. FULL SCREEN LAYOUT ================= */
+        /* FULL SCREEN LAYOUT */
         .full-screen-page { background-color: var(--surface); min-height: 100vh; width: 100%; }
         .doc-header { position: sticky; top: 0; background-color: var(--surface); padding: 20px 40px; border-bottom: 1px solid var(--border); box-shadow: 0 2px 10px rgba(0,0,0,0.02); z-index: 10; }
         .doc-content { max-width: 800px; margin: 0 auto; padding: 60px 40px; }
         .doc-content h2 { font-size: 40px; margin-bottom: 24px; font-weight: 800; letter-spacing: -0.04em;}
         .document-text p { color: var(--text-muted); font-size: 16px; line-height: 1.8; margin-bottom: 24px; font-weight: 500;}
         .document-text strong { color: var(--text-main); font-family: 'Outfit', sans-serif; font-size: 20px; display: block; margin-bottom: 8px; margin-top: 32px; font-weight: 800; letter-spacing: -0.02em;}
-        .doc-link {
-            display: flex; justify-content: space-between; align-items: center; padding: 18px 20px; background-color: #F4F8FB; border: 1px solid var(--border);
-            border-radius: 12px; margin-bottom: 12px; cursor: pointer; font-weight: 700; transition: all 0.2s ease; color: var(--text-main);
-        }
+        .doc-link { display: flex; justify-content: space-between; align-items: center; padding: 18px 20px; background-color: #F4F8FB; border: 1px solid var(--border); border-radius: 12px; margin-bottom: 12px; cursor: pointer; font-weight: 700; transition: all 0.2s ease; color: var(--text-main); }
         .doc-link:hover { background-color: #E6F0F9; border-color: #B4C9DA; transform: translateY(-2px); }
         .doc-link::after { content: '→'; color: var(--primary); font-size: 20px; }
 
-        /* UI Elements */
         .checkbox-container { margin: 24px 0; display: flex; align-items: flex-start; gap: 12px; cursor: pointer; }
         input[type="checkbox"] { margin-top: 3px; width: 20px; height: 20px; accent-color: var(--primary); cursor: pointer;}
         .checkbox-label { font-size: 14px; line-height: 1.5; color: var(--text-main); font-weight: 600;}
-        .btn {
-            display: block; width: 100%; padding: 18px; background-color: var(--primary); color: white; border: none; border-radius: 12px; font-size: 16px; font-family: 'Outfit', sans-serif;
-            font-weight: 800; cursor: pointer; transition: transform 200ms ease, background-color 200ms ease; margin-top: 10px; box-shadow: 0 4px 14px rgba(90, 178, 255, 0.25);
-        }
+        .btn { display: block; width: 100%; padding: 18px; background-color: var(--primary); color: white; border: none; border-radius: 12px; font-size: 16px; font-family: 'Outfit', sans-serif; font-weight: 800; cursor: pointer; transition: transform 200ms ease, background-color 200ms ease; margin-top: 10px; box-shadow: 0 4px 14px rgba(90, 178, 255, 0.25); }
         .btn:not(:disabled):hover { background-color: var(--primary-hover); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255, 135, 178, 0.35); }
         .btn:disabled { background-color: #B4C9DA; cursor: not-allowed; box-shadow: none; transform: none;}
-        .btn-back {
-            background: none; border: none; color: var(--primary); font-size: 16px; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font-family: 'Outfit', sans-serif;
-        }
+        .btn-back { background: none; border: none; color: var(--primary); font-size: 16px; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font-family: 'Outfit', sans-serif; }
         .btn-back:hover { text-decoration: underline; color: var(--primary-hover); }
     </style>
 </head>
 <body>
 
-    <!-- ================= 0. HOME PAGE ================= -->
+    <!-- 0. HOME PAGE -->
     <div id="view-home" class="view-wrapper active">
         <video autoplay loop muted playsinline class="bg-video">
             <source src="bg-video.mp4.webm" type="video/webm">
@@ -309,70 +268,44 @@
         
         <div class="home-container">
             <header class="home-nav">
-                <div class="flex items-center gap-3 cursor-pointer" onclick="location.reload()">
-                    <!-- UNIFIED LOGO FIX: Home Header -->
-                    <svg class="w-10 h-10 drop-shadow-md" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <defs><clipPath id="circleHomeNav"><circle cx="100" cy="100" r="65" /></clipPath></defs>
-                        <g clip-path="url(#circleHomeNav)">
-                            <circle cx="100" cy="100" r="65" fill="#FFFFFF" />
-                            <path d="M 25 100 A 65 65 0 0 1 175 100 Z" fill="#5AB2FF" />
-                            <rect x="71" y="102" width="14" height="65" fill="#101720" rx="1" />
-                        </g>
-                        <path d="M 32 114 C 65 114, 115 94, 144 60 C 124 86, 75 110, 32 114 Z" fill="#FF87B2" />
-                    </svg>
-                    <div class="home-logo font-heading">FetchFunds</div>
-                </div>
+                <div class="home-logo font-heading">FetchFunds</div>
             </header>
 
             <main>
                 <div class="home-hero">
                     <h1 class="font-heading">Empowering Your Growth with Government Schemes.</h1>
-                    <p>Welcome to your central hub for accessible financial support. We bridge the gap between hard-working individuals and the government schemes designed to help them thrive. Whether you are expanding a local shop, investing in your harvest, or starting a new venture, we simplify the path to funding.</p>
+                    <p>Welcome to your central hub for accessible financial support. We bridge the gap between hard-working individuals and the government schemes designed to help them thrive.</p>
                 </div>
 
-                <!-- FLUID ACCORDION GALLERY -->
-                <div class="content-section" style="padding-bottom: 90px; text-align: center;">
+                <div class="content-section" style="padding-bottom: 90px;">
                     <span class="section-tag">Audience</span>
-                    <h2 class="font-heading">Who We Serve</h2>
-                    <p style="color: #5B6B7A; max-width: 600px; margin: 0 auto; font-size: 16px;">From rural fields to tech hubs, we match specialized government initiatives to the specific needs of diverse Indian demographics.</p>
+                    <h2 class="font-heading" style="text-align: center;">Who We Serve</h2>
                     
-                    <div class="accordion-gallery text-left">
-                        <!-- Card 1 -->
+                    <div class="accordion-gallery">
                         <div class="accordion-card active">
                             <div class="accordion-bg-number">01</div>
                             <div class="accordion-vertical"><span>FARMERS</span></div>
                             <div class="accordion-content">
                                 <h3 class="accordion-title">Farmers & Agri-Business</h3>
-                                <p class="accordion-desc" style="max-width: 420px;">
-                                    <strong style="color: var(--primary);">For rural cultivators and agro-processors.</strong><br><br>
-                                    We bridge the gap between your seasonal harvest cycles and government aid. Instantly discover eligibility for NABARD refinancing, PM-Kisan benefits, and heavily subsidized equipment loans for tractors and cold storage—allowing you to modernize without the burden of steep collateral.
-                                </p>
+                                <p class="accordion-desc">Discover agricultural subsidies, crop insurance, and equipment loans tailored to your seasonal needs.</p>
                             </div>
                         </div>
 
-                        <!-- Card 2 -->
                         <div class="accordion-card">
                             <div class="accordion-bg-number">02</div>
                             <div class="accordion-vertical"><span>BUSINESSES</span></div>
                             <div class="accordion-content">
-                                <h3 class="accordion-title">Small & Medium Enterprises</h3>
-                                <p class="accordion-desc" style="max-width: 420px;">
-                                    <strong style="color: var(--primary);">For established shops and local manufacturers.</strong><br><br>
-                                    Scaling a business requires steady cash flow and secure backing. We help you unlock collateral-free credit through CGTMSE, secure immediate working capital, and tap into technology upgradation subsidies (CLCSS) to keep your daily operations expanding seamlessly.
-                                </p>
+                                <h3 class="accordion-title">Small & Medium Businesses</h3>
+                                <p class="accordion-desc">Access MSME credit guarantees, working capital, and expansion funds to scale your enterprise.</p>
                             </div>
                         </div>
 
-                        <!-- Card 3 -->
                         <div class="accordion-card">
                             <div class="accordion-bg-number">03</div>
                             <div class="accordion-vertical"><span>STARTUPS</span></div>
                             <div class="accordion-content">
                                 <h3 class="accordion-title">Aspiring Entrepreneurs</h3>
-                                <p class="accordion-desc" style="max-width: 420px;">
-                                    <strong style="color: var(--primary);">For first-generation founders and innovators.</strong><br><br>
-                                    Turn your vision into a registered startup with the right financial runway. We navigate the maze of DPIIT recognition, the Startup India Seed Fund, and Mudra Tarun schemes on your behalf—securing the early-stage capital and tax exemptions you need to launch confidently.
-                                </p>
+                                <p class="accordion-desc">Find seed funding, startup grants, and skill development schemes to bring your vision to life.</p>
                             </div>
                         </div>
                     </div>
@@ -382,7 +315,6 @@
                     "Growth is never by mere chance; it is the result of forces working together."
                 </div>
 
-                <!-- WEBGL SPECULAR BUTTON -->
                 <button id="specular-btn" class="specular-button" onclick="openLogin()">
                     <span class="specular-button__fx" aria-hidden="true"></span>
                     <span class="specular-button__label">Take the Next Step &rarr;</span>
@@ -390,7 +322,6 @@
             </main>
         </div>
 
-        <!-- FOOTER -->
         <footer class="home-footer-section">
             <div class="home-footer-grid">
                 <div class="home-footer-col">
@@ -413,141 +344,141 @@
         </footer>
     </div>
 
-    <!-- ================= 1. LOGIN PORTAL ================= -->
-    <div id="view-login" class="view-wrapper min-h-screen w-full items-center justify-center p-4 sm:p-6 lg:p-10 antialiased text-[#E2E8F0]">
-        <div class="w-full max-w-6xl bg-[#101720] rounded-[32px] shadow-[0_25px_70px_rgba(0,0,0,0.8)] overflow-hidden flex flex-col md:flex-row min-h-[640px] border border-[#2A3B4C]">
-       
-          <div class="w-full md:w-[58%] xl:w-[55%] p-6 sm:p-10 flex flex-col justify-between relative bg-[#101720]">
-            
+    <!-- 1. LOGIN PORTAL -->
+    <div id="view-login" class="view-wrapper relative min-h-screen w-full flex items-center justify-center p-4 sm:p-6 lg:p-10 antialiased text-[#E2E8F0] overflow-hidden">
+        <div class="absolute inset-0 w-full h-full overflow-hidden z-0 pointer-events-none">
+          <video autoplay loop muted playsinline class="w-full h-full object-cover filter brightness-75 contrast-110 saturate-150 hue-rotate-[190deg]">
+            <source src="WILD1.mp4" type="video/mp4" />
+          </video>
+          <div class="absolute inset-0 bg-[#060D18]/80 mix-blend-multiply"></div>
+          <div class="absolute inset-0 bg-gradient-to-br from-[#091526]/90 via-[#0B1A2E]/70 to-[#030811]/90"></div>
+        </div>
+
+        <div class="relative z-10 w-full max-w-5xl bg-[#0B111D]/90 backdrop-blur-xl rounded-[28px] shadow-[0_25px_80px_rgba(0,0,0,0.9)] overflow-hidden flex flex-col md:flex-row min-h-[600px] border border-[#182335]">
+          <div class="w-full md:w-[52%] p-8 sm:p-10 flex flex-col justify-between relative border-b md:border-b-0 md:border-r border-[#162030]">
             <header class="flex items-center justify-between w-full mb-6">
               <div class="flex items-center gap-3 group cursor-pointer" onclick="location.reload()">
-                <!-- UNIFIED LOGO FIX: Login Nav -->
-                <svg class="w-10 h-10 drop-shadow-md transition-transform group-hover:scale-105" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <defs><clipPath id="circleViewNavDark"><circle cx="100" cy="100" r="65" /></clipPath></defs>
-                  <g clip-path="url(#circleViewNavDark)">
-                    <circle cx="100" cy="100" r="65" fill="#FFFFFF" />
-                    <path d="M 25 100 A 65 65 0 0 1 175 100 Z" fill="#5AB2FF" />
-                    <rect x="71" y="102" width="14" height="65" fill="#101720" rx="1" />
-                  </g>
-                  <path d="M 32 114 C 65 114, 115 94, 144 60 C 124 86, 75 110, 32 114 Z" fill="#FF87B2" />
-                </svg>
+                <img src="logo.jpeg" alt="Fetch Funds Logo" class="w-9 h-9 object-contain rounded-lg drop-shadow-md transition-transform group-hover:scale-105" />
                 <span class="font-heading font-extrabold text-xl text-white tracking-tight">Fetch Funds</span>
               </div>
             </header>
-       
+        
             <div class="my-auto max-w-md w-full mx-auto md:mx-0">
-              <h2 class="font-heading text-3xl sm:text-4xl font-extrabold text-white mb-2 tracking-tight">Get Started</h2>
-              <p class="text-xs sm:text-sm text-[#95A5B5] mb-6 font-medium">Enter your details below to unlock tailored government funding matches.</p>
-       
+              <h2 class="font-heading text-3xl sm:text-4xl font-extrabold text-white mb-2 tracking-tight">Get Star<span class="text-[#F472B6]">ted</span></h2>
+              <p class="text-xs sm:text-sm text-[#8295A8] mb-6 font-medium">Enter your unique account details below to unlock personalized funding options.</p>
+        
               <form onsubmit="event.preventDefault(); submitLogin();" class="space-y-4">
                 <div>
-                  <label class="block text-[11px] font-bold uppercase tracking-[0.1em] text-[#9ca3af] mb-1.5">USERNAME:</label>
-                  <input type="text" id="login-username" placeholder="e.g. rahul_sharma99" class="w-full bg-[#182433] text-white placeholder-[#5B6B7A] text-sm font-medium rounded-xl px-4 py-3 border border-[#26364A] focus:outline-none focus:ring-2 focus:ring-[#5AB2FF] focus:bg-[#1E2C3F] transition" required />
+                  <label class="block text-[11px] font-bold uppercase tracking-[0.1em] text-[#8295A8] mb-1.5">USERNAME:</label>
+                  <input type="text" placeholder="e.g. rahul_sharma99" class="w-full bg-[#060B14] text-white placeholder-[#3B4C60] text-sm font-medium rounded-xl px-4 py-3 border border-[#162335] focus:outline-none focus:border-[#38BDF8] transition" required />
                 </div>
-       
+        
                 <div>
-                  <label class="block text-[11px] font-bold uppercase tracking-[0.1em] text-[#9ca3af] mb-1.5">PASSWORD:</label>
-                  <input type="password" id="login-password" placeholder="••••••••" class="w-full bg-[#182433] text-white placeholder-[#5B6B7A] text-sm font-medium rounded-xl px-4 py-3 border border-[#26364A] focus:outline-none focus:ring-2 focus:ring-[#5AB2FF] focus:bg-[#1E2C3F] transition" required />
+                  <label class="block text-[11px] font-bold uppercase tracking-[0.1em] text-[#8295A8] mb-1.5">PASSWORD:</label>
+                  <input type="password" placeholder="••••••••" class="w-full bg-[#060B14] text-white placeholder-[#3B4C60] text-sm font-medium rounded-xl px-4 py-3 border border-[#162335] focus:outline-none focus:border-[#38BDF8] transition" required />
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label class="block text-[11px] font-bold uppercase tracking-[0.1em] text-[#9ca3af] mb-1.5">AGE:</label>
-                    <input type="number" id="login-age" placeholder="e.g. 32" class="w-full bg-[#182433] text-white placeholder-[#5B6B7A] text-sm font-medium rounded-xl px-4 py-3 border border-[#26364A] focus:outline-none focus:ring-2 focus:ring-[#5AB2FF] focus:bg-[#1E2C3F] transition" required />
+                    <label class="block text-[11px] font-bold uppercase tracking-[0.1em] text-[#8295A8] mb-1.5">AGE:</label>
+                    <input type="number" placeholder="e.g. 32" class="w-full bg-[#060B14] text-white placeholder-[#3B4C60] text-sm font-medium rounded-xl px-4 py-3 border border-[#162335] focus:outline-none focus:border-[#38BDF8] transition" required />
                   </div>
-       
+        
                   <div>
-                    <label class="block text-[11px] font-bold uppercase tracking-[0.1em] text-[#9ca3af] mb-1.5">GENDER:</label>
-                    <select id="login-gender" class="w-full bg-[#182433] text-white text-sm font-medium rounded-xl px-4 py-3 border border-[#26364A] focus:outline-none focus:ring-2 focus:ring-[#5AB2FF] focus:bg-[#1E2C3F] transition appearance-none cursor-pointer" required>
-                      <option value="" disabled selected class="bg-[#182433] text-[#5B6B7A]">Select Gender</option>
-                      <option value="male" class="bg-[#182433] text-white">Male</option>
-                      <option value="female" class="bg-[#182433] text-white">Female</option>
-                      <option value="other" class="bg-[#182433] text-white">Other</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label class="block text-[11px] font-bold uppercase tracking-[0.1em] text-[#9ca3af] mb-1.5">CASTE CATEGORY:</label>
-                    <select id="login-category" class="w-full bg-[#182433] text-white text-sm font-medium rounded-xl px-4 py-3 border border-[#26364A] focus:outline-none focus:ring-2 focus:ring-[#5AB2FF] focus:bg-[#1E2C3F] transition appearance-none cursor-pointer" required>
-                      <option value="" disabled selected class="bg-[#182433] text-[#5B6B7A]">Select Category</option>
-                      <option value="general" class="bg-[#182433] text-white">General / UR</option>
-                      <option value="obc" class="bg-[#182433] text-white">OBC</option>
-                      <option value="sc" class="bg-[#182433] text-white">SC</option>
-                      <option value="st" class="bg-[#182433] text-white">ST</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label class="block text-[11px] font-bold uppercase tracking-[0.1em] text-[#9ca3af] mb-1.5">REGION / STATE:</label>
-                    <select id="login-region" class="w-full bg-[#182433] text-white text-sm font-medium rounded-xl px-4 py-3 border border-[#26364A] focus:outline-none focus:ring-2 focus:ring-[#5AB2FF] focus:bg-[#1E2C3F] transition appearance-none cursor-pointer" required>
-                      <option value="" disabled selected class="bg-[#182433] text-[#5B6B7A]">Select State</option>
-                      <optgroup label="States" class="bg-[#182433] text-[#5AB2FF]">
-                        <option value="Andhra Pradesh" class="bg-[#182433] text-white">Andhra Pradesh</option>
-                        <option value="Gujarat" class="bg-[#182433] text-white">Gujarat</option>
-                        <option value="Karnataka" class="bg-[#182433] text-white">Karnataka</option>
-                        <option value="Maharashtra" class="bg-[#182433] text-white">Maharashtra</option>
-                        <option value="Punjab" class="bg-[#182433] text-white">Punjab</option>
-                        <option value="Tamil Nadu" class="bg-[#182433] text-white">Tamil Nadu</option>
-                        <option value="Uttar Pradesh" class="bg-[#182433] text-white">Uttar Pradesh</option>
+                    <label class="block text-[11px] font-bold uppercase tracking-[0.1em] text-[#8295A8] mb-1.5">REGION:</label>
+                    <select class="w-full bg-[#060B14] text-white text-sm font-medium rounded-xl px-4 py-3 border border-[#162335] focus:outline-none focus:border-[#38BDF8] transition appearance-none cursor-pointer" required>
+                      <option value="" disabled selected class="bg-[#060B14] text-[#3B4C60]">Select State / UT</option>
+                      <optgroup label="28 States" class="bg-[#060B14] text-[#38BDF8]">
+                        <option value="Andhra Pradesh" class="bg-[#060B14] text-white">Andhra Pradesh</option>
+                        <option value="Arunachal Pradesh" class="bg-[#060B14] text-white">Arunachal Pradesh</option>
+                        <option value="Assam" class="bg-[#060B14] text-white">Assam</option>
+                        <option value="Bihar" class="bg-[#060B14] text-white">Bihar</option>
+                        <option value="Chhattisgarh" class="bg-[#060B14] text-white">Chhattisgarh</option>
+                        <option value="Goa" class="bg-[#060B14] text-white">Goa</option>
+                        <option value="Gujarat" class="bg-[#060B14] text-white">Gujarat</option>
+                        <option value="Haryana" class="bg-[#060B14] text-white">Haryana</option>
+                        <option value="Himachal Pradesh" class="bg-[#060B14] text-white">Himachal Pradesh</option>
+                        <option value="Jharkhand" class="bg-[#060B14] text-white">Jharkhand</option>
+                        <option value="Karnataka" class="bg-[#060B14] text-white">Karnataka</option>
+                        <option value="Kerala" class="bg-[#060B14] text-white">Kerala</option>
+                        <option value="Madhya Pradesh" class="bg-[#060B14] text-white">Madhya Pradesh</option>
+                        <option value="Maharashtra" class="bg-[#060B14] text-white">Maharashtra</option>
+                        <option value="Manipur" class="bg-[#060B14] text-white">Manipur</option>
+                        <option value="Meghalaya" class="bg-[#060B14] text-white">Meghalaya</option>
+                        <option value="Mizoram" class="bg-[#060B14] text-white">Mizoram</option>
+                        <option value="Nagaland" class="bg-[#060B14] text-white">Nagaland</option>
+                        <option value="Odisha" class="bg-[#060B14] text-white">Odisha</option>
+                        <option value="Punjab" class="bg-[#060B14] text-white">Punjab</option>
+                        <option value="Rajasthan" class="bg-[#060B14] text-white">Rajasthan</option>
+                        <option value="Sikkim" class="bg-[#060B14] text-white">Sikkim</option>
+                        <option value="Tamil Nadu" class="bg-[#060B14] text-white">Tamil Nadu</option>
+                        <option value="Telangana" class="bg-[#060B14] text-white">Telangana</option>
+                        <option value="Tripura" class="bg-[#060B14] text-white">Tripura</option>
+                        <option value="Uttar Pradesh" class="bg-[#060B14] text-white">Uttar Pradesh</option>
+                        <option value="Uttarakhand" class="bg-[#060B14] text-white">Uttarakhand</option>
+                        <option value="West Bengal" class="bg-[#060B14] text-white">West Bengal</option>
+                      </optgroup>
+                      <optgroup label="8 Union Territories" class="bg-[#060B14] text-[#38BDF8]">
+                        <option value="Andaman and Nicobar Islands" class="bg-[#060B14] text-white">Andaman and Nicobar Islands</option>
+                        <option value="Chandigarh" class="bg-[#060B14] text-white">Chandigarh</option>
+                        <option value="Dadra and Nagar Haveli and Daman and Diu" class="bg-[#060B14] text-white">Dadra and Nagar Haveli and Daman and Diu</option>
+                        <option value="Delhi" class="bg-[#060B14] text-white">Delhi (NCT)</option>
+                        <option value="Jammu and Kashmir" class="bg-[#060B14] text-white">Jammu and Kashmir</option>
+                        <option value="Ladakh" class="bg-[#060B14] text-white">Ladakh</option>
+                        <option value="Lakshadweep" class="bg-[#060B14] text-white">Lakshadweep</option>
+                        <option value="Puducherry" class="bg-[#060B14] text-white">Puducherry</option>
                       </optgroup>
                     </select>
                   </div>
                 </div>
-       
-                <button type="submit" class="font-heading w-full mt-4 bg-[#5AB2FF] hover:bg-[#FF87B2] text-[#0A1118] font-extrabold text-sm py-4 px-5 rounded-xl transition-all duration-300 shadow-lg shadow-[#5AB2FF]/30 flex items-center justify-center gap-2 group uppercase tracking-wider">
-                  <span>Login Securely</span>
+
+                <div>
+                  <label class="block text-[11px] font-bold uppercase tracking-[0.1em] text-[#8295A8] mb-1.5">CATEGORY:</label>
+                  <select class="w-full bg-[#060B14] text-white text-sm font-medium rounded-xl px-4 py-3 border border-[#162335] focus:outline-none focus:border-[#38BDF8] transition appearance-none cursor-pointer" required>
+                    <option value="" disabled selected class="bg-[#060B14] text-[#3B4C60]">Select Category</option>
+                    <option value="none" class="bg-[#060B14] text-white">None</option>
+                    <option value="women" class="bg-[#060B14] text-white">Women</option>
+                    <option value="sc" class="bg-[#060B14] text-white">SC</option>
+                    <option value="st" class="bg-[#060B14] text-white">ST</option>
+                  </select>
+                </div>
+        
+                <button type="submit" class="font-heading w-full mt-5 bg-gradient-to-r from-[#00B2FE] via-[#60A5FA] to-[#E879F9] hover:opacity-95 text-white font-extrabold text-sm py-3.5 px-5 rounded-xl transition-all duration-300 shadow-[0_0_25px_rgba(232,121,249,0.35)] flex items-center justify-center gap-2 group tracking-wide">
+                  <span>Fetch Funds Now</span>
                   <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                 </button>
               </form>
             </div>
-       
-            <div class="mt-5 text-[11px] text-[#5B6B7A] font-semibold tracking-wide uppercase">Empowering Small Business • Access Funds</div>
+        
+            <div class="mt-6 text-[10px] text-[#556980] font-semibold tracking-wide">Empowering Small Business • Access Funds • Grow Your Future</div>
           </div>
-       
-          <div class="w-full md:w-[42%] xl:w-[45%] bg-[#090E14] relative overflow-hidden flex flex-col items-center justify-center p-8 sm:p-12 text-white border-t md:border-t-0 md:border-l border-[#2A3B4C]">
-            <div class="relative z-10 text-center max-w-xs space-y-5">
-              <div class="w-24 h-24 mx-auto bg-white/10 backdrop-blur-md rounded-3xl p-3 border border-white/15 shadow-2xl flex items-center justify-center">
-                <!-- UNIFIED LOGO FIX: Login Panel Hero -->
-                <svg class="w-full h-full drop-shadow-md" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <defs><clipPath id="circleViewPanel"><circle cx="100" cy="100" r="65" /></clipPath></defs>
-                  <g clip-path="url(#circleViewPanel)">
-                    <circle cx="100" cy="100" r="65" fill="#FFFFFF" />
-                    <path d="M 25 100 A 65 65 0 0 1 175 100 Z" fill="#5AB2FF" />
-                    <rect x="71" y="102" width="14" height="65" fill="#101720" rx="1" />
-                  </g>
-                  <path d="M 32 114 C 65 114, 115 94, 144 60 C 124 86, 75 110, 32 114 Z" fill="#FF87B2" />
-                </svg>
+        
+          <div class="w-full md:w-[48%] bg-[#080E18]/80 relative overflow-hidden flex flex-col items-center justify-center p-8 sm:p-12 text-white">
+            <div class="relative z-10 text-center max-w-xs space-y-6 flex flex-col items-center">
+              <div class="w-28 h-28 bg-[#091322] rounded-3xl p-3 border border-[#38BDF8]/40 shadow-[0_0_40px_rgba(56,189,248,0.25)] flex items-center justify-center">
+                <img src="logo.jpeg" alt="Fetch Funds Logo" class="w-full h-full object-contain rounded-2xl drop-shadow-lg" />
               </div>
-              <h3 class="font-heading font-extrabold text-2xl sm:text-3xl text-white tracking-tight leading-tight">FETCH FUNDS</h3>
-              <p class="text-xs sm:text-sm text-blue-100/70 font-medium leading-relaxed">Empowering Small Business.<br>Access Funds.<br>Grow Your Future.</p>
+              <h3 class="font-heading font-black text-3xl sm:text-4xl text-white tracking-widest leading-none uppercase">
+                FETCH<br>FUNDS
+              </h3>
+              <p class="text-xs sm:text-sm text-[#94A3B8] font-medium leading-relaxed">
+                Empowering Small Business.<br>Access Funds.<br>Grow Your Future.
+              </p>
+              <div class="inline-block border border-[#1E293B] bg-[#0A111D] rounded-full px-5 py-1.5 text-[10px] font-bold tracking-[0.2em] text-[#94A3B8] uppercase shadow-sm">
+                FAST • SECURE • DIRECT
+              </div>
             </div>
           </div>
         </div>
     </div>
 
-    <!-- ================= 2. PAGE 3: APP VIEW (DASHBOARD) WITH CUSTOM AMBIENT BACKGROUND ================= -->
+    <!-- 2. APP VIEW -->
     <div id="centered-app-view" class="view-wrapper">
-        <!-- Dashboard Top Header Bar with Unified Logo -->
-        <header class="w-full max-w-2xl mb-6 flex items-center justify-between px-2">
-            <div class="flex items-center gap-3 cursor-pointer" onclick="location.reload()">
-                <svg class="w-9 h-9 drop-shadow-md" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <defs><clipPath id="circleDashNav"><circle cx="100" cy="100" r="65" /></clipPath></defs>
-                    <g clip-path="url(#circleDashNav)">
-                        <circle cx="100" cy="100" r="65" fill="#FFFFFF" />
-                        <path d="M 25 100 A 65 65 0 0 1 175 100 Z" fill="#5AB2FF" />
-                        <rect x="71" y="102" width="14" height="65" fill="#101720" rx="1" />
-                    </g>
-                    <path d="M 32 114 C 65 114, 115 94, 144 60 C 124 86, 75 110, 32 114 Z" fill="#FF87B2" />
-                </svg>
-                <span class="font-heading font-extrabold text-xl text-[#0A1118] tracking-tight">Fetch Funds</span>
-            </div>
-            <span class="text-xs font-bold text-[#5B6B7A] bg-white/80 backdrop-blur px-3 py-1.5 rounded-full border border-[#D1DAE3]">AI Scheme Portal</span>
-        </header>
+        <!-- Radial Glow Light Sky Blue Background -->
+        <div class="radial-glow-bg"></div>
 
         <div class="container">
             <div id="page-dashboard" class="card-page active">
-                
-                <!-- STEP 1: FUNDING OBJECTIVE -->
                 <div id="step-objective" class="fade-step" style="flex-grow: 1;">
                     <h2 class="font-heading" style="font-size: 26px; margin-bottom: 6px;">Funding Objective</h2>
                     <p class="intro-text" style="margin-bottom: 12px; font-size: 14px;">Select the primary purpose of your funding to help our AI pinpoint the exact government schemes you qualify for.</p>
@@ -590,10 +521,9 @@
                     </button>
                 </div>
 
-                <!-- STEP 2: DETAILS FORM -->
                 <div id="step-details" class="fade-step" style="display: none; flex-grow: 1;">
                     <h2 class="font-heading" style="font-size: 26px; margin-bottom: 6px;">Additional Details</h2>
-                    <p class="intro-text" style="margin-bottom: 24px; font-size: 14px;">Provide a few more specifics to ensure our AI matches you with high-probability schemes.</p>
+                    <p class="intro-text" style="margin-bottom: 24px; font-size: 14px;">Provide a few more specifics to ensure our AI matches you with the highest-probability schemes.</p>
                     
                     <form onsubmit="submitFinalDetails(event)">
                         <div class="form-group">
@@ -631,16 +561,14 @@
                     </form>
                 </div>
 
-                <!-- STEP 3: DYNAMIC RESULTS AREA -->
-                <div id="results-area" class="fade-step" style="display: none; margin-top: 10px;">
-                    <div id="results-content"></div>
+                <div id="results-area" class="fade-step" style="display: none; margin-top: 24px; padding: 32px 24px; background: #F4F8FB; border-radius: 12px; border: 1px solid var(--border);">
+                    <p style="text-align: center; font-weight: 700; color: var(--primary); line-height: 1.6; font-size: 15px;" id="loading-text">Analyzing profile against 100+ schemes...</p>
                 </div>
-
             </div>
         </div>
     </div>
 
-    <!-- ================= CONSENT MODAL ================= -->
+    <!-- CONSENT MODAL -->
     <div id="consent-modal" class="modal-overlay">
         <div class="modal-content">
             <h2 class="font-heading">Legal & Privacy</h2>
@@ -658,38 +586,28 @@
         </div>
     </div>
 
-    <!-- ================= FULL SCREEN VIEWS ================= -->
+    <!-- FULL SCREEN VIEWS -->
     <div id="view-terms" class="view-wrapper full-screen-page">
         <div class="doc-header"><button class="btn-back font-heading" onclick="closeFullScreenDoc()">← Back</button></div>
-        <div class="doc-content"><h2 class="font-heading">Terms & Conditions</h2><div class="document-text"><p><strong>General Usage</strong><br>By accessing FetchFunds, you agree to comply with our terms. The AI-generated matchmaking services provided are for informational purposes to connect small businesses with potential schemes.</p></div></div>
+        <div class="doc-content"><h2 class="font-heading">Terms & Conditions</h2><div class="document-text"><p><strong>General Usage</strong><br>By accessing FetchFunds, you agree to comply with our terms.</p></div></div>
     </div>
 
     <div id="view-privacy" class="view-wrapper full-screen-page">
         <div class="doc-header"><button class="btn-back font-heading" onclick="closeFullScreenDoc()">← Back</button></div>
-        <div class="doc-content">
-            <h2 class="font-heading">Privacy Policy</h2>
-            <div class="document-text">
-                <p><strong>Data We Keep</strong><br>We collect business demographics, financial indicators (such as requested amount and annual turnover), and basic personal identifiers necessary for scheme matching.</p>
-                <p><strong>What Is Done With Data</strong><br>Your information is processed exclusively by our secure AI engine to evaluate eligibility against thousands of government financial schemes and mandates.</p>
-                <p><strong>Data Sharing Policy</strong><br>We do not sell your proprietary business data to third-party marketing algorithms. Information is only shared with verified lending partners or government portals upon your explicit request.</p>
-            </div>
-        </div>
+        <div class="doc-content"><h2 class="font-heading">Privacy Policy</h2><div class="document-text"><p><strong>Data We Keep</strong><br>We collect business demographics and financial indicators for scheme matching.</p></div></div>
     </div>
 
     <div id="view-policy" class="view-wrapper full-screen-page">
         <div class="doc-header"><button class="btn-back font-heading" onclick="closeFullScreenDoc()">← Back</button></div>
-        <div class="doc-content"><h2 class="font-heading">Policy Information</h2><div class="document-text"><p><strong>Compliance & Security</strong><br>All transactional data and user verification protocols adhere strictly to national digital financial security standards.</p></div></div>
+        <div class="doc-content"><h2 class="font-heading">Policy Information</h2><div class="document-text"><p><strong>Compliance & Security</strong><br>All data adheres strictly to financial security standards.</p></div></div>
     </div>
 
     <div id="view-cookies" class="view-wrapper full-screen-page">
         <div class="doc-header"><button class="btn-back font-heading" onclick="closeFullScreenDoc()">← Back</button></div>
-        <div class="doc-content"><h2 class="font-heading">Cookie Policy</h2><div class="document-text"><p><strong>Session Tracking</strong><br>We use essential cookies strictly to maintain your application session state securely.</p></div></div>
+        <div class="doc-content"><h2 class="font-heading">Cookie Policy</h2><div class="document-text"><p><strong>Session Tracking</strong><br>We use essential cookies strictly to maintain session state.</p></div></div>
     </div>
 
-    <!-- ================= JAVASCRIPT MODULES & LOGIC ================= -->
     <script type="module">
-        import { Renderer, Program, Mesh, Triangle, Color } from 'https://esm.sh/ogl@1.0.10';
-
         const PAD = 20;
 
         const VERT = `#version 300 es
@@ -750,132 +668,142 @@
         }
         `;
 
-        class SpecularButton {
-            constructor(btn, props) {
-                this.btn = btn;
-                this.fx = btn.querySelector('.specular-button__fx');
-                this.props = props;
+        async function initSpecular() {
+            try {
+                const { Renderer, Program, Mesh, Triangle, Color } = await import('https://esm.sh/ogl@1.0.10');
 
-                const dpr = window.devicePixelRatio || 1;
-                this.renderer = new Renderer({ alpha: true, premultipliedAlpha: true, antialias: true, dpr });
-                const gl = this.renderer.gl;
-                gl.clearColor(0, 0, 0, 0);
-                gl.enable(gl.BLEND);
-                gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+                class SpecularButton {
+                    constructor(btn, props) {
+                        this.btn = btn;
+                        this.fx = btn.querySelector('.specular-button__fx');
+                        if (!this.fx) return;
 
-                const geometry = new Triangle(gl);
-                if (geometry.attributes.uv) delete geometry.attributes.uv;
+                        const dpr = window.devicePixelRatio || 1;
+                        this.renderer = new Renderer({ alpha: true, premultipliedAlpha: true, antialias: true, dpr });
+                        const gl = this.renderer ? this.renderer.gl : null;
+                        if (!gl) return;
 
-                const lineC = new Color(props.lineColor);
-                const baseC = new Color(props.baseColor);
+                        gl.clearColor(0, 0, 0, 0);
+                        gl.enable(gl.BLEND);
+                        gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
 
-                this.program = new Program(gl, {
-                    vertex: VERT,
-                    fragment: FRAG,
-                    uniforms: {
-                        uCenter: { value: [0, 0] },
-                        uHalfSize: { value: [1, 1] },
-                        uRadius: { value: 0 },
-                        uAngle: { value: 2.4 },
-                        uPx: { value: dpr },
-                        uLineColor: { value: [lineC.r, lineC.g, lineC.b] },
-                        uBaseColor: { value: [baseC.r, baseC.g, baseC.b] },
-                        uIntensity: { value: 0 },
-                        uShineSize: { value: (props.shineSize * Math.PI) / 180 },
-                        uShineFade: { value: (props.shineFade * Math.PI) / 180 },
-                        uThickness: { value: props.thickness * dpr },
-                        uBaseWidth: { value: dpr }
+                        const geometry = new Triangle(gl);
+                        if (geometry.attributes.uv) delete geometry.attributes.uv;
+
+                        const lineC = new Color(props.lineColor);
+                        const baseC = new Color(props.baseColor);
+
+                        this.program = new Program(gl, {
+                            vertex: VERT,
+                            fragment: FRAG,
+                            uniforms: {
+                                uCenter: { value: [0, 0] },
+                                uHalfSize: { value: [1, 1] },
+                                uRadius: { value: 0 },
+                                uAngle: { value: 2.4 },
+                                uPx: { value: dpr },
+                                uLineColor: { value: [lineC.r, lineC.g, lineC.b] },
+                                uBaseColor: { value: [baseC.r, baseC.g, baseC.b] },
+                                uIntensity: { value: 0 },
+                                uShineSize: { value: (props.shineSize * Math.PI) / 180 },
+                                uShineFade: { value: (props.shineFade * Math.PI) / 180 },
+                                uThickness: { value: props.thickness * dpr },
+                                uBaseWidth: { value: dpr }
+                            }
+                        });
+
+                        this.mesh = new Mesh(gl, { geometry, program: this.program });
+                        this.fx.appendChild(gl.canvas);
+
+                        this.size = { w: 1, h: 1 };
+                        this.resize = () => {
+                            const rect = this.btn.getBoundingClientRect();
+                            const w = rect.width;
+                            const h = rect.height;
+                            this.size.w = w;
+                            this.size.h = h;
+                            this.renderer.setSize(w + PAD * 2, h + PAD * 2);
+                            this.program.uniforms.uCenter.value = [(PAD + w / 2) * dpr, (PAD + h / 2) * dpr];
+                            this.program.uniforms.uHalfSize.value = [(w / 2) * dpr, (h / 2) * dpr];
+                            this.program.uniforms.uRadius.value = Math.min(props.radius, Math.min(w, h) / 2) * dpr;
+                        };
+
+                        this.ro = new ResizeObserver(this.resize);
+                        this.ro.observe(this.btn);
+                        this.resize();
+
+                        this.pointerAngle = null;
+                        this.proximityT = 0;
+                        this.onPointerMove = (e) => {
+                            const rect = this.btn.getBoundingClientRect();
+                            const cx = rect.left + rect.width / 2;
+                            const cy = rect.top + rect.height / 2;
+                            const dx = Math.max(rect.left - e.clientX, 0, e.clientX - rect.right);
+                            const dy = Math.max(rect.top - e.clientY, 0, e.clientY - rect.bottom);
+                            const dist = Math.hypot(dx, dy);
+
+                            if (dist === 0) {
+                                const nx = (e.clientX - cx) / (rect.width / 2);
+                                const ny = (cy - e.clientY) / (rect.height / 2);
+                                this.pointerAngle = Math.atan2(2 / rect.height, -2 / rect.width) + nx * 0.3 + ny * 0.15;
+                            } else {
+                                this.pointerAngle = Math.atan2(cy - e.clientY, e.clientX - cx);
+                            }
+                            const t = Math.max(0, 1 - dist / Math.max(props.proximity, 1));
+                            this.proximityT = t * t * (3 - 2 * t);
+                        };
+                        window.addEventListener('pointermove', this.onPointerMove);
+
+                        this.angle = 2.4;
+                        this.idleAngle = 2.4;
+                        this.bright = 0;
+                        this.lastT = performance.now();
+
+                        this.update = (now) => {
+                            this.raf = requestAnimationFrame(this.update);
+                            const dt = Math.min((now - this.lastT) / 1000, 0.05);
+                            this.lastT = now;
+
+                            this.idleAngle += props.speed * dt;
+                            const steer = props.followMouse && this.pointerAngle !== null && (!props.autoAnimate || this.proximityT > 0);
+                            const target = steer ? this.pointerAngle : this.idleAngle;
+                            const diff = ((target - this.angle + Math.PI * 3) % (Math.PI * 2)) - Math.PI;
+                            this.angle += diff * (1 - Math.exp(-dt * 7));
+
+                            const brightTarget = props.autoAnimate ? 1 : this.proximityT;
+                            this.bright += (brightTarget - this.bright) * (1 - Math.exp(-dt * 8));
+
+                            this.program.uniforms.uAngle.value = this.angle;
+                            this.program.uniforms.uIntensity.value = props.intensity * this.bright;
+
+                            this.renderer.render({ scene: this.mesh });
+                        };
+                        this.raf = requestAnimationFrame(this.update);
                     }
-                });
+                }
 
-                this.mesh = new Mesh(gl, { geometry, program: this.program });
-                this.fx.appendChild(gl.canvas);
-
-                this.size = { w: 1, h: 1 };
-                this.resize = () => {
-                    const rect = this.btn.getBoundingClientRect();
-                    const w = rect.width;
-                    const h = rect.height;
-                    this.size.w = w;
-                    this.size.h = h;
-                    this.renderer.setSize(w + PAD * 2, h + PAD * 2);
-                    this.program.uniforms.uCenter.value = [(PAD + w / 2) * dpr, (PAD + h / 2) * dpr];
-                    this.program.uniforms.uHalfSize.value = [(w / 2) * dpr, (h / 2) * dpr];
-                    this.program.uniforms.uRadius.value = Math.min(props.radius, Math.min(w, h) / 2) * dpr;
-                };
-
-                this.ro = new ResizeObserver(this.resize);
-                this.ro.observe(this.btn);
-                this.resize();
-
-                this.pointerAngle = null;
-                this.proximityT = 0;
-                this.onPointerMove = (e) => {
-                    const rect = this.btn.getBoundingClientRect();
-                    const cx = rect.left + rect.width / 2;
-                    const cy = rect.top + rect.height / 2;
-                    const dx = Math.max(rect.left - e.clientX, 0, e.clientX - rect.right);
-                    const dy = Math.max(rect.top - e.clientY, 0, e.clientY - rect.bottom);
-                    const dist = Math.hypot(dx, dy);
-
-                    if (dist === 0) {
-                        const nx = (e.clientX - cx) / (rect.width / 2);
-                        const ny = (cy - e.clientY) / (rect.height / 2);
-                        this.pointerAngle = Math.atan2(2 / rect.height, -2 / rect.width) + nx * 0.3 + ny * 0.15;
-                    } else {
-                        this.pointerAngle = Math.atan2(cy - e.clientY, e.clientX - cx);
-                    }
-                    const t = Math.max(0, 1 - dist / Math.max(props.proximity, 1));
-                    this.proximityT = t * t * (3 - 2 * t);
-                };
-                window.addEventListener('pointermove', this.onPointerMove);
-
-                this.angle = 2.4;
-                this.idleAngle = 2.4;
-                this.bright = 0;
-                this.lastT = performance.now();
-
-                this.update = (now) => {
-                    this.raf = requestAnimationFrame(this.update);
-                    const dt = Math.min((now - this.lastT) / 1000, 0.05);
-                    this.lastT = now;
-
-                    this.idleAngle += props.speed * dt;
-                    const steer = props.followMouse && this.pointerAngle !== null && (!props.autoAnimate || this.proximityT > 0);
-                    const target = steer ? this.pointerAngle : this.idleAngle;
-                    const diff = ((target - this.angle + Math.PI * 3) % (Math.PI * 2)) - Math.PI;
-                    this.angle += diff * (1 - Math.exp(-dt * 7));
-
-                    const brightTarget = props.autoAnimate ? 1 : this.proximityT;
-                    this.bright += (brightTarget - this.bright) * (1 - Math.exp(-dt * 8));
-
-                    this.program.uniforms.uAngle.value = this.angle;
-                    this.program.uniforms.uIntensity.value = props.intensity * this.bright;
-
-                    this.renderer.render({ scene: this.mesh });
-                };
-                this.raf = requestAnimationFrame(this.update);
+                const btnElement = document.getElementById('specular-btn');
+                if (btnElement) {
+                    new SpecularButton(btnElement, {
+                        radius: 40,
+                        lineColor: '#FF87B2', 
+                        baseColor: '#101C29', 
+                        intensity: 1.5, 
+                        shineSize: 10,
+                        shineFade: 40,
+                        thickness: 2,
+                        speed: 0.35,
+                        followMouse: true,
+                        proximity: 250,
+                        autoAnimate: false
+                    });
+                }
+            } catch (err) {
+                console.warn("SpecularButton WebGL renderer fallback mode active:", err);
             }
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const btnElement = document.getElementById('specular-btn');
-            if (btnElement) {
-                new SpecularButton(btnElement, {
-                    radius: 40,
-                    lineColor: '#FF87B2', 
-                    baseColor: '#101C29', 
-                    intensity: 1.5, 
-                    shineSize: 10,
-                    shineFade: 40,
-                    thickness: 2,
-                    speed: 0.35,
-                    followMouse: true,
-                    proximity: 250,
-                    autoAnimate: false
-                });
-            }
-        });
+        document.addEventListener('DOMContentLoaded', initSpecular);
     </script>
     
     <script>
@@ -883,48 +811,7 @@
         let selectedLoanType = null;
         let isUserLoggedIn = false; 
 
-        // Knowledge Base for Schemes
-        const SCHEME_DATABASE = {
-            working_capital: {
-                title: "CGTMSE Collateral-Free Credit Support",
-                benefit: "Guaranteed working capital up to ₹2 Crores without collateral.",
-                subsidy: "7% Interest Subvention for MSMEs",
-                matchScore: "96%"
-            },
-            machinery: {
-                title: "Credit Linked Capital Subsidy Scheme (CLCSS)",
-                benefit: "Up to 15% capital subsidy for induction of well-established technology.",
-                subsidy: "15% Front-end Capital Subsidy",
-                matchScore: "92%"
-            },
-            agriculture: {
-                title: "NABARD Agri-Infra & PM-Kisan Scheme Support",
-                benefit: "Subsidized term loans for cold storage, tractors, and processing.",
-                subsidy: "3% Interest Subvention + Credit Guarantee",
-                matchScore: "98%"
-            },
-            raw_materials: {
-                title: "NSIC Raw Material Assistance Scheme",
-                benefit: "Procure bulk raw materials with low interest financial assistance.",
-                subsidy: "Zero Processing Fees for Direct Suppliers",
-                matchScore: "89%"
-            },
-            micro: {
-                title: "Pradhan Mantri MUDRA Yojana (Tarun Scheme)",
-                benefit: "Collateral-free loans for non-farm micro and small enterprise growth.",
-                subsidy: "100% Processing Fee Waiver",
-                matchScore: "95%"
-            },
-            infrastructure: {
-                title: "Stand-Up India Scheme for Infrastructure Expansion",
-                benefit: "Loans between ₹10 Lakhs and ₹1 Crore for greenfield projects.",
-                subsidy: "Composite Loan up to 85% Project Cost",
-                matchScore: "91%"
-            }
-        };
-
         function openLogin() {
-            document.body.classList.remove('creme-bg');
             document.getElementById('view-home').classList.remove('active');
             document.getElementById('view-login').classList.add('active');
             window.scrollTo(0, 0);
@@ -935,6 +822,7 @@
             document.getElementById('view-login').classList.remove('active');
             document.getElementById('centered-app-view').classList.add('active');
             document.body.classList.add('creme-bg');
+            document.body.style.backgroundColor = ''; 
             
             if (!hasConsented) {
                 document.getElementById('consent-modal').classList.add('active');
@@ -955,6 +843,7 @@
 
         function openFullScreenDoc(docId) {
             document.getElementById('view-home').classList.remove('active');
+            document.getElementById('view-login').classList.remove('active');
             document.getElementById('centered-app-view').classList.remove('active');
             
             if (document.getElementById('consent-modal').classList.contains('active')) {
@@ -971,13 +860,11 @@
             document.getElementById('view-cookies').classList.remove('active');
 
             if (isUserLoggedIn) {
-                document.body.classList.add('creme-bg');
                 document.getElementById('centered-app-view').classList.add('active');
                 if (!hasConsented) {
                     document.getElementById('consent-modal').classList.add('active');
                 }
             } else {
-                document.body.classList.remove('creme-bg');
                 document.getElementById('view-home').classList.add('active');
             }
             window.scrollTo(0, 0);
@@ -1002,56 +889,20 @@
             document.getElementById('step-objective').style.display = 'block';
         }
 
-        function resetForm() {
-            selectedLoanType = null;
-            document.querySelectorAll('.loan-card').forEach(c => c.classList.remove('active'));
-            document.getElementById('btn-continue-details').disabled = true;
-            document.getElementById('results-area').style.display = 'none';
-            document.getElementById('step-details').style.display = 'none';
-            document.getElementById('step-objective').style.display = 'block';
-        }
-
         function submitFinalDetails(event) {
             event.preventDefault(); 
-            
             document.getElementById('step-details').style.display = 'none';
             
             const resultsArea = document.getElementById('results-area');
-            const resultsContent = document.getElementById('results-content');
+            const loadingText = document.getElementById('loading-text');
+            const loanName = selectedLoanType ? selectedLoanType.replace(/_/g, ' ') : 'selected';
             
             resultsArea.style.display = 'block';
-            resultsContent.innerHTML = `
-                <div style="text-align: center; padding: 40px 20px; background: #F4F8FB; border-radius: 16px; border: 1px solid var(--border);">
-                    <p style="font-weight: 700; color: var(--primary); font-size: 16px;" class="font-heading">Evaluating profile eligibility...</p>
-                    <p style="font-size: 13px; color: var(--text-muted); margin-top: 6px;">Matching profile against state & national portals...</p>
-                </div>
-            `;
-
-            const reqAmount = document.getElementById('req-amount').value || "500000";
-            const userRegion = document.getElementById('login-region').value || "India";
-            const schemeInfo = SCHEME_DATABASE[selectedLoanType] || SCHEME_DATABASE.working_capital;
+            loadingText.innerHTML = 'Connecting to AI Engine... <br><span style="font-size: 13px; color: var(--text-muted); font-weight: 600; margin-top: 6px; display: inline-block;">(Analyzing profile for ' + loanName + ' schemes)</span>';
 
             setTimeout(() => {
-                resultsContent.innerHTML = `
-                    <div style="background: #ffffff; border-radius: 16px; border: 2px solid var(--primary); padding: 24px; box-shadow: 0 10px 30px rgba(90, 178, 255, 0.15);">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-                            <span style="background: #E6F0F9; color: var(--primary); font-weight: 800; font-size: 12px; padding: 4px 12px; border-radius: 20px;" class="font-heading">AI MATCH: ${schemeInfo.matchScore}</span>
-                            <span style="font-size: 12px; font-weight: 700; color: #5B6B7A;">${userRegion} Portal</span>
-                        </div>
-                        <h3 class="font-heading" style="font-size: 20px; color: var(--text-main); margin-bottom: 8px;">${schemeInfo.title}</h3>
-                        <p style="font-size: 14px; color: var(--text-muted); line-height: 1.5; margin-bottom: 16px;">${schemeInfo.benefit}</p>
-                        
-                        <div style="background: #F4F8FB; padding: 14px; border-radius: 10px; margin-bottom: 20px;">
-                            <div style="font-size: 12px; color: var(--text-muted); font-weight: 700;">PROPOSED AMOUNT</div>
-                            <div style="font-size: 22px; font-weight: 800; color: var(--text-main);" class="font-heading">₹${parseInt(reqAmount).toLocaleString('en-IN')}</div>
-                            <div style="font-size: 12px; color: #10B981; font-weight: 700; margin-top: 2px;">✔ Includes: ${schemeInfo.subsidy}</div>
-                        </div>
-
-                        <button class="btn font-heading" onclick="alert('Redirecting to national scheme portal...')">Apply Direct &rarr;</button>
-                        <button type="button" class="btn font-heading" style="background: none; color: var(--text-muted); border: 1px solid var(--border); box-shadow: none; margin-top: 10px;" onclick="resetForm()">Start New Search</button>
-                    </div>
-                `;
-            }, 1800); 
+                loadingText.innerHTML = '✅ <strong style="font-size: 18px;" class="font-heading">Matches Found!</strong><br><br><span style="color: var(--text-main); font-size: 20px; font-weight: 800;" class="font-heading">Top Pick: Government Scheme Match</span>';
+            }, 2500); 
         }
 
         document.addEventListener("DOMContentLoaded", () => {
