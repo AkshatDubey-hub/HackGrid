@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
+from typing import List, Optional
 from google import genai
 from google.genai import types
 import firebase_admin
@@ -13,7 +14,7 @@ from firebase_admin import credentials, firestore
 # -------------------------------------------------------------
 # 1. Initialize API & CORS
 # -------------------------------------------------------------
-app = FastAPI(title="Govt Loan Matcher - Hackathon API")
+app = FastAPI(title="FetchFunds API - Hackathon")
 
 app.add_middleware(
     CORSMiddleware,
@@ -43,16 +44,16 @@ except Exception as e:
     print(f"Error initializing Firebase: {e}")
 
 # -------------------------------------------------------------
-# 4. Input Data Models (Split into Two Steps)
+# 4. Input Data Models (Mapped to Frontend Payload)
 # -------------------------------------------------------------
-class ApplicantStep1(BaseModel):
+class UserLoginData(BaseModel):
     name: str = Field(...)
     age: int = Field(...)
     gender: str = Field(...)
-    caste_category: str = Field(...)
+    caste: str = Field(...)
     state: str = Field(...)
 
-class ApplicantStep2(BaseModel):
+class FullApplicationData(UserLoginData):
     occupation: str = Field(...)
     annual_income: float = Field(...)
     requested_amount: float = Field(...)
@@ -60,18 +61,29 @@ class ApplicantStep2(BaseModel):
     purpose: str = Field(...)
 
 # -------------------------------------------------------------
-# 5. Output Data Model (Structured JSON returned to frontend)
+# 5. Output Data Models (Strict JSON schema for Gemini)
 # -------------------------------------------------------------
-class LoanRecommendation(BaseModel):
-    applicant_name: str
-    recommended_scheme: str
-    firebase_scheme_id: str  # Added this field based on your prompt instructions
-    administering_ministry: str
-    subsidy_or_concession_details: str
-    interest_rate_structure: str
+class SchemeDetails(BaseModel):
+    name: str
+    firebase_scheme_id: str
     eligibility_verdict: str
-    key_documents_required: list[str]
-    alternative_options: list[str]
+    msme_benefits: str
+    subsidy_details: str
+    interest_rate: str
+    application_workflow: List[str]
+    contingency: Optional[str] = None
+    differences: Optional[str] = None
+
+class DocumentItem(BaseModel):
+    document: str
+    how_to_generate: str
+
+class LoanRecommendation(BaseModel):
+    primary_scheme: SchemeDetails
+    secondary_scheme: SchemeDetails
+    document_checklist_and_generation: List[DocumentItem]
+    pitch_strategy: str
+    fund_implementation: str
 
 # -------------------------------------------------------------
 # 6. Helper: Fetch Schemes from Database
@@ -95,90 +107,81 @@ def fetch_schemes_from_firestore(collection_name: str = "schemes") -> list[dict]
 # -------------------------------------------------------------
 # 7. Routes
 # -------------------------------------------------------------
-@app.post("/api/application/step1")
-def save_step1(user_initial: ApplicantStep1):
+@app.post("/api/save-user")
+def save_user(user_data: UserLoginData):
+    """Saves the data from the initial login tab to Firestore."""
     if db is None:
         raise HTTPException(status_code=500, detail="Database not initialized")
     
     try:
-        doc_ref = db.collection("loan_applications").document()
-        doc_data = {
-            "step1_data": user_initial.model_dump() if hasattr(user_initial, 'model_dump') else user_initial.dict(),
-            "status": "draft",
-            "timestamp": firestore.SERVER_TIMESTAMP
-        }
-        doc_ref.set(doc_data)
+        # Check if user already exists based on name/state combo to avoid duplicates (optional logic)
+        doc_ref = db.collection("users").document()
+        
+        db_payload = user_data.model_dump()
+        db_payload["created_at"] = firestore.SERVER_TIMESTAMP
+        
+        doc_ref.set(db_payload)
         
         return {
-            "message": "Step 1 saved successfully", 
-            "application_id": doc_ref.id
+            "message": "User profile saved successfully", 
+            "user_id": doc_ref.id
         }
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to save step 1: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to save user: {str(e)}")
 
 
-@app.post("/api/match-loan/{application_id}", response_model=LoanRecommendation)
-def match_loan(application_id: str, user_final: ApplicantStep2):
+@app.post("/api/match-loan", response_model=LoanRecommendation)
+def match_loan(application_data: FullApplicationData):
+    """Processes the full application, runs Gemini, and stores the final result."""
     if db is None:
         raise HTTPException(status_code=500, detail="Database not initialized")
     
-    # 1. Fetch Step 1 data
-    doc_ref = db.collection("loan_applications").document(application_id)
-    doc_snap = doc_ref.get()
-    if not doc_snap.exists:
-        raise HTTPException(status_code=404, detail="Application ID not found. Complete step 1 first.")
-    
-    db_data = doc_snap.to_dict()
-    step1_data = db_data.get("step1_data", {})
-
-    # 2. Fetch Schemes
+    # 1. Fetch Schemes
     available_schemes = fetch_schemes_from_firestore(collection_name="schemes")
     if not available_schemes:
-        raise HTTPException(status_code=500, detail="No schemes found in Firebase. Ensure the 'schemes' collection is populated.")
+        raise HTTPException(status_code=500, detail="No schemes found in Firebase.")
 
     schemes_json_str = json.dumps(available_schemes, indent=2)
 
-    # 3. Build Prompt (Fixed Variables)
+    # 2. Build Prompt 
     prompt = f"""
     You are an expert advisor on Government of India and State financial schemes.
     Evaluate the applicant against ONLY the authorized schemes provided below from our official database.
 
-=== APPLICANT PROFILE ===
-- Name: {step1_data.get('name')}
-- Age: {step1_data.get('age')}
-- Gender: {step1_data.get('gender')}
-- Caste / Category: {step1_data.get('caste_category')}
-- Occupation: {user_final.occupation}
-- Annual Income: INR {user_final.annual_income}
-- Requested Amount: INR {user_final.requested_amount}
-- Land Holding: {user_final.land_holding_acres} acres
-- State: {step1_data.get('state')}
-- Purpose: {user_final.purpose}
+    === APPLICANT PROFILE ===
+    - Name: {application_data.name}
+    - Age: {application_data.age}
+    - Gender: {application_data.gender}
+    - Caste / Category: {application_data.caste}
+    - Occupation: {application_data.occupation}
+    - Annual Income: INR {application_data.annual_income}
+    - Requested Amount: INR {application_data.requested_amount}
+    - Land Holding: {application_data.land_holding_acres} acres
+    - State: {application_data.state}
+    - Purpose: {application_data.purpose}
 
-=== AVAILABLE SCHEMES DATABASE (PULLED FROM FIREBASE) ===
-{schemes_json_str}
+    === AVAILABLE SCHEMES DATABASE (PULLED FROM FIREBASE) ===
+    {schemes_json_str}
 
-=== INSTRUCTIONS ===
-1. **Scheme Selection:** Select the BEST PRIMARY scheme and a viable SECONDARY (backup) scheme from the provided Firebase list based on matching caste benefits, land criteria, occupation, and financial concessions. Populate `primary_firebase_scheme_id` and `secondary_firebase_scheme_id` with the exact `id`s from the database.
-2. **Financial Precision:** Use the exact subsidy percentages, margin money requirements, and interest rate structures recorded in the scheme database for both selected schemes.
-3. **Eligibility Verdict & Contingency:** Provide a clear eligibility verdict explaining exactly why the primary scheme maximizes benefits. Then, define the specific scenarios or rejection reasons under which the applicant should pivot to the secondary scheme.
-4. **MSME Benefits:** Outline the relevant points of the primary scheme that directly benefit the MSME (e.g., collateral-free guarantees, capital subsidies). Briefly note how the secondary scheme's benefits differ.
-5. **Application Workflow:** Provide a clear, step-by-step pathway of the application process for the primary scheme. Highlight any major workflow differences if the applicant has to fall back to the secondary scheme.
-6. **Document Checklist & Generation:** 
-    *   List all mandatory documents necessary to apply for both schemes, clearly separating any documents unique to the backup scheme. 
-    *   Provide a practical guide on how to generate or draft complex documents that aren't ready (e.g., using CA services or automated tools for Detailed Project Reports, 5-year financial projections, CMA data, Udyam Registration, and DSCR calculations).
-7. **Pitch & Proposal Strategy:** Outline key themes for the company to pitch to maximize approval chances (e.g., highlighting employment generation, rural development). If the backup scheme has a different focus (e.g., technology upgrade vs. employment), specify how the pitch must change.
-8. **Fund Implementation:** Provide actionable recommendations on how to effectively deploy the secured fund amount to ensure business growth, regulatory compliance, and seamless loan repayment.
+    === INSTRUCTIONS ===
+    1. **Scheme Selection:** Select the BEST PRIMARY scheme and a viable SECONDARY (backup) scheme...
+    2. **Financial Precision:** Use the exact subsidy percentages...
+    3. **Eligibility Verdict & Contingency:** Provide a clear eligibility verdict...
+    4. **MSME Benefits:** Outline the relevant points...
+    5. **Application Workflow:** Provide a clear pathway...
+    6. **Document Checklist & Generation:** List documents and provide generation guide...
+    7. **Pitch & Proposal Strategy:** Outline key themes for the company to pitch...
+    8. **Fund Implementation:** Provide actionable recommendations...
     """
     
-    # 4. Call Gemini with Retry Logic
+    # 3. Call Gemini with Retry Logic
     max_retries = 3
     recommendation_data = None
     
     for attempt in range(max_retries):
         try:
             response = client.models.generate_content(
-                model="gemini-3.6-flash", # Updated to current stable version
+                model="gemini-3.6-flash", 
                 contents=prompt,
                 config=types.GenerateContentConfig(
                     response_mime_type="application/json",
@@ -187,28 +190,30 @@ def match_loan(application_id: str, user_final: ApplicantStep2):
                 ),
             )
             recommendation_data = json.loads(response.text)
-            break # Success, exit retry loop
+            break 
             
         except Exception as e:
             err_str = str(e)
-            if "503" in err_str or "high demand" in err_str.lower() or "429" in err_str:
+            if "503" in err_str or "429" in err_str:
                 time.sleep(2)
                 continue
             raise HTTPException(status_code=500, detail=f"Scheme matching failed: {err_str}")
 
     if not recommendation_data:
-        raise HTTPException(status_code=503, detail="Model temporarily unavailable after retries.")
+        raise HTTPException(status_code=503, detail="Model temporarily unavailable.")
 
-    # 5. Update Firestore with Final Data
+    # 4. Save the full application and AI result together in Firestore
     try:
-        step2_dict = user_final.model_dump() if hasattr(user_final, 'model_dump') else user_final.dict()
-        doc_ref.update({
-            "step2_data": step2_dict,
-            "recommendation": recommendation_data,
+        app_ref = db.collection("loan_applications").document()
+        app_payload = {
+            "user_profile": application_data.model_dump(),
+            "ai_recommendation": recommendation_data,
             "status": "completed",
-            "completed_timestamp": firestore.SERVER_TIMESTAMP,
-        })
+            "timestamp": firestore.SERVER_TIMESTAMP,
+        }
+        app_ref.set(app_payload)
     except Exception as db_err:
         print(f"Database Update Error: {db_err}")
 
+    # 5. Return data to frontend
     return recommendation_data
