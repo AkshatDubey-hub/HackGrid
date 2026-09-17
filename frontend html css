@@ -99,13 +99,14 @@
         .content-section > p { font-size: 18px; color: #D1DAE3; line-height: 1.8; margin-bottom: 40px; font-weight: 400; text-align: center; max-width: 600px; margin-left: auto; margin-right: auto;}
 
         /* ================= FLEXBOX ACCORDION GALLERY ================= */
-        .accordion-gallery { display: flex; width: 100%; height: 480px; gap: 16px; margin-top: 20px; }
+        .accordion-gallery { 
+            display: flex; width: 100%; max-width: 1000px; height: 480px; gap: 16px; margin: 30px auto 0; 
+        }
         .accordion-card {
             position: relative; flex: 1; border-radius: 32px; overflow: hidden; cursor: pointer;
             transition: flex 0.6s cubic-bezier(0.25, 1, 0.5, 1), border-color 0.4s ease, background 0.4s ease;
             border: 1px solid rgba(90, 178, 255, 0.1); 
             display: flex; 
-            /* MOVED TO THE TOP */
             align-items: flex-start; 
         }
         .accordion-card:nth-child(1) { background: linear-gradient(180deg, #101C29 0%, #0A1118 100%); }
@@ -115,13 +116,9 @@
         .accordion-card.active { flex: 6; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
         
         /* THEME COLORS FOR ACTIVE TABS */
-        /* 1. Farmers - Calamine Blue */
         .accordion-card:nth-child(1).active { background: #A3C1DA; border-color: #A3C1DA; }
-        /* 2. Small Businesses - Seashell Pink */
         .accordion-card:nth-child(2).active { background: #FFF5F6; border-color: #FFF5F6; }
-        /* 3. Startups - Light Glaucous Blue */
         .accordion-card:nth-child(3).active { background: #9DB5C9; border-color: #9DB5C9; }
-
 
         .accordion-bg-number {
             position: absolute; bottom: -25px; right: 15px; font-size: 200px; font-weight: 900;
@@ -144,7 +141,6 @@
         .accordion-card.active .accordion-desc { color: #26364A; }
 
         .quote-section { text-align: center; padding: 40px 20px; margin: 60px 0; font-style: italic; font-size: 22px; color: #FFCBE0; font-family: 'Outfit', sans-serif; letter-spacing: -0.01em; }
-
         /* ================= SPECULAR WEBGL BUTTON ================= */
         .specular-button {
             --sb-radius: 40px;
@@ -298,40 +294,54 @@
                 </div>
 
                 <!-- FLUID ACCORDION GALLERY -->
-                <div class="content-section" style="padding-bottom: 90px;">
+                <div class="content-section" style="padding-bottom: 90px; text-align: center;">
                     <span class="section-tag">Audience</span>
-                    <h2 class="font-heading" style="text-align: center;">Who We Serve</h2>
+                    <h2 class="font-heading">Who We Serve</h2>
+                    <p style="color: #5B6B7A; max-width: 600px; margin: 0 auto; font-size: 16px;">From rural fields to tech hubs, we match specialized government initiatives to the specific needs of diverse Indian demographics.</p>
                     
-                    <div class="accordion-gallery">
+                    <div class="accordion-gallery text-left">
+                        
+                        <!-- Card 1 -->
                         <div class="accordion-card active">
                             <div class="accordion-bg-number">01</div>
                             <div class="accordion-vertical"><span>FARMERS</span></div>
                             <div class="accordion-content">
                                 <h3 class="accordion-title">Farmers & Agri-Business</h3>
-                                <p class="accordion-desc">Discover agricultural subsidies, crop insurance, and equipment loans tailored to your seasonal needs.</p>
+                                <p class="accordion-desc" style="max-width: 420px;">
+                                    <strong style="color: var(--primary);">For rural cultivators and agro-processors.</strong><br><br>
+                                    We bridge the gap between your seasonal harvest cycles and government aid. Instantly discover eligibility for NABARD refinancing, PM-Kisan benefits, and heavily subsidized equipment loans for tractors and cold storage—allowing you to modernize without the burden of steep collateral.
+                                </p>
                             </div>
                         </div>
 
+                        <!-- Card 2 -->
                         <div class="accordion-card">
                             <div class="accordion-bg-number">02</div>
                             <div class="accordion-vertical"><span>BUSINESSES</span></div>
                             <div class="accordion-content">
-                                <h3 class="accordion-title">Small & Medium Businesses</h3>
-                                <p class="accordion-desc">Access MSME credit guarantees, working capital, and expansion funds to scale your enterprise.</p>
+                                <h3 class="accordion-title">Small & Medium Enterprises</h3>
+                                <p class="accordion-desc" style="max-width: 420px;">
+                                    <strong style="color: var(--primary);">For established shops and local manufacturers.</strong><br><br>
+                                    Scaling a business requires steady cash flow and secure backing. We help you unlock collateral-free credit through CGTMSE, secure immediate working capital, and tap into technology upgradation subsidies (CLCSS) to keep your daily operations expanding seamlessly.
+                                </p>
                             </div>
                         </div>
 
+                        <!-- Card 3 -->
                         <div class="accordion-card">
                             <div class="accordion-bg-number">03</div>
                             <div class="accordion-vertical"><span>STARTUPS</span></div>
                             <div class="accordion-content">
                                 <h3 class="accordion-title">Aspiring Entrepreneurs</h3>
-                                <p class="accordion-desc">Find seed funding, startup grants, and skill development schemes to bring your vision to life.</p>
+                                <p class="accordion-desc" style="max-width: 420px;">
+                                    <strong style="color: var(--primary);">For first-generation founders and innovators.</strong><br><br>
+                                    Turn your vision into a registered startup with the right financial runway. We navigate the maze of DPIIT recognition, the Startup India Seed Fund, and Mudra Tarun schemes on your behalf—securing the early-stage capital and tax exemptions you need to launch confidently.
+                                </p>
                             </div>
                         </div>
+
                     </div>
                 </div>
-
                 <div class="quote-section">
                     "Growth is never by mere chance; it is the result of forces working together."
                 </div>
