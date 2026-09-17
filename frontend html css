@@ -164,443 +164,580 @@
         .report-value { font-size: 15px; color: var(--text-main); line-height: 1.5; font-weight: 500; }
         .doc-list li { margin-bottom: 12px; padding-left: 24px; position: relative; }
         .doc-list li::before { content: "📄"; position: absolute; left: 0; top: 0; font-size: 14px; }
+        
+        .doc-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.doc-item:hover {
+  background-color: #f5f5f5; /* Light gray hover effect */
+}
+
+.doc-checkbox {
+  margin-top: 5px; /* Aligns the checkbox with the heading */
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+/* Strikethrough effect when checked */
+.doc-checkbox:checked + .doc-content h4 {
+  text-decoration: line-through;
+  color: #888;
+}
+    
     </style>
 </head>
 <body>
 
-    <!-- ================= 0. HOME PAGE ================= -->
-    <div id="view-home" class="view-wrapper active">
-        <video autoplay loop muted playsinline class="bg-video">
-            <source src="bg-video.mp4.webm" type="video/webm">
-        </video>
-        <div class="bg-overlay"></div>
-        <div class="home-container">
-            <header class="home-nav">
-                <div class="home-logo font-heading">FetchFunds</div>
-                <button class="btn-login" onclick="openLogin()">Client Login</button>
-            </header>
-            <main>
-                <div class="home-hero">
-                    <h1 class="font-heading">Empowering Your Growth with Government Schemes.</h1>
-                    <p>Welcome to your central hub for accessible financial support. We bridge the gap between hard-working individuals and the government schemes designed to help them thrive.</p>
-                </div>
-                <button class="btn-enter font-heading" onclick="openLogin()">Take the Next Step &rarr;</button>
-            </main>
-        </div>
+    <!-- ================= ADD THIS STYLE FOR THE CHECKBOX EFFECT ================= -->
+<style>
+    /* Strikethrough text when the checkbox is checked */
+    .doc-checkbox:checked + .doc-content h4 {
+        text-decoration: line-through;
+        color: #9ca3af; /* Tailwind gray-400 */
+    }
+</style>
+
+<!-- ================= 0. HOME PAGE ================= -->
+<div id="view-home" class="view-wrapper active">
+    <video autoplay loop muted playsinline class="bg-video">
+        <source src="bg-video.mp4.webm" type="video/webm">
+    </video>
+    <div class="bg-overlay"></div>
+    <div class="home-container">
+        <header class="home-nav">
+            <div class="home-logo font-heading">FetchFunds</div>
+            <button class="btn-login" onclick="openLogin()">Client Login</button>
+        </header>
+        <main>
+            <div class="home-hero">
+                <h1 class="font-heading">Empowering Your Growth with Government Schemes.</h1>
+                <p>Welcome to your central hub for accessible financial support. We bridge the gap between hard-working individuals and the government schemes designed to help them thrive.</p>
+            </div>
+            <button class="btn-enter font-heading" onclick="openLogin()">Take the Next Step &rarr;</button>
+        </main>
     </div>
+</div>
 
 
-    <!-- ================= 1. INTERACTIVE LOGIN PORTAL ================= -->
-    <div id="view-login" class="view-wrapper items-center justify-center min-h-screen p-4">
-        <div class="bg-[#111B13] p-8 md:p-10 rounded-[28px] border border-[#2D4232] w-full max-w-md shadow-2xl relative overflow-hidden">
-            <!-- Decorative blur -->
-            <div class="absolute top-[-50px] right-[-50px] w-40 h-40 bg-[#3D704D] rounded-full blur-[80px] opacity-30 pointer-events-none"></div>
+<!-- ================= 1. INTERACTIVE LOGIN PORTAL ================= -->
+<div id="view-login" class="view-wrapper items-center justify-center min-h-screen p-4">
+    <div class="bg-[#111B13] p-8 md:p-10 rounded-[28px] border border-[#2D4232] w-full max-w-md shadow-2xl relative overflow-hidden">
+        <!-- Decorative blur -->
+        <div class="absolute top-[-50px] right-[-50px] w-40 h-40 bg-[#3D704D] rounded-full blur-[80px] opacity-30 pointer-events-none"></div>
 
-            <h2 class="font-heading text-white text-3xl mb-2">Create Profile</h2>
-            <p class="text-[#95A89A] text-sm mb-8 font-medium">Let's start with the basics to personalize your scheme matching experience.</p>
-            
-            <form onsubmit="saveLoginAndNext(event)" class="space-y-5 relative z-10">
-                <!-- Username -->
+        <h2 class="font-heading text-white text-3xl mb-2">Create Profile</h2>
+        <p class="text-[#95A89A] text-sm mb-8 font-medium">Let's start with the basics to personalize your scheme matching experience.</p>
+        
+        <form onsubmit="saveLoginAndNext(event)" class="space-y-5 relative z-10">
+            <!-- Username -->
+            <div>
+                <label class="block text-[11px] uppercase tracking-wider text-[#6EE7B7] font-bold mb-2">Full Name</label>
+                <input type="text" id="login-name" required placeholder="e.g. Rahul Sharma" class="w-full bg-[#1F2E22] text-white placeholder-[#5E7365] text-sm font-medium rounded-xl px-4 py-3.5 border border-[#2D4232] focus:outline-none focus:ring-2 focus:ring-[#3D704D] focus:bg-[#25382A] transition" />
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <!-- Age -->
                 <div>
-                    <label class="block text-[11px] uppercase tracking-wider text-[#6EE7B7] font-bold mb-2">Full Name</label>
-                    <input type="text" id="login-name" required placeholder="e.g. Rahul Sharma" class="w-full bg-[#1F2E22] text-white placeholder-[#5E7365] text-sm font-medium rounded-xl px-4 py-3.5 border border-[#2D4232] focus:outline-none focus:ring-2 focus:ring-[#3D704D] focus:bg-[#25382A] transition" />
+                    <label class="block text-[11px] uppercase tracking-wider text-[#6EE7B7] font-bold mb-2">Age</label>
+                    <input type="number" id="login-age" required placeholder="e.g. 32" class="w-full bg-[#1F2E22] text-white placeholder-[#5E7365] text-sm font-medium rounded-xl px-4 py-3.5 border border-[#2D4232] focus:outline-none focus:ring-2 focus:ring-[#3D704D] focus:bg-[#25382A] transition" />
+                </div>
+                <!-- Gender -->
+                <div>
+                    <label class="block text-[11px] uppercase tracking-wider text-[#6EE7B7] font-bold mb-2">Gender</label>
+                    <select id="login-gender" required class="w-full bg-[#1F2E22] text-white text-sm font-medium rounded-xl px-4 py-3.5 border border-[#2D4232] focus:outline-none focus:ring-2 focus:ring-[#3D704D] focus:bg-[#25382A] transition appearance-none cursor-pointer">
+                        <option value="" disabled selected class="text-[#5E7365]">Select</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Caste Category -->
+            <div>
+                <label class="block text-[11px] uppercase tracking-wider text-[#6EE7B7] font-bold mb-2">Social Category</label>
+                <select id="login-caste" required class="w-full bg-[#1F2E22] text-white text-sm font-medium rounded-xl px-4 py-3.5 border border-[#2D4232] focus:outline-none focus:ring-2 focus:ring-[#3D704D] focus:bg-[#25382A] transition appearance-none cursor-pointer">
+                    <option value="" disabled selected class="text-[#5E7365]">Required for specialized schemes</option>
+                    <option value="General">General / UR</option>
+                    <option value="OBC">OBC</option>
+                    <option value="SC">SC</option>
+                    <option value="ST">ST</option>
+                </select>
+            </div>
+
+            <!-- Region/State -->
+            <div>
+                <label class="block text-[11px] uppercase tracking-wider text-[#6EE7B7] font-bold mb-2">State of Operation</label>
+                <select id="login-state" required class="w-full bg-[#1F2E22] text-white text-sm font-medium rounded-xl px-4 py-3.5 border border-[#2D4232] focus:outline-none focus:ring-2 focus:ring-[#3D704D] focus:bg-[#25382A] transition appearance-none cursor-pointer">
+                    <option value="" disabled selected class="text-[#5E7365]">Select State</option>
+                    <option value="Andhra Pradesh">Andhra Pradesh</option>
+                    <option value="Karnataka">Karnataka</option>
+                    <option value="Maharashtra">Maharashtra</option>
+                    <option value="Tamil Nadu">Tamil Nadu</option>
+                </select>
+            </div>
+
+            <button type="submit" class="w-full mt-6 bg-[#3D704D] hover:bg-[#2D5A3B] text-white font-heading font-bold text-lg rounded-xl py-4 shadow-[0_4px_14px_rgba(61,112,77,0.4)] transition-all hover:translate-y-[-2px]">
+                Save & Next →
+            </button>
+        </form>
+    </div>
+</div>
+
+
+<!-- ================= 2. APP DASHBOARD (OBJECTIVE & DETAILS) ================= -->
+<div id="centered-app-view" class="view-wrapper">
+    <div class="container" id="main-container">
+        <div id="page-dashboard" class="card-page active">
+            
+            <!-- STEP 1: FUNDING OBJECTIVE -->
+            <div id="step-objective" class="fade-step" style="flex-grow: 1;">
+                <h2 class="font-heading" style="font-size: 26px; margin-bottom: 6px;">Funding Objective</h2>
+                <p class="text-muted" style="margin-bottom: 12px; font-size: 14px;">Select the primary purpose of your funding to help our AI pinpoint the exact government schemes.</p>
+                
+                <div class="loan-grid">
+                    <div class="loan-card" onclick="selectLoan('working_capital', this)">
+                        <div class="loan-icon-wrap">💼</div>
+                        <div class="loan-title">Working Capital</div>
+                        <div class="loan-desc">Manage daily operations & inventory.</div>
+                    </div>
+                    <div class="loan-card" onclick="selectLoan('machinery', this)">
+                        <div class="loan-icon-wrap">⚙️</div>
+                        <div class="loan-title">Machinery & Tech</div>
+                        <div class="loan-desc">Upgrade equipment assets.</div>
+                    </div>
+                    <div class="loan-card" onclick="selectLoan('agriculture', this)">
+                        <div class="loan-icon-wrap">🌾</div>
+                        <div class="loan-title">Agriculture Loan</div>
+                        <div class="loan-desc">Farming & allied sectors.</div>
+                    </div>
+                    <div class="loan-card" onclick="selectLoan('micro', this)">
+                        <div class="loan-icon-wrap">🏪</div>
+                        <div class="loan-title">Micro & Mudra</div>
+                        <div class="loan-desc">Small ticket loans for micro-ventures.</div>
+                    </div>
                 </div>
 
-                <div class="grid grid-cols-2 gap-4">
-                    <!-- Age -->
-                    <div>
-                        <label class="block text-[11px] uppercase tracking-wider text-[#6EE7B7] font-bold mb-2">Age</label>
-                        <input type="number" id="login-age" required placeholder="e.g. 32" class="w-full bg-[#1F2E22] text-white placeholder-[#5E7365] text-sm font-medium rounded-xl px-4 py-3.5 border border-[#2D4232] focus:outline-none focus:ring-2 focus:ring-[#3D704D] focus:bg-[#25382A] transition" />
+                <button id="btn-continue-details" class="btn font-heading" disabled onclick="goToDetails()">Continue &rarr;</button>
+            </div>
+
+            <!-- STEP 2: ADDITIONAL DETAILS -->
+            <div id="step-details" class="fade-step" style="display: none; flex-grow: 1;">
+                <h2 class="font-heading" style="font-size: 26px; margin-bottom: 6px;">Additional Details</h2>
+                <p class="text-muted" style="margin-bottom: 24px; font-size: 14px;">Provide a few more specifics to ensure our AI matches you accurately.</p>
+                
+                <form onsubmit="submitFinalDetails(event)">
+                    <div class="form-group">
+                        <label>Requested Amount (in ₹)</label>
+                        <input type="number" id="req-amount" placeholder="e.g. 500000" required>
                     </div>
-                    <!-- Gender -->
-                    <div>
-                        <label class="block text-[11px] uppercase tracking-wider text-[#6EE7B7] font-bold mb-2">Gender</label>
-                        <select id="login-gender" required class="w-full bg-[#1F2E22] text-white text-sm font-medium rounded-xl px-4 py-3.5 border border-[#2D4232] focus:outline-none focus:ring-2 focus:ring-[#3D704D] focus:bg-[#25382A] transition appearance-none cursor-pointer">
-                            <option value="" disabled selected class="text-[#5E7365]">Select</option>
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
-                            <option value="Other">Other</option>
+                    <div class="form-group">
+                        <label>Occupation</label>
+                        <select id="occupation" required>
+                            <option value="" disabled selected>Select Occupation</option>
+                            <option value="farmer">Farmer / Agriculturist</option>
+                            <option value="business">Business Owner</option>
+                            <option value="salaried">Salaried Professional</option>
+                            <option value="unemployed">Unemployed / Startup</option>
                         </select>
                     </div>
-                </div>
-
-                <!-- Caste Category -->
-                <div>
-                    <label class="block text-[11px] uppercase tracking-wider text-[#6EE7B7] font-bold mb-2">Social Category</label>
-                    <select id="login-caste" required class="w-full bg-[#1F2E22] text-white text-sm font-medium rounded-xl px-4 py-3.5 border border-[#2D4232] focus:outline-none focus:ring-2 focus:ring-[#3D704D] focus:bg-[#25382A] transition appearance-none cursor-pointer">
-                        <option value="" disabled selected class="text-[#5E7365]">Required for specialized schemes</option>
-                        <option value="General">General / UR</option>
-                        <option value="OBC">OBC</option>
-                        <option value="SC">SC</option>
-                        <option value="ST">ST</option>
-                    </select>
-                </div>
-
-                <!-- Region/State -->
-                <div>
-                    <label class="block text-[11px] uppercase tracking-wider text-[#6EE7B7] font-bold mb-2">State of Operation</label>
-                    <select id="login-state" required class="w-full bg-[#1F2E22] text-white text-sm font-medium rounded-xl px-4 py-3.5 border border-[#2D4232] focus:outline-none focus:ring-2 focus:ring-[#3D704D] focus:bg-[#25382A] transition appearance-none cursor-pointer">
-                        <option value="" disabled selected class="text-[#5E7365]">Select State</option>
-                        <option value="Andhra Pradesh">Andhra Pradesh</option>
-                        <option value="Karnataka">Karnataka</option>
-                        <option value="Maharashtra">Maharashtra</option>
-                        <option value="Tamil Nadu">Tamil Nadu</option>
-                    </select>
-                </div>
-
-                <button type="submit" class="w-full mt-6 bg-[#3D704D] hover:bg-[#2D5A3B] text-white font-heading font-bold text-lg rounded-xl py-4 shadow-[0_4px_14px_rgba(61,112,77,0.4)] transition-all hover:translate-y-[-2px]">
-                    Save & Next →
-                </button>
-            </form>
-        </div>
-    </div>
-
-
-    <!-- ================= 2. APP DASHBOARD (OBJECTIVE & DETAILS) ================= -->
-    <div id="centered-app-view" class="view-wrapper">
-        <div class="container" id="main-container">
-            <div id="page-dashboard" class="card-page active">
-                
-                <!-- STEP 1: FUNDING OBJECTIVE -->
-                <div id="step-objective" class="fade-step" style="flex-grow: 1;">
-                    <h2 class="font-heading" style="font-size: 26px; margin-bottom: 6px;">Funding Objective</h2>
-                    <p class="text-muted" style="margin-bottom: 12px; font-size: 14px;">Select the primary purpose of your funding to help our AI pinpoint the exact government schemes.</p>
-                    
-                    <div class="loan-grid">
-                        <div class="loan-card" onclick="selectLoan('working_capital', this)">
-                            <div class="loan-icon-wrap">💼</div>
-                            <div class="loan-title">Working Capital</div>
-                            <div class="loan-desc">Manage daily operations & inventory.</div>
-                        </div>
-                        <div class="loan-card" onclick="selectLoan('machinery', this)">
-                            <div class="loan-icon-wrap">⚙️</div>
-                            <div class="loan-title">Machinery & Tech</div>
-                            <div class="loan-desc">Upgrade equipment assets.</div>
-                        </div>
-                        <div class="loan-card" onclick="selectLoan('agriculture', this)">
-                            <div class="loan-icon-wrap">🌾</div>
-                            <div class="loan-title">Agriculture Loan</div>
-                            <div class="loan-desc">Farming & allied sectors.</div>
-                        </div>
-                        <div class="loan-card" onclick="selectLoan('micro', this)">
-                            <div class="loan-icon-wrap">🏪</div>
-                            <div class="loan-title">Micro & Mudra</div>
-                            <div class="loan-desc">Small ticket loans for micro-ventures.</div>
-                        </div>
+                    <div class="form-group">
+                        <label>Annual Income (in ₹)</label>
+                        <input type="number" id="annual-income" placeholder="e.g. 1200000" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Land Holding (in Acres)</label>
+                        <input type="number" id="land-holding" placeholder="e.g. 2.5 (Enter 0 if none)" step="any" required>
                     </div>
 
-                    <button id="btn-continue-details" class="btn font-heading" disabled onclick="goToDetails()">Continue &rarr;</button>
-                </div>
-
-                <!-- STEP 2: ADDITIONAL DETAILS -->
-                <div id="step-details" class="fade-step" style="display: none; flex-grow: 1;">
-                    <h2 class="font-heading" style="font-size: 26px; margin-bottom: 6px;">Additional Details</h2>
-                    <p class="text-muted" style="margin-bottom: 24px; font-size: 14px;">Provide a few more specifics to ensure our AI matches you accurately.</p>
-                    
-                    <form onsubmit="submitFinalDetails(event)">
-                        <div class="form-group">
-                            <label>Requested Amount (in ₹)</label>
-                            <input type="number" id="req-amount" placeholder="e.g. 500000" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Occupation</label>
-                            <select id="occupation" required>
-                                <option value="" disabled selected>Select Occupation</option>
-                                <option value="farmer">Farmer / Agriculturist</option>
-                                <option value="business">Business Owner</option>
-                                <option value="salaried">Salaried Professional</option>
-                                <option value="unemployed">Unemployed / Startup</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Annual Income (in ₹)</label>
-                            <input type="number" id="annual-income" placeholder="e.g. 1200000" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Land Holding (in Acres)</label>
-                            <input type="number" id="land-holding" placeholder="e.g. 2.5 (Enter 0 if none)" step="any" required>
-                        </div>
-
-                        <div style="display: flex; gap: 12px; margin-top: 30px;">
-                            <button type="button" class="btn font-heading" style="background: #F2F4F2; color: var(--text-muted); width: 30%; box-shadow: none;" onclick="goBackToObjective()">Back</button>
-                            <button type="submit" class="btn font-heading" style="width: 70%;">Analyze & Match ✨</button>
-                        </div>
-                    </form>
-                </div>
-
-                <!-- STEP 3: RESULTS / CONTINUATION PAGE -->
-                <div id="step-results" class="fade-step" style="display: none;">
-                    <div id="loading-area" style="text-align: center; padding: 60px 20px;">
-                        <div class="animate-spin inline-block w-10 h-10 border-[4px] border-current border-t-transparent text-[#3D704D] rounded-full mb-4" role="status" aria-label="loading"></div>
-                        <h3 class="font-heading text-xl text-[#0B120C]">Analyzing Profile...</h3>
-                        <p class="text-[#5E7365] text-sm mt-2">Evaluating against 100+ Government schemes, calculating subsidies, and drafting strategies.</p>
+                    <div style="display: flex; gap: 12px; margin-top: 30px;">
+                        <button type="button" class="btn font-heading" style="background: #F2F4F2; color: var(--text-muted); width: 30%; box-shadow: none;" onclick="goBackToObjective()">Back</button>
+                        <button type="submit" class="btn font-heading" style="width: 70%;">Analyze & Match ✨</button>
                     </div>
-                    
-                    <!-- JSON Data Injected Here -->
-                    <div id="results-content" style="display: none;"></div>
-                </div>
-
+                </form>
             </div>
-        </div>
-    </div>
 
-    <!-- CONSENT MODAL -->
-    <div id="consent-modal" class="modal-overlay">
-        <div class="modal-content">
-            <h2 class="font-heading text-2xl mb-2">Legal & Privacy</h2>
-            <p class="text-sm text-[#5E7365] mb-6">Please agree to data processing terms before generating matches.</p>
-            <label class="flex items-start gap-3 cursor-pointer mb-6">
-                <input type="checkbox" id="consent-checkbox" onchange="validateForm()" class="mt-1 w-5 h-5 accent-[#3D704D]">
-                <span class="text-sm font-semibold text-[#0B120C]">I acknowledge and agree to the Terms & Conditions and Privacy Policy.</span>
-            </label>
-            <button id="btn-accept" class="btn font-heading" disabled onclick="acceptConsent()">Accept & Continue</button>
+            <!-- STEP 3: RESULTS / CONTINUATION PAGE -->
+            <div id="step-results" class="fade-step" style="display: none;">
+                <div id="loading-area" style="text-align: center; padding: 60px 20px;">
+                    <div class="animate-spin inline-block w-10 h-10 border-[4px] border-current border-t-transparent text-[#3D704D] rounded-full mb-4" role="status" aria-label="loading"></div>
+                    <h3 class="font-heading text-xl text-[#0B120C]">Analyzing Profile...</h3>
+                    <p class="text-[#5E7365] text-sm mt-2">Evaluating against 100+ Government schemes, calculating subsidies, and drafting strategies.</p>
+                </div>
+                
+                <!-- ================= DOCUMENT CHECKLIST HTML ADDED HERE ================= -->
+                <!-- Note: Ensure your JS that renders the report includes this HTML structure -->
+                <div id="results-content" style="display: none;">
+                    
+                    <!-- Your other report content (Primary Match, Verdict, etc.) would go here above the checklist -->
+
+                    <!-- DOCUMENT GENERATION GUIDE CHECKLIST -->
+                    <div class="bg-white border border-gray-200 rounded-[20px] p-6 mt-6 shadow-sm">
+                        <h3 class="font-heading text-[#95A89A] text-xs font-bold uppercase tracking-wider mb-4">Document Generation Guide</h3>
+                        
+                        <!-- Item 1 -->
+                        <label class="flex items-start gap-3 p-3 -ml-3 rounded-xl cursor-pointer hover:bg-[#F9FAFB] transition-colors" for="doc-aadhaar">
+                            <input type="checkbox" id="doc-aadhaar" class="doc-checkbox mt-1 w-4 h-4 accent-[#3D704D] rounded cursor-pointer">
+                            <div class="doc-content flex-1">
+                                <h4 class="font-semibold text-[#0B120C] text-sm transition-colors">📄 Aadhaar or PAN Card</h4>
+                                <p class="text-[13px] text-[#5E7365] mt-1 leading-relaxed">💡 <em class="not-italic text-[#3D704D] font-medium">How to get it:</em> Download via UIDAI portal (eaadhaar.uidai.gov.in) or NSDL e-Gov portal using mobile OTP verification.</p>
+                            </div>
+                        </label>
+
+                        <!-- Item 2 -->
+                        <label class="flex items-start gap-3 p-3 -ml-3 rounded-xl cursor-pointer hover:bg-[#F9FAFB] transition-colors" for="doc-dpr">
+                            <input type="checkbox" id="doc-dpr" class="doc-checkbox mt-1 w-4 h-4 accent-[#3D704D] rounded cursor-pointer">
+                            <div class="doc-content flex-1">
+                                <h4 class="font-semibold text-[#0B120C] text-sm transition-colors">📄 Detailed Project Report (DPR)</h4>
+                                <p class="text-[13px] text-[#5E7365] mt-1 leading-relaxed">💡 <em class="not-italic text-[#3D704D] font-medium">How to get it:</em> Generate using the KVIC online DPR template tool or MSME project profile guidelines specifying a INR 2 Lakhs budget and revenue plan.</p>
+                            </div>
+                        </label>
+
+                        <!-- Item 3 -->
+                        <label class="flex items-start gap-3 p-3 -ml-3 rounded-xl cursor-pointer hover:bg-[#F9FAFB] transition-colors" for="doc-caste">
+                            <input type="checkbox" id="doc-caste" class="doc-checkbox mt-1 w-4 h-4 accent-[#3D704D] rounded cursor-pointer">
+                            <div class="doc-content flex-1">
+                                <h4 class="font-semibold text-[#0B120C] text-sm transition-colors">📄 Educational or Caste Certificate</h4>
+                                <p class="text-[13px] text-[#5E7365] mt-1 leading-relaxed">💡 <em class="not-italic text-[#3D704D] font-medium">How to get it:</em> Obtain SC Caste Certificate from Karnataka Digital Seva Sindhu portal verified by local Tahsildar.</p>
+                            </div>
+                        </label>
+
+                        <!-- Item 4 -->
+                        <label class="flex items-start gap-3 p-3 -ml-3 rounded-xl cursor-pointer hover:bg-[#F9FAFB] transition-colors" for="doc-bank">
+                            <input type="checkbox" id="doc-bank" class="doc-checkbox mt-1 w-4 h-4 accent-[#3D704D] rounded cursor-pointer">
+                            <div class="doc-content flex-1">
+                                <h4 class="font-semibold text-[#0B120C] text-sm transition-colors">📄 Bank Statement</h4>
+                                <p class="text-[13px] text-[#5E7365] mt-1 leading-relaxed">💡 <em class="not-italic text-[#3D704D] font-medium">How to get it:</em> Download 6-month statement via internet banking portal or request a stamped statement from bank branch.</p>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
+</div>
+
+<!-- CONSENT MODAL -->
+<div id="consent-modal" class="modal-overlay">
+    <div class="modal-content">
+        <h2 class="font-heading text-2xl mb-2">Legal & Privacy</h2>
+        <p class="text-sm text-[#5E7365] mb-6">Please agree to data processing terms before generating matches.</p>
+        <label class="flex items-start gap-3 cursor-pointer mb-6">
+            <input type="checkbox" id="consent-checkbox" onchange="validateForm()" class="mt-1 w-5 h-5 accent-[#3D704D]">
+            <span class="text-sm font-semibold text-[#0B120C]">I acknowledge and agree to the Terms & Conditions and Privacy Policy.</span>
+        </label>
+        <button id="btn-accept" class="btn font-heading" disabled onclick="acceptConsent()">Accept & Continue</button>
+    </div>
+</div>
+
+<!-- ================= ADD THIS SCRIPT AT THE VERY BOTTOM ================= -->
+<script>
+    // Initialize checkboxes once the DOM is loaded
+    document.addEventListener("DOMContentLoaded", () => {
+        // Function to bind checkbox logic (Useful if you inject HTML dynamically later)
+        function initCheckboxes() {
+            const checkboxes = document.querySelectorAll('.doc-checkbox');
+
+            checkboxes.forEach(checkbox => {
+                // Load saved states from localStorage
+                const savedState = localStorage.getItem(checkbox.id);
+                if (savedState === 'true') {
+                    checkbox.checked = true;
+                }
+
+                // Listen for changes and save to localStorage
+                checkbox.addEventListener('change', (e) => {
+                    localStorage.setItem(e.target.id, e.target.checked);
+                });
+            });
+        }
+        
+        // Run immediately in case the HTML is already there
+        initCheckboxes();
+
+        // Optional: If you inject your results via JS dynamically, 
+        // call initCheckboxes() again right after injecting the HTML inside your JS function.
+    });
+</script>
 
     <!-- ================= JAVASCRIPT LOGIC ================= -->
     <script>
-        let hasConsented = false;
-        let selectedLoanType = null;
-        let userDataStore = {}; // Holds data from Login Portal
+    let hasConsented = false;
+    let selectedLoanType = null;
+    let userDataStore = {}; // Holds data from Login Portal
 
-        // Show Login Portal
-        function openLogin() {
-            document.getElementById('view-home').classList.remove('active');
-            document.getElementById('view-login').classList.add('active');
-            window.scrollTo(0, 0);
+    // Show Login Portal
+    function openLogin() {
+        document.getElementById('view-home').classList.remove('active');
+        document.getElementById('view-login').classList.add('active');
+        window.scrollTo(0, 0);
+    }
+
+    // Handle Login Save & API Post
+    async function saveLoginAndNext(event) {
+        event.preventDefault();
+        
+        // Collect user data
+        userDataStore = {
+            name: document.getElementById('login-name').value,
+            age: document.getElementById('login-age').value,
+            gender: document.getElementById('login-gender').value,
+            caste: document.getElementById('login-caste').value,
+            state: document.getElementById('login-state').value
+        };
+
+        // Attempt to send data to backend to store
+        try {
+            // Change URL to your real backend endpoint
+            await fetch('http://127.0.0.1:8000/api/save-user', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(userDataStore)
+            });
+            console.log("User data saved to backend:", userDataStore);
+        } catch (error) {
+            console.warn("Backend not reachable. Proceeding with local state.", error);
         }
 
-        // Handle Login Save & API Post
-        async function saveLoginAndNext(event) {
-            event.preventDefault();
-            
-            // Collect user data
-            userDataStore = {
-                name: document.getElementById('login-name').value,
-                age: document.getElementById('login-age').value,
-                gender: document.getElementById('login-gender').value,
-                caste: document.getElementById('login-caste').value,
-                state: document.getElementById('login-state').value
+        // Transition to Dashboard
+        document.getElementById('view-login').classList.remove('active');
+        document.getElementById('centered-app-view').classList.add('active');
+        document.body.classList.add('creme-bg');
+        
+        if (!hasConsented) {
+            document.getElementById('consent-modal').classList.add('active');
+        }
+        window.scrollTo(0, 0);
+    }
+
+    // Modal Logic
+    function validateForm() {
+        document.getElementById('btn-accept').disabled = !document.getElementById('consent-checkbox').checked;
+    }
+    function acceptConsent() {
+        hasConsented = true;
+        document.getElementById('consent-modal').classList.remove('active');
+    }
+
+    // Dashboard Step Navigation
+    function selectLoan(type, element) {
+        selectedLoanType = type;
+        document.querySelectorAll('.loan-card').forEach(c => c.classList.remove('active'));
+        element.classList.add('active');
+        document.getElementById('btn-continue-details').disabled = false;
+    }
+    function goToDetails() {
+        document.getElementById('step-objective').style.display = 'none';
+        document.getElementById('step-details').style.display = 'block';
+    }
+    function goBackToObjective() {
+        document.getElementById('step-details').style.display = 'none';
+        document.getElementById('step-objective').style.display = 'block';
+    }
+
+    // Checkbox initialization function
+    function initCheckboxes() {
+        const checkboxes = document.querySelectorAll('.doc-checkbox');
+        
+        checkboxes.forEach(checkbox => {
+            // Load saved states from localStorage
+            const savedState = localStorage.getItem(checkbox.id);
+            if (savedState === 'true') {
+                checkbox.checked = true;
+            }
+
+            // Listen for changes and save to localStorage
+            checkbox.addEventListener('change', (e) => {
+                localStorage.setItem(e.target.id, e.target.checked);
+            });
+        });
+    }
+
+    // Final Submission & Rendering Continuation Page
+    async function submitFinalDetails(event) {
+        event.preventDefault(); 
+        
+        // UI Transition to Loading State
+        document.getElementById('step-details').style.display = 'none';
+        document.getElementById('step-results').style.display = 'block';
+        document.getElementById('loading-area').style.display = 'block';
+        document.getElementById('results-content').style.display = 'none';
+        
+        // Widen the container for the report
+        document.getElementById('main-container').classList.add('results-mode');
+
+        // Combine Login data and Details data
+        const requestPayload = {
+            ...userDataStore,
+            occupation: document.getElementById('occupation').value,
+            annual_income: parseFloat(document.getElementById('annual-income').value),
+            requested_amount: parseFloat(document.getElementById('req-amount').value),
+            land_holding_acres: parseFloat(document.getElementById('land-holding').value) || 0,
+            purpose: selectedLoanType
+        };
+
+        try {
+            const response = await fetch('http://127.0.0.1:8000/api/match-loan', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(requestPayload)
+            });
+
+            let data;
+            if (!response.ok) {
+                throw new Error(`Server returned ${response.status}`);
+            } else {
+                data = await response.json();
+            }
+
+            renderContinuationPage(data);
+
+        } catch (error) {
+            console.error("API Error, rendering mock data instead.", error);
+            // Mock data matching the new advanced prompt output for demonstration
+            const mockData = {
+                "primary_scheme": {
+                    "name": "Prime Minister's Employment Generation Programme (PMEGP)",
+                    "eligibility_verdict": `Because of your ${userDataStore.caste || 'category'} status and location, you qualify for maximum subvention under PMEGP.`,
+                    "msme_benefits": "Up to 35% capital subsidy. Collateral-free up to ₹10 Lakhs via CGTMSE.",
+                    "subsidy_details": "Margin money subsidy of 35% (Rural) or 25% (Urban).",
+                    "interest_rate": "Standard bank lending rate (approx 9.5% - 11.5%).",
+                    "application_workflow": ["Register on PMEGP e-Portal", "Submit Detailed Project Report (DPR)", "District Task Force Committee Interview", "Bank Appraisal and Sanction"]
+                },
+                "secondary_scheme": {
+                    "name": "MUDRA Yojana (Tarun Category)",
+                    "contingency": "If your project report is rejected due to high estimated project costs under PMEGP.",
+                    "differences": "MUDRA does not offer capital subsidy but has a faster processing time and requires no margin money."
+                },
+                "document_checklist_and_generation": [
+                    { "document": "Detailed Project Report (DPR)", "how_to_generate": "Use CA services or automated tools like ClearTax for 5-year financial projections and DSCR calculations." },
+                    { "document": "Udyam Registration", "how_to_generate": "Self-generate for free on the official Udyam portal using your Aadhaar linked phone number." }
+                ],
+                "pitch_strategy": "Focus your bank interview on employment generation. Banks favor PMEGP applications that clearly show how the fund will hire local workers.",
+                "fund_implementation": "Deploy 60% of funds strictly towards machinery (CAPEX) to satisfy subsidy rules, keeping 40% for working capital."
             };
-
-            // Attempt to send data to backend to store
-            try {
-                // Change URL to your real backend endpoint
-                await fetch('http://127.0.0.1:8000/api/save-user', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(userDataStore)
-                });
-                console.log("User data saved to backend:", userDataStore);
-            } catch (error) {
-                console.warn("Backend not reachable. Proceeding with local state.", error);
-            }
-
-            // Transition to Dashboard
-            document.getElementById('view-login').classList.remove('active');
-            document.getElementById('centered-app-view').classList.add('active');
-            document.body.classList.add('creme-bg');
-            
-            if (!hasConsented) {
-                document.getElementById('consent-modal').classList.add('active');
-            }
-            window.scrollTo(0, 0);
+            renderContinuationPage(mockData);
         }
+    }
 
-        // Modal Logic
-        function validateForm() {
-            document.getElementById('btn-accept').disabled = !document.getElementById('consent-checkbox').checked;
-        }
-        function acceptConsent() {
-            hasConsented = true;
-            document.getElementById('consent-modal').classList.remove('active');
-        }
+    function renderContinuationPage(data) {
+        document.getElementById('loading-area').style.display = 'none';
+        const content = document.getElementById('results-content');
 
-        // Dashboard Step Navigation
-        function selectLoan(type, element) {
-            selectedLoanType = type;
-            document.querySelectorAll('.loan-card').forEach(c => c.classList.remove('active'));
-            element.classList.add('active');
-            document.getElementById('btn-continue-details').disabled = false;
-        }
-        function goToDetails() {
-            document.getElementById('step-objective').style.display = 'none';
-            document.getElementById('step-details').style.display = 'block';
-        }
-        function goBackToObjective() {
-            document.getElementById('step-details').style.display = 'none';
-            document.getElementById('step-objective').style.display = 'block';
-        }
-
-        // Final Submission & Rendering Continuation Page
-        async function submitFinalDetails(event) {
-            event.preventDefault(); 
-            
-            // UI Transition to Loading State
-            document.getElementById('step-details').style.display = 'none';
-            document.getElementById('step-results').style.display = 'block';
-            document.getElementById('loading-area').style.display = 'block';
-            document.getElementById('results-content').style.display = 'none';
-            
-            // Widen the container for the report
-            document.getElementById('main-container').classList.add('results-mode');
-
-            // Combine Login data and Details data
-            const requestPayload = {
-                ...userDataStore,
-                occupation: document.getElementById('occupation').value,
-                annual_income: parseFloat(document.getElementById('annual-income').value),
-                requested_amount: parseFloat(document.getElementById('req-amount').value),
-                land_holding_acres: parseFloat(document.getElementById('land-holding').value) || 0,
-                purpose: selectedLoanType
-            };
-
-            try {
-                const response = await fetch('http://127.0.0.1:8000/api/match-loan', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(requestPayload)
-                });
-
-                let data;
-                if (!response.ok) {
-                    throw new Error(`Server returned ${response.status}`);
-                } else {
-                    data = await response.json();
-                }
-
-                renderContinuationPage(data);
-
-            } catch (error) {
-                console.error("API Error, rendering mock data instead.", error);
-                // Mock data matching the new advanced prompt output for demonstration
-                const mockData = {
-                    "primary_scheme": {
-                        "name": "Prime Minister's Employment Generation Programme (PMEGP)",
-                        "eligibility_verdict": `Because of your ${userDataStore.caste || 'category'} status and location, you qualify for maximum subvention under PMEGP.`,
-                        "msme_benefits": "Up to 35% capital subsidy. Collateral-free up to ₹10 Lakhs via CGTMSE.",
-                        "subsidy_details": "Margin money subsidy of 35% (Rural) or 25% (Urban).",
-                        "interest_rate": "Standard bank lending rate (approx 9.5% - 11.5%).",
-                        "application_workflow": ["Register on PMEGP e-Portal", "Submit Detailed Project Report (DPR)", "District Task Force Committee Interview", "Bank Appraisal and Sanction"]
-                    },
-                    "secondary_scheme": {
-                        "name": "MUDRA Yojana (Tarun Category)",
-                        "contingency": "If your project report is rejected due to high estimated project costs under PMEGP.",
-                        "differences": "MUDRA does not offer capital subsidy but has a faster processing time and requires no margin money."
-                    },
-                    "document_checklist_and_generation": [
-                        { "document": "Detailed Project Report (DPR)", "how_to_generate": "Use CA services or automated tools like ClearTax for 5-year financial projections and DSCR calculations." },
-                        { "document": "Udyam Registration", "how_to_generate": "Self-generate for free on the official Udyam portal using your Aadhar linked phone number." }
-                    ],
-                    "pitch_strategy": "Focus your bank interview on employment generation. Banks favor PMEGP applications that clearly show how the fund will hire local workers.",
-                    "fund_implementation": "Deploy 60% of funds strictly towards machinery (CAPEX) to satisfy subsidy rules, keeping 40% for working capital."
-                };
-                renderContinuationPage(mockData);
-            }
-        }
-
-        function renderContinuationPage(data) {
-            document.getElementById('loading-area').style.display = 'none';
-            const content = document.getElementById('results-content');
-
-            if (!data?.primary_scheme || !data?.secondary_scheme ||
-                !Array.isArray(data.primary_scheme.application_workflow) ||
-                !Array.isArray(data.document_checklist_and_generation)) {
-                content.innerHTML = `
-                    <div class="report-section">
-                        <span class="report-label">Unable to display results</span>
-                        <p class="report-value">The backend returned an incomplete report. Please try again.</p>
-                        <button class="btn mt-6" type="button" onclick="location.reload()">Try Again</button>
-                    </div>`;
-                content.style.display = 'block';
-                return;
-            }
-            
-            // Build the Workflows list
-            const workflowHTML = data.primary_scheme.application_workflow.map((step, index) => 
-                `<div style="display: flex; gap: 12px; margin-bottom: 12px; align-items: flex-start;">
-                    <div style="background: var(--primary); color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; flex-shrink: 0;">${index + 1}</div>
-                    <div style="font-size: 14px; color: var(--text-main); font-weight: 600; padding-top: 2px;">${step}</div>
-                </div>`
-            ).join('');
-
-            // Build Documents list
-            const docsHTML = data.document_checklist_and_generation.map(doc => 
-                `<li style="margin-bottom: 16px;">
-                    <strong style="color: var(--text-main); font-size: 15px;">${doc.document}</strong>
-                    <p style="font-size: 13px; color: var(--text-muted); margin-top: 4px; line-height: 1.4;">💡 <em>How to get it:</em> ${doc.how_to_generate}</p>
-                </li>`
-            ).join('');
-
+        if (!data?.primary_scheme || !data?.secondary_scheme ||
+            !Array.isArray(data.primary_scheme.application_workflow) ||
+            !Array.isArray(data.document_checklist_and_generation)) {
             content.innerHTML = `
-                <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 24px;">
-                    <div>
-                        <span class="report-label">AI Matchmaker Report</span>
-                        <h2 class="font-heading" style="font-size: 28px; color: var(--primary);">Funding Strategy Ready</h2>
-                    </div>
-                    <button class="btn font-heading" style="width: auto; padding: 12px 24px; font-size: 14px;" onclick="window.print()">Save PDF</button>
-                </div>
-
-                <!-- PRIMARY SCHEME -->
-                <div class="report-section" style="border-top: 4px solid var(--primary);">
-                    <span class="report-label">Primary Match (Highest Probability)</span>
-                    <h3 class="font-heading" style="font-size: 22px; margin-bottom: 12px;">${data.primary_scheme.name}</h3>
-                    
-                    <div style="background: #F0FDF4; padding: 16px; border-radius: 12px; margin-bottom: 20px;">
-                        <span class="report-label">Eligibility Verdict</span>
-                        <p class="report-value">${data.primary_scheme.eligibility_verdict}</p>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                        <div>
-                            <span class="report-label">MSME Benefits & Subsidy</span>
-                            <p class="report-value">${data.primary_scheme.msme_benefits} <br><span style="color: var(--text-muted); font-size: 13px;">${data.primary_scheme.subsidy_details}</span></p>
-                        </div>
-                        <div>
-                            <span class="report-label">Interest Structure</span>
-                            <p class="report-value">${data.primary_scheme.interest_rate}</p>
-                        </div>
-                    </div>
-
-                    <span class="report-label">Application Workflow</span>
-                    <div style="margin-top: 12px;">${workflowHTML}</div>
-                </div>
-
-                <!-- SECONDARY / BACKUP SCHEME -->
-                <div class="report-section" style="background: #FAFAFA;">
-                    <span class="report-label" style="color: #F59E0B;">Backup Scheme (Contingency)</span>
-                    <h3 class="font-heading" style="font-size: 18px; margin-bottom: 8px;">${data.secondary_scheme.name}</h3>
-                    <p class="report-value" style="font-size: 14px; margin-bottom: 8px;"><strong>When to pivot:</strong> ${data.secondary_scheme.contingency}</p>
-                    <p class="report-value" style="font-size: 14px; color: var(--text-muted);"><strong>Key Differences:</strong> ${data.secondary_scheme.differences}</p>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    <!-- DOCUMENTS -->
-                    <div class="report-section mb-0">
-                        <span class="report-label">Document Generation Guide</span>
-                        <ul class="doc-list mt-4">${docsHTML}</ul>
-                    </div>
-
-                    <!-- STRATEGY -->
-                    <div class="report-section mb-0" style="background: #111B13; color: white;">
-                        <span class="report-label" style="color: #6EE7B7;">Pitch & Implementation Strategy</span>
-                        
-                        <div style="margin-top: 16px; margin-bottom: 20px;">
-                            <strong style="font-size: 14px; color: white;">Bank Pitch Strategy:</strong>
-                            <p style="font-size: 13px; color: #95A89A; margin-top: 6px; line-height: 1.5;">${data.pitch_strategy}</p>
-                        </div>
-
-                        <div>
-                            <strong style="font-size: 14px; color: white;">Fund Deployment:</strong>
-                            <p style="font-size: 13px; color: #95A89A; margin-top: 6px; line-height: 1.5;">${data.fund_implementation}</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <button class="btn mt-6" style="background: #E8ECE9; color: var(--text-main); box-shadow: none;" onclick="location.reload()">Start New Application</button>
-            `;
+                <div class="report-section">
+                    <span class="report-label">Unable to display results</span>
+                    <p class="report-value">The backend returned an incomplete report. Please try again.</p>
+                    <button class="btn mt-6" type="button" onclick="location.reload()">Try Again</button>
+                </div>`;
             content.style.display = 'block';
+            return;
         }
-    </script>
+        
+        // Build the Workflows list
+        const workflowHTML = data.primary_scheme.application_workflow.map((step, index) => 
+            `<div style="display: flex; gap: 12px; margin-bottom: 12px; align-items: flex-start;">
+                <div style="background: var(--primary); color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; flex-shrink: 0;">${index + 1}</div>
+                <div style="font-size: 14px; color: var(--text-main); font-weight: 600; padding-top: 2px;">${step}</div>
+            </div>`
+        ).join('');
+
+        // Build Documents list (UPDATED: Now generates the interactive Checkboxes)
+        const docsHTML = data.document_checklist_and_generation.map((doc, index) => 
+            `<label class="flex items-start gap-3 p-3 -ml-3 rounded-xl cursor-pointer hover:bg-[#F9FAFB] transition-colors" for="doc-${index}">
+                <input type="checkbox" id="doc-${index}" class="doc-checkbox mt-1 w-4 h-4 accent-[#3D704D] rounded cursor-pointer">
+                <div class="doc-content flex-1">
+                    <h4 class="font-semibold text-[#0B120C] text-sm transition-colors">📄 ${doc.document}</h4>
+                    <p class="text-[13px] text-[#5E7365] mt-1 leading-relaxed">💡 <em class="not-italic text-[#3D704D] font-medium">How to get it:</em> ${doc.how_to_generate}</p>
+                </div>
+            </label>`
+        ).join('');
+
+        content.innerHTML = `
+            <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 24px;">
+                <div>
+                    <span class="report-label">AI Matchmaker Report</span>
+                    <h2 class="font-heading" style="font-size: 28px; color: var(--primary);">Funding Strategy Ready</h2>
+                </div>
+                <button class="btn font-heading" style="width: auto; padding: 12px 24px; font-size: 14px;" onclick="window.print()">Save PDF</button>
+            </div>
+
+            <!-- PRIMARY SCHEME -->
+            <div class="report-section" style="border-top: 4px solid var(--primary);">
+                <span class="report-label">Primary Match (Highest Probability)</span>
+                <h3 class="font-heading" style="font-size: 22px; margin-bottom: 12px;">${data.primary_scheme.name}</h3>
+                
+                <div style="background: #F0FDF4; padding: 16px; border-radius: 12px; margin-bottom: 20px;">
+                    <span class="report-label">Eligibility Verdict</span>
+                    <p class="report-value">${data.primary_scheme.eligibility_verdict}</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <div>
+                        <span class="report-label">MSME Benefits & Subsidy</span>
+                        <p class="report-value">${data.primary_scheme.msme_benefits} <br><span style="color: var(--text-muted); font-size: 13px;">${data.primary_scheme.subsidy_details}</span></p>
+                    </div>
+                    <div>
+                        <span class="report-label">Interest Structure</span>
+                        <p class="report-value">${data.primary_scheme.interest_rate}</p>
+                    </div>
+                </div>
+
+                <span class="report-label">Application Workflow</span>
+                <div style="margin-top: 12px;">${workflowHTML}</div>
+            </div>
+
+            <!-- SECONDARY / BACKUP SCHEME -->
+            <div class="report-section" style="background: #FAFAFA;">
+                <span class="report-label" style="color: #F59E0B;">Backup Scheme (Contingency)</span>
+                <h3 class="font-heading" style="font-size: 18px; margin-bottom: 8px;">${data.secondary_scheme.name}</h3>
+                <p class="report-value" style="font-size: 14px; margin-bottom: 8px;"><strong>When to pivot:</strong> ${data.secondary_scheme.contingency}</p>
+                <p class="report-value" style="font-size: 14px; color: var(--text-muted);"><strong>Key Differences:</strong> ${data.secondary_scheme.differences}</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <!-- DOCUMENTS -->
+                <div class="report-section mb-0">
+                    <span class="report-label">Document Generation Guide</span>
+                    <!-- The generated checkboxes will be injected here -->
+                    <div class="doc-list mt-4 flex flex-col gap-1">${docsHTML}</div>
+                </div>
+
+                <!-- STRATEGY -->
+                <div class="report-section mb-0" style="background: #111B13; color: white;">
+                    <span class="report-label" style="color: #6EE7B7;">Pitch & Implementation Strategy</span>
+                    
+                    <div style="margin-top: 16px; margin-bottom: 20px;">
+                        <strong style="font-size: 14px; color: white;">Bank Pitch Strategy:</strong>
+                        <p style="font-size: 13px; color: #95A89A; margin-top: 6px; line-height: 1.5;">${data.pitch_strategy}</p>
+                    </div>
+
+                    <div>
+                        <strong style="font-size: 14px; color: white;">Fund Deployment:</strong>
+                        <p style="font-size: 13px; color: #95A89A; margin-top: 6px; line-height: 1.5;">${data.fund_implementation}</p>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="btn mt-6" style="background: #E8ECE9; color: var(--text-main); box-shadow: none;" onclick="location.reload()">Start New Application</button>
+        `;
+        content.style.display = 'block';
+
+        // IMPORTANT: Initialize the checkboxes immediately after injecting the HTML
+        initCheckboxes();
+    }
+</script>
 </body>
 </html>
