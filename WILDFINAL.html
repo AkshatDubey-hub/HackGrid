@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fetch Funds - Small Business Portal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    .font-syne {
+      font-family: 'Syne', sans-serif;
+    }
+
+    /* Full-screen video color grade for Light Sky Blue & Seashell Pink */
+    .video-color-corrected {
+      filter: hue-rotate(185deg) brightness(1.25) saturate(1.4) contrast(1.15);
+    }
+
+    /* Dual-tone gradient tint matching Light Sky Blue (#87CEEB) & Seashell Pink (#FFF5EE) */
+    .theme-blend-overlay {
+      background: linear-gradient(135deg, rgba(135, 206, 235, 0.5) 0%, rgba(255, 245, 238, 0.35) 50%, rgba(244, 114, 182, 0.4) 100%);
+      mix-blend-mode: overlay;
+    }
+
+    /* Gradient Text utility */
+    .text-gradient-sky-pink {
+      background: linear-gradient(135deg, #7DD3FC 0%, #FFF5EE 50%, #F472B6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  </style>
+</head>
+<body class="min-h-screen w-screen flex items-center justify-center p-4 sm:p-6 lg:p-10 antialiased text-[#E2E8F0] relative overflow-x-hidden bg-[#060911]">
+
+  <!-- FULL-SCREEN BACKDROP VIDEO -->
+  <div class="fixed inset-0 w-full h-full pointer-events-none -z-10 overflow-hidden">
+    <video autoplay loop muted playsinline class="w-full h-full object-cover video-color-corrected scale-105">
+      <source src="WILD1.mp4" type="video/mp4">
+    </video>
+    <div class="absolute inset-0 theme-blend-overlay"></div>
+    <div class="absolute inset-0 bg-slate-950/45 backdrop-brightness-90"></div>
+  </div>
+
+  <!-- MAIN GLASSMORPHIC CARD CONTAINER -->
+  <div class="w-full max-w-6xl bg-slate-900/55 backdrop-blur-2xl rounded-[32px] shadow-[0_30px_90px_rgba(0,0,0,0.85)] overflow-hidden flex flex-col md:flex-row min-h-[640px] border border-sky-300/30">
+
+    <!-- LEFT PANEL: FORM & LOGO -->
+    <div class="w-full md:w-[58%] xl:w-[55%] p-6 sm:p-10 flex flex-col justify-between relative bg-slate-900/65 backdrop-blur-xl border-b md:border-b-0 md:border-r border-sky-300/15">
+      
+      <!-- TOP HEADER / LOGO AT TOP LEFT CORNER -->
+      <header class="flex items-center justify-between w-full mb-6">
+        <div class="flex items-center gap-3.5 group cursor-pointer">
+          
+          <!-- REPLACED WITH JPEG LOGO (TOP LEFT) -->
+          <img 
+            src="logo.jpeg" 
+            alt="Fetch Funds Logo" 
+            class="w-10 h-10 object-contain rounded-xl border border-sky-300/40 filter drop-shadow-[0_0_12px_rgba(125,211,252,0.8)] transition-transform group-hover:scale-105"
+          />
+
+          <span class="font-syne font-extrabold text-xl text-white tracking-tight drop-shadow">Fetch Funds</span>
+        </div>
+      </header>
+
+      <!-- FORM SECTION -->
+      <div class="my-auto max-w-md w-full mx-auto md:mx-0">
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-white mb-1 tracking-tight drop-shadow">
+          Get <span class="text-gradient-sky-pink">Started</span>
+        </h2>
+        <p class="text-xs sm:text-sm text-sky-100/80 mb-5 font-medium">
+          Enter your unique account details below to unlock personalized funding options.
+        </p>
+
+        <form onsubmit="event.preventDefault();" class="space-y-3.5">
+          
+          <!-- 1. USERNAME FIELD -->
+          <div>
+            <label class="block text-[11px] font-extrabold uppercase tracking-wider text-sky-300 mb-1">
+              USERNAME:
+            </label>
+            <input 
+              type="text" 
+              placeholder="e.g. rahul_sharma99"
+              class="w-full bg-slate-950/60 text-white placeholder-slate-400 text-sm font-semibold rounded-xl px-4 py-2.5 border border-sky-400/30 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-[#FFF5EE] transition backdrop-blur-md"
+            />
+          </div>
+
+          <!-- 2. PASSWORD FIELD -->
+          <div>
+            <label class="block text-[11px] font-extrabold uppercase tracking-wider text-sky-300 mb-1">
+              PASSWORD:
+            </label>
+            <input 
+              type="password" 
+              placeholder="••••••••"
+              class="w-full bg-slate-950/60 text-white placeholder-slate-400 text-sm font-semibold rounded-xl px-4 py-2.5 border border-sky-400/30 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-[#FFF5EE] transition backdrop-blur-md"
+            />
+          </div>
+
+          <!-- 3. AGE & REGION ROW -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <!-- AGE -->
+            <div>
+              <label class="block text-[11px] font-extrabold uppercase tracking-wider text-sky-300 mb-1">
+                AGE:
+              </label>
+              <input 
+                type="number" 
+                placeholder="e.g. 32"
+                class="w-full bg-slate-950/60 text-white placeholder-slate-400 text-sm font-semibold rounded-xl px-4 py-2.5 border border-sky-400/30 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-[#FFF5EE] transition backdrop-blur-md"
+              />
+            </div>
+
+            <!-- REGION -->
+            <div>
+              <label class="block text-[11px] font-extrabold uppercase tracking-wider text-sky-300 mb-1">
+                REGION:
+              </label>
+              <select class="w-full bg-slate-950/80 text-white text-sm font-semibold rounded-xl px-4 py-2.5 border border-sky-400/30 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-[#FFF5EE] transition appearance-none cursor-pointer backdrop-blur-md">
+                <option value="" disabled selected class="bg-slate-900 text-white">Select State / UT</option>
+                
+                <!-- ALL 28 STATES -->
+                <optgroup label="States (28)" class="bg-slate-900 text-sky-300">
+                  <option value="Andhra Pradesh" class="bg-slate-900 text-white">Andhra Pradesh</option>
+                  <option value="Arunachal Pradesh" class="bg-slate-900 text-white">Arunachal Pradesh</option>
+                  <option value="Assam" class="bg-slate-900 text-white">Assam</option>
+                  <option value="Bihar" class="bg-slate-900 text-white">Bihar</option>
+                  <option value="Chhattisgarh" class="bg-slate-900 text-white">Chhattisgarh</option>
+                  <option value="Goa" class="bg-slate-900 text-white">Goa</option>
+                  <option value="Gujarat" class="bg-slate-900 text-white">Gujarat</option>
+                  <option value="Haryana" class="bg-slate-900 text-white">Haryana</option>
+                  <option value="Himachal Pradesh" class="bg-slate-900 text-white">Himachal Pradesh</option>
+                  <option value="Jharkhand" class="bg-slate-900 text-white">Jharkhand</option>
+                  <option value="Karnataka" class="bg-slate-900 text-white">Karnataka</option>
+                  <option value="Kerala" class="bg-slate-900 text-white">Kerala</option>
+                  <option value="Madhya Pradesh" class="bg-slate-900 text-white">Madhya Pradesh</option>
+                  <option value="Maharashtra" class="bg-slate-900 text-white">Maharashtra</option>
+                  <option value="Manipur" class="bg-slate-900 text-white">Manipur</option>
+                  <option value="Meghalaya" class="bg-slate-900 text-white">Meghalaya</option>
+                  <option value="Mizoram" class="bg-slate-900 text-white">Mizoram</option>
+                  <option value="Nagaland" class="bg-slate-900 text-white">Nagaland</option>
+                  <option value="Odisha" class="bg-slate-900 text-white">Odisha</option>
+                  <option value="Punjab" class="bg-slate-900 text-white">Punjab</option>
+                  <option value="Rajasthan" class="bg-slate-900 text-white">Rajasthan</option>
+                  <option value="Sikkim" class="bg-slate-900 text-white">Sikkim</option>
+                  <option value="Tamil Nadu" class="bg-slate-900 text-white">Tamil Nadu</option>
+                  <option value="Telangana" class="bg-slate-900 text-white">Telangana</option>
+                  <option value="Tripura" class="bg-slate-900 text-white">Tripura</option>
+                  <option value="Uttar Pradesh" class="bg-slate-900 text-white">Uttar Pradesh</option>
+                  <option value="Uttarakhand" class="bg-slate-900 text-white">Uttarakhand</option>
+                  <option value="West Bengal" class="bg-slate-900 text-white">West Bengal</option>
+                </optgroup>
+                
+                <!-- ALL 8 UNION TERRITORIES -->
+                <optgroup label="Union Territories (8)" class="bg-slate-900 text-pink-400">
+                  <option value="Andaman and Nicobar Islands" class="bg-slate-900 text-white">Andaman &amp; Nicobar Islands</option>
+                  <option value="Chandigarh" class="bg-slate-900 text-white">Chandigarh</option>
+                  <option value="Dadra and Nagar Haveli and Daman and Diu" class="bg-slate-900 text-white">Dadra &amp; Nagar Haveli and Daman &amp; Diu</option>
+                  <option value="Delhi" class="bg-slate-900 text-white">Delhi (NCT)</option>
+                  <option value="Jammu and Kashmir" class="bg-slate-900 text-white">Jammu &amp; Kashmir</option>
+                  <option value="Ladakh" class="bg-slate-900 text-white">Ladakh</option>
+                  <option value="Lakshadweep" class="bg-slate-900 text-white">Lakshadweep</option>
+                  <option value="Puducherry" class="bg-slate-900 text-white">Puducherry</option>
+                </optgroup>
+              </select>
+            </div>
+          </div>
+
+          <!-- 4. SPECIAL CATEGORY -->
+          <div>
+            <label class="block text-[11px] font-extrabold uppercase tracking-wider text-sky-300 mb-1">
+              SPECIAL CATEGORY:
+            </label>
+            <select class="w-full bg-slate-950/80 text-white text-sm font-semibold rounded-xl px-4 py-2.5 border border-sky-400/30 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-[#FFF5EE] transition appearance-none cursor-pointer backdrop-blur-md">
+              <option value="" disabled selected class="bg-slate-900 text-white">Select Special Category</option>
+              <option value="women" class="bg-slate-900 text-white">Women Entrepreneur</option>
+              <option value="sc" class="bg-slate-900 text-white">SC (Scheduled Castes)</option>
+              <option value="st" class="bg-slate-900 text-white">ST (Scheduled Tribes)</option>
+              <option value="obc" class="bg-slate-900 text-white">OBC (Other Backward Classes)</option>
+              <option value="pwd" class="bg-slate-900 text-white">Differently Abled (PwD)</option>
+              <option value="general" class="bg-slate-900 text-white">General / Other</option>
+            </select>
+          </div>
+
+          <!-- SUBMIT / ACTION BUTTON -->
+          <button class="w-full mt-3 bg-gradient-to-r from-sky-500 via-sky-400 to-pink-400 hover:opacity-95 text-white font-extrabold text-sm py-3.5 px-5 rounded-xl transition-all duration-300 shadow-[0_0_25px_rgba(56,189,248,0.4)] flex items-center justify-center gap-2 group">
+            <span class="drop-shadow">Fetch Funds Now</span>
+            <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform drop-shadow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+            </svg>
+          </button>
+
+        </form>
+      </div>
+
+      <!-- FOOTER TEXT -->
+      <div class="mt-5 text-[11px] text-slate-300/80 font-medium drop-shadow-sm">
+        Empowering Small Business • Access Funds • Grow Your Future
+      </div>
+
+    </div>
+
+    <!-- RIGHT PANEL: FROSTED GLASS OVERLAY -->
+    <div class="w-full md:w-[42%] xl:w-[45%] relative flex flex-col items-center justify-center p-8 sm:p-12 text-white bg-slate-950/20 backdrop-blur-sm">
+      
+      <!-- OVERLAY CONTENT ON RIGHT PANEL -->
+      <div class="relative z-10 text-center max-w-xs space-y-4">
+        
+        <!-- REPLACED WITH JPEG LOGO IN BADGE (RIGHT PANEL) -->
+        <div class="w-28 h-28 mx-auto bg-slate-950/40 backdrop-blur-md rounded-3xl p-2 border border-sky-300/40 shadow-[0_0_35px_rgba(125,211,252,0.45)] flex items-center justify-center overflow-hidden">
+          <img 
+            src="logo.jpeg" 
+            alt="Fetch Funds Badge Logo" 
+            class="w-full h-full object-cover rounded-2xl filter drop-shadow-[0_0_16px_rgba(125,211,252,0.9)]"
+          />
+        </div>
+
+        <h3 class="font-syne font-extrabold text-2xl sm:text-3xl text-white tracking-tight leading-tight drop-shadow-md">
+          FETCH FUNDS
+        </h3>
+
+        <p class="text-xs sm:text-sm text-sky-100 font-medium leading-relaxed drop-shadow">
+          Empowering Small Business.<br>
+          Access Funds.<br>
+          Grow Your Future.
+        </p>
+
+        <div class="pt-4">
+          <span class="inline-block bg-slate-900/60 backdrop-blur-md border border-sky-300/40 text-[#FFF5EE] font-bold text-[10px] tracking-widest uppercase px-4 py-1.5 rounded-full shadow-lg">
+            Fast • Secure • Direct
+          </span>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</body>
+</html>
