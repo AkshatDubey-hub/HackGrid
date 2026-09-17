@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FetchFunds - AI Matchmaker</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Elite Fintech Font Pairing: Outfit (Headings) & DM Sans (Body) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            /* NEW THEME: Sky Blue Primary, Pink Hover */
+            --primary: #5AB2FF; 
+            --primary-hover: #FF87B2; 
+            --background: #E6F0F9; 
+            --surface: #ffffff;
+            --text-main: #0A1118;
+            --text-muted: #5B6B7A;
+            --border: #D1DAE3;
+            --radius: 24px; 
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        h1, h2, h3, h4, .font-heading, .home-logo {
+            font-family: 'Outfit', sans-serif;
+            letter-spacing: -0.03em;
+        }
+
+        body {
+            background-color: #0A1118; 
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            transition: background-color 0.5s ease;
+        }
+
+        /* App View Background with Light Sky Blue Glow */
+        body.creme-bg { 
+            background-color: #F4F8FB; 
+            background-image: radial-gradient(circle at center, rgba(147, 197, 253, 0.5) 0%, transparent 70%);
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+        }
+
+        /* --- View Controllers --- */
+        .view-wrapper { 
+            display: none !important; 
+            animation: fade-in 400ms ease-out forwards; 
+        }
+        .view-wrapper.active { 
+            display: flex !important; 
+        }
+        #view-home.active,
+        .full-screen-page.active { 
+            display: block !important; 
+        }
+        
+        .fade-step { animation: fade-in 400ms ease-out forwards; }
+
+        #view-login {
+            background-color: #0A1118;
+            background-image: repeating-linear-gradient(-45deg, #0A1118, #0A1118 20px, #0F1822 20px, #0F1822 40px);
+        }
+
+        @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+
+        /* ================= 0. HOME PAGE STYLES ================= */
+        #view-home { position: relative; min-height: 100vh; width: 100%; color: #ffffff; overflow-x: hidden; }
+        .bg-video { position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
+        .bg-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to bottom, rgba(10, 17, 24, 0.4) 0%, rgba(10, 17, 24, 0.95) 70%, rgba(10, 17, 24, 1) 100%);
+            backdrop-filter: blur(4px); z-index: 1;
+        }
+        .home-container { position: relative; z-index: 2; max-width: 1100px; margin: 0 auto; padding: 40px; }
+        .home-nav { display: flex; justify-content: center; align-items: center; margin-bottom: 120px; }
+        .home-logo {
+            font-size: 28px; font-weight: 800; letter-spacing: -0.05em;
+            background: linear-gradient(to right, #5AB2FF, #FF87B2); -webkit-background-clip: text; background-clip: text; color: transparent;
+        }
+
+        .home-hero { text-align: center; margin-bottom: 100px; }
+        .home-hero h1 { 
+            font-size: 76px; font-weight: 800; letter-spacing: -0.05em; margin-bottom: 24px; line-height: 1.05; 
+            background: linear-gradient(to bottom right, #ffffff, #FFCBE0); -webkit-background-clip: text; background-clip: text; color: transparent;
+        }
+        .home-hero p { font-size: 20px; color: #95A5B5; max-width: 750px; margin: 0 auto; line-height: 1.7; font-weight: 500;}
+        
+        .content-section {
+            background: linear-gradient(145deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%);
+            border-top: 1px solid rgba(255,255,255,0.1); border-left: 1px solid rgba(255,255,255,0.05); border-right: 1px solid rgba(255,255,255,0.02); border-bottom: 1px solid rgba(255,255,255,0.02);
+            border-radius: var(--radius); padding: 70px; margin-bottom: 60px; backdrop-filter: blur(20px); box-shadow: 0 20px 40px rgba(0,0,0,0.3); transition: transform 0.3s ease;
+        }
+        .section-tag {
+            display: inline-block; background: rgba(90, 178, 255, 0.1); border: 1px solid rgba(90, 178, 255, 0.3);
+            color: #5AB2FF; font-size: 13px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; padding: 6px 16px; border-radius: 20px; margin-bottom: 24px;
+        }
+        .content-section h2 { font-size: 42px; font-weight: 800; margin-bottom: 12px; color: #ffffff; letter-spacing: -0.04em;}
+        .content-section > p { font-size: 18px; color: #D1DAE3; line-height: 1.8; margin-bottom: 40px; font-weight: 400; text-align: center; max-width: 600px; margin-left: auto; margin-right: auto;}
+
+        /* ================= FLEXBOX ACCORDION GALLERY ================= */
+        .accordion-gallery { 
+            display: flex; width: 100%; max-width: 1000px; height: 480px; gap: 16px; margin: 30px auto 0; 
+        }
+        .accordion-card {
+            position: relative; flex: 1; border-radius: 32px; overflow: hidden; cursor: pointer;
+            transition: flex 0.6s cubic-bezier(0.25, 1, 0.5, 1), border-color 0.4s ease, background 0.4s ease;
+            border: 1px solid rgba(90, 178, 255, 0.1); 
+            display: flex; 
+            align-items: flex-start; 
+        }
+        .accordion-card:nth-child(1) { background: linear-gradient(180deg, #101C29 0%, #0A1118 100%); }
+        .accordion-card:nth-child(2) { background: linear-gradient(180deg, #1C1019 0%, #0A1118 100%); }
+        .accordion-card:nth-child(3) { background: linear-gradient(180deg, #10161C 0%, #0A1118 100%); }
+        
+        .accordion-card.active { flex: 6; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        
+        /* THEME COLORS FOR ACTIVE TABS */
+        .accordion-card:nth-child(1).active { background: #A3C1DA; border-color: #A3C1DA; }
+        .accordion-card:nth-child(2).active { background: #FFF5F6; border-color: #FFF5F6; }
+        .accordion-card:nth-child(3).active { background: #9DB5C9; border-color: #9DB5C9; }
+
+        .accordion-bg-number {
+            position: absolute; bottom: -25px; right: 15px; font-size: 200px; font-weight: 900;
+            color: rgba(255, 255, 255, 0.02); font-family: 'Outfit', sans-serif; line-height: 1; pointer-events: none; transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1); z-index: 0;
+        }
+        .accordion-card.active .accordion-bg-number { transform: translateY(-20px) scale(1.05); color: rgba(0, 0, 0, 0.04); }
+        
+        .accordion-vertical { position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; justify-content: center; align-items: center; transition: opacity 0.3s ease; z-index: 1; }
+        .accordion-vertical span { transform: rotate(-90deg); color: rgba(255,255,255,0.5); font-family: 'Outfit', sans-serif; font-size: 22px; font-weight: 700; letter-spacing: 4px; white-space: nowrap; }
+        .accordion-card.active .accordion-vertical { opacity: 0; }
+        
+        .accordion-content { position: relative; z-index: 2; padding: 40px; opacity: 0; transform: translateY(-10px); transition: opacity 0.4s ease, transform 0.4s ease; min-width: 400px; pointer-events: none; }
+        .accordion-card.active .accordion-content { opacity: 1; transform: translateY(0); transition-delay: 0.2s; pointer-events: auto; }
+        
+        .accordion-title { color: #5AB2FF; font-size: 34px; font-weight: 800; margin-bottom: 16px; font-family: 'Outfit', sans-serif; line-height: 1.1; letter-spacing: -0.02em; transition: color 0.4s ease;}
+        .accordion-desc { color: #95A5B5; font-size: 16px; line-height: 1.7; margin: 0; font-family: 'DM Sans', sans-serif; max-width: 350px; transition: color 0.4s ease;}
+
+        /* Apply pink text where background is light sky blue (Cards 1 & 3) */
+        .accordion-card:nth-child(1).active .accordion-title,
+        .accordion-card:nth-child(3).active .accordion-title,
+        .accordion-card:nth-child(1).active .accordion-desc,
+        .accordion-card:nth-child(3).active .accordion-desc { color: #FF87B2; }
+
+        /* Apply blue text where background is seashell pink (Card 2) */
+        .accordion-card:nth-child(2).active .accordion-title,
+        .accordion-card:nth-child(2).active .accordion-desc { color: #5AB2FF; }
+
+        .quote-section { text-align: center; padding: 40px 20px; margin: 60px 0; font-style: italic; font-size: 22px; color: #FFCBE0; font-family: 'Outfit', sans-serif; letter-spacing: -0.01em; }
+        
+        /* ================= SPECULAR WEBGL BUTTON ================= */
+        .specular-button {
+            --sb-radius: 40px;
+            --sb-tint: #5AB2FF;
+            --sb-tint-opacity: 1;
+            --sb-text-color: #ffffff;
+            
+            position: relative; display: flex; margin: 40px auto; align-items: center; justify-content: center;
+            border: none; font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 18px; padding: 20px 56px;
+            color: var(--sb-text-color); background: color-mix(in srgb, var(--sb-tint) calc(var(--sb-tint-opacity) * 100%), transparent);
+            border-radius: var(--sb-radius); box-shadow: 0 10px 30px rgba(90, 178, 255, 0.4); cursor: pointer; outline: none;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+        .specular-button:hover { box-shadow: 0 15px 40px rgba(255, 135, 178, 0.6); transform: scale(1.02) translateY(-2px); }
+        .specular-button:active { transform: scale(0.97); }
+        .specular-button__fx { position: absolute; inset: -20px; pointer-events: none; z-index: 1; }
+        .specular-button__fx canvas { display: block; width: 100%; height: 100%; }
+        .specular-button__label { position: relative; z-index: 2; }
+
+
+        /* ================= HOME PAGE FOOTER ================= */
+        .home-footer-section { background-color: #F4F8FB; color: #707E85; padding: 90px 40px; margin-top: 120px; position: relative; z-index: 2; border-top: 1px solid #E6F0F9; }
+        .home-footer-grid { max-width: 700px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 100px; }
+        .home-footer-col h3 { font-size: 13px; font-weight: 800; letter-spacing: 2.5px; color: #5B6B7A; margin-bottom: 32px; text-transform: uppercase; }
+        .home-footer-links { display: flex; flex-direction: column; gap: 22px; }
+        .home-footer-link { font-size: 20px; font-weight: 700; color: #707E85; cursor: pointer; transition: color 0.3s ease; width: fit-content; letter-spacing: -0.01em; text-decoration: none; }
+        .home-footer-link:hover { background: linear-gradient(to right, #5AB2FF, #FF87B2, #5AB2FF); background-size: 200% auto; color: transparent; -webkit-background-clip: text; background-clip: text; animation: gradient-flow 2.5s linear infinite; }
+        @keyframes gradient-flow { to { background-position: 200% center; } }
+
+        /* ================= APP VIEW ================= */
+        #centered-app-view { 
+            flex-grow: 1; 
+            justify-content: center; 
+            align-items: center; 
+            padding: 60px 20px; 
+            position: relative; 
+            overflow: hidden;
+        }
+
+        .radial-glow-bg {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            background: radial-gradient(circle at center, #93c5fd 0%, transparent 70%);
+            opacity: 0.65;
+        }
+
+        .container { 
+            position: relative;
+            z-index: 10;
+            background-color: var(--surface); 
+            width: 100%; 
+            max-width: 620px; 
+            border-radius: var(--radius); 
+            box-shadow: 0 25px 50px -12px rgba(10, 17, 24, 0.15); 
+            overflow: hidden; 
+            display: flex; 
+            flex-direction: column; 
+            min-height: 480px; 
+        }
+        .card-page { display: none; padding: 48px 40px; flex-grow: 1; }
+        .card-page.active { display: flex; flex-direction: column; }
+
+        .loan-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 28px; margin-top: 16px; max-height: 400px; overflow-y: auto; padding-right: 4px; }
+        @media (max-width: 480px) { .loan-grid { grid-template-columns: 1fr; } }
+        
+        .loan-card { border: 2px solid var(--border); border-radius: 16px; padding: 18px; cursor: pointer; transition: all 0.25s ease; display: flex; flex-direction: column; align-items: flex-start; background: #fdfdfd; }
+        .loan-card:hover { border-color: #B4C9DA; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.05); }
+        .loan-card.active { border-color: var(--primary); background: #F0F8FF; box-shadow: 0 8px 20px rgba(90, 178, 255, 0.12); }
+        
+        .loan-icon-wrap { width: 40px; height: 40px; border-radius: 10px; background: #E6F0F9; display: flex; align-items: center; justify-content: center; margin-bottom: 12px; color: var(--primary); transition: all 0.25s ease; }
+        .loan-card.active .loan-icon-wrap { background: var(--primary); color: white; }
+        
+        .loan-title { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 15px; color: var(--text-main); margin-bottom: 4px; letter-spacing: -0.01em;}
+        .loan-desc { font-size: 12px; color: var(--text-muted); line-height: 1.4; font-weight: 500; }
+
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; color: var(--text-muted); }
+        .form-group input, .form-group select { width: 100%; padding: 14px 16px; border: 1px solid var(--border); border-radius: 12px; font-size: 15px; outline: none; transition: all 0.2s; font-family: inherit; font-weight: 600; color: var(--text-main); background: #fdfdfd; }
+        .form-group input:focus, .form-group select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(90, 178, 255, 0.1); }
+
+        /* ================= CONSENT MODAL ================= */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 17, 24, 0.65); backdrop-filter: blur(8px); display: none; justify-content: center; align-items: center; z-index: 100; animation: fade-in 300ms ease-out forwards; padding: 20px; }
+        .modal-overlay.active { display: flex; }
+        .modal-content { background: var(--surface); width: 100%; max-width: 480px; padding: 40px; border-radius: var(--radius); box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3); display: flex; flex-direction: column; }
+        .modal-content h2 { font-size: 28px; margin-bottom: 12px; }
+        .modal-content .intro-text { color: var(--text-muted); font-size: 15px; margin-bottom: 24px; line-height: 1.6; }
+
+        /* ================= FULL SCREEN LAYOUT (LEGAL DOCS) ================= */
+        .full-screen-page { background-color: var(--surface); min-height: 100vh; width: 100%; }
+        .doc-header { position: sticky; top: 0; background-color: var(--surface); padding: 20px 40px; border-bottom: 1px solid var(--border); box-shadow: 0 2px 10px rgba(0,0,0,0.02); z-index: 10; }
+        .doc-content { max-width: 800px; margin: 0 auto; padding: 60px 40px; }
+        .doc-content h2 { font-size: 40px; margin-bottom: 24px; font-weight: 800; letter-spacing: -0.04em;}
+        .document-text p { color: var(--text-muted); font-size: 16px; line-height: 1.8; margin-bottom: 24px; font-weight: 500;}
+        .document-text strong { color: var(--text-main); font-family: 'Outfit', sans-serif; font-size: 20px; display: block; margin-bottom: 8px; margin-top: 32px; font-weight: 800; letter-spacing: -0.02em;}
+        .doc-link { display: flex; justify-content: space-between; align-items: center; padding: 18px 20px; background-color: #F4F8FB; border: 1px solid var(--border); border-radius: 12px; margin-bottom: 12px; cursor: pointer; font-weight: 700; transition: all 0.2s ease; color: var(--text-main); }
+        .doc-link:hover { background-color: #E6F0F9; border-color: #B4C9DA; transform: translateY(-2px); }
+        .doc-link::after { content: '→'; color: var(--primary); font-size: 20px; }
+
+        .checkbox-container { margin: 24px 0; display: flex; align-items: flex-start; gap: 12px; cursor: pointer; }
+        input[type="checkbox"] { margin-top: 3px; width: 20px; height: 20px; accent-color: var(--primary); cursor: pointer;}
+        .checkbox-label { font-size: 14px; line-height: 1.5; color: var(--text-main); font-weight: 600;}
+        .btn { display: block; width: 100%; padding: 18px; background-color: var(--primary); color: white; border: none; border-radius: 12px; font-size: 16px; font-family: 'Outfit', sans-serif; font-weight: 800; cursor: pointer; transition: transform 200ms ease, background-color 200ms ease; margin-top: 10px; box-shadow: 0 4px 14px rgba(90, 178, 255, 0.25); }
+        .btn:not(:disabled):hover { background-color: var(--primary-hover); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255, 135, 178, 0.35); }
+        .btn:disabled { background-color: #B4C9DA; cursor: not-allowed; box-shadow: none; transform: none;}
+        .btn-back { background: none; border: none; color: var(--primary); font-size: 16px; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font-family: 'Outfit', sans-serif; }
+        .btn-back:hover { text-decoration: underline; color: var(--primary-hover); }
+    </style>
+</head>
+<body>
+
+    <!-- ================= 0. HOME PAGE (LANDING) ================= -->
+    <div id="view-home" class="view-wrapper active">
+        <video autoplay loop muted playsinline class="bg-video">
+            <source src="bg-video.mp4.webm" type="video/webm">
+        </video>
+        <div class="bg-overlay"></div>
+        
+        <div class="home-container">
+            <header class="home-nav">
+                <div class="home-logo font-heading">FetchFunds</div>
+            </header>
+
+            <main>
+                <div class="home-hero">
+                    <h1 class="font-heading">Empowering Your Growth with Government Schemes.</h1>
+                    <p>Welcome to your central hub for accessible financial support. We bridge the gap between hard-working individuals and the government schemes designed to help them thrive. Whether you are expanding a local shop, investing in your harvest, or starting a new venture, we simplify the path to funding.</p>
+                </div>
+
+                <!-- FLUID ACCORDION GALLERY -->
+                <div class="content-section" style="padding-bottom: 90px; text-align: center;">
+                    <span class="section-tag">Audience</span>
+                    <h2 class="font-heading">Who We Serve</h2>
+                    <p style="color: #5B6B7A; max-width: 600px; margin: 0 auto; font-size: 16px;">From rural fields to tech hubs, we match specialized government initiatives to the specific needs of diverse Indian demographics.</p>
+                    
+                    <div class="accordion-gallery text-left">
+                        
+                        <!-- Card 1 -->
+                        <div class="accordion-card active">
+                            <div class="accordion-bg-number">01</div>
+                            <div class="accordion-vertical"><span>FARMERS</span></div>
+                            <div class="accordion-content">
+                                <h3 class="accordion-title">Farmers & Agri-Business</h3>
+                                <p class="accordion-desc" style="max-width: 420px;">
+                                    <strong style="color: var(--primary);">For rural cultivators and agro-processors.</strong><br><br>
+                                    We bridge the gap between your seasonal harvest cycles and government aid. Instantly discover eligibility for NABARD refinancing, PM-Kisan benefits, and heavily subsidized equipment loans for tractors and cold storage—allowing you to modernize without the burden of steep collateral.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Card 2 -->
+                        <div class="accordion-card">
+                            <div class="accordion-bg-number">02</div>
+                            <div class="accordion-vertical"><span>BUSINESSES</span></div>
+                            <div class="accordion-content">
+                                <h3 class="accordion-title">Small & Medium Enterprises</h3>
+                                <p class="accordion-desc" style="max-width: 420px;">
+                                    <strong style="color: var(--primary);">For established shops and local manufacturers.</strong><br><br>
+                                    Scaling a business requires steady cash flow and secure backing. We help you unlock collateral-free credit through CGTMSE, secure immediate working capital, and tap into technology upgradation subsidies (CLCSS) to keep your daily operations expanding seamlessly.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Card 3 -->
+                        <div class="accordion-card">
+                            <div class="accordion-bg-number">03</div>
+                            <div class="accordion-vertical"><span>STARTUPS</span></div>
+                            <div class="accordion-content">
+                                <h3 class="accordion-title">Aspiring Entrepreneurs</h3>
+                                <p class="accordion-desc" style="max-width: 420px;">
+                                    <strong style="color: var(--primary);">For first-generation founders and innovators.</strong><br><br>
+                                    Turn your vision into a registered startup with the right financial runway. We navigate the maze of DPIIT recognition, the Startup India Seed Fund, and Mudra Tarun schemes on your behalf—securing the early-stage capital and tax exemptions you need to launch confidently.
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="quote-section">
+                    "Growth is never by mere chance; it is the result of forces working together."
+                </div>
+
+                <!-- WEBGL SPECULAR BUTTON -->
+                <button id="specular-btn" class="specular-button" onclick="openLogin()">
+                    <span class="specular-button__fx" aria-hidden="true"></span>
+                    <span class="specular-button__label">Take the Next Step &rarr;</span>
+                </button>
+            </main>
+        </div>
+
+        <!-- FOOTER -->
+        <footer class="home-footer-section">
+            <div class="home-footer-grid">
+                <div class="home-footer-col">
+                    <h3 class="font-heading">Legal</h3>
+                    <div class="home-footer-links">
+                        <div class="home-footer-link" onclick="openFullScreenDoc('view-terms')">Terms & Conditions</div>
+                        <div class="home-footer-link" onclick="openFullScreenDoc('view-cookies')">Cookie Page</div>
+                    </div>
+                </div>
+                <div class="home-footer-col">
+                    <h3 class="font-heading">Policy</h3>
+                    <div class="home-footer-links">
+                        <div class="home-footer-link" onclick="openFullScreenDoc('view-policy')">Transactional</div>
+                        <div class="home-footer-link" onclick="openFullScreenDoc('view-policy')">Verification</div>
+                        <div class="home-footer-link" onclick="openFullScreenDoc('view-policy')">Security</div>
+                        <div class="home-footer-link" onclick="openFullScreenDoc('view-privacy')">Privacy Policy</div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+
+    <!-- ================= 1. LOGIN PORTAL (TAILWIND FULL SCREEN) ================= -->
+    <div id="view-login" class="view-wrapper min-h-screen w-full items-center justify-center p-4 sm:p-6 lg:p-10 antialiased text-[#E2E8F0]">
+        <div class="w-full max-w-6xl bg-[#101720] rounded-[32px] shadow-[0_25px_70px_rgba(0,0,0,0.8)] overflow-hidden flex flex-col md:flex-row min-h-[640px] border border-[#2A3B4C]">
+       
+          <div class="w-full md:w-[58%] xl:w-[55%] p-6 sm:p-10 flex flex-col justify-between relative bg-[#101720]">
+            
+            <header class="flex items-center justify-between w-full mb-6">
+              <div class="flex items-center gap-3 group cursor-pointer" onclick="location.reload()">
+                <svg class="w-10 h-10 drop-shadow-md transition-transform group-hover:scale-105" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <defs><clipPath id="circleViewNavDark"><circle cx="100" cy="100" r="65" /></clipPath></defs>
+                  <g clip-path="url(#circleViewNavDark)">
+                    <circle cx="100" cy="100" r="65" fill="#FFFFFF" />
+                    <path d="M 25 100 A 65 65 0 0 1 175 100 Z" fill="#5AB2FF" />
+                    <rect x="71" y="102" width="14" height="65" fill="#101720" rx="1" />
+                  </g>
+                  <path d="M 32 114 C 65 114, 115 94, 144 60 C 124 86, 75 110, 32 114 Z" fill="#FF87B2" />
+                </svg>
+                <span class="font-heading font-extrabold text-xl text-white tracking-tight">Fetch Funds</span>
+              </div>
+            </header>
+       
+            <div class="my-auto max-w-md w-full mx-auto md:mx-0">
+              <h2 class="font-heading text-3xl sm:text-4xl font-extrabold text-white mb-2 tracking-tight">Get Started</h2>
+              <p class="text-xs sm:text-sm text-[#95A5B5] mb-6 font-medium">Enter your unique account details below to unlock personalized funding options.</p>
+       
+              <form onsubmit="event.preventDefault(); submitLogin();" class="space-y-4">
+                
+                <div>
+                  <label class="block text-[11px] font-bold uppercase tracking-[0.1em] text-[#9ca3af] mb-1.5">USERNAME:</label>
+                  <input type="text" placeholder="e.g. rahul_sharma99" class="w-full bg-[#182433] text-white placeholder-[#5B6B7A] text-sm font-medium rounded-xl px-4 py-3 border border-[#26364A] focus:outline-none focus:ring-2 focus:ring-[#5AB2FF] focus:bg-[#1E2C3F] transition" required />
+                </div>
+       
+                <div>
+                  <label class="block text-[11px] font-bold uppercase tracking-[0.1em] text-[#9ca3af] mb-1.5">PASSWORD:</label>
+                  <input type="password" placeholder="••••••••" class="w-full bg-[#182433] text-white placeholder-[#5B6B7A] text-sm font-medium rounded-xl px-4 py-3 border border-[#26364A] focus:outline-none focus:ring-2 focus:ring-[#5AB2FF] focus:bg-[#1E2C3F] transition" required />
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-[11px] font-bold uppercase tracking-[0.1em] text-[#9ca3af] mb-1.5">AGE:</label>
+                    <input type="number" placeholder="e.g. 32" class="w-full bg-[#182433] text-white placeholder-[#5B6B7A] text-sm font-medium rounded-xl px-4 py-3 border border-[#26364A] focus:outline-none focus:ring-2 focus:ring-[#5AB2FF] focus:bg-[#1E2C3F] transition" required />
+                  </div>
+       
+                  <div>
+                    <label class="block text-[11px] font-bold uppercase tracking-[0.1em] text-[#9ca3af] mb-1.5">GENDER:</label>
+                    <select class="w-full bg-[#182433] text-white text-sm font-medium rounded-xl px-4 py-3 border border-[#26364A] focus:outline-none focus:ring-2 focus:ring-[#5AB2FF] focus:bg-[#1E2C3F] transition appearance-none cursor-pointer" required>
+                      <option value="" disabled selected class="bg-[#182433] text-[#5B6B7A]">Select Gender</option>
+                      <option value="male" class="bg-[#182433] text-white">Male</option>
+                      <option value="female" class="bg-[#182433] text-white">Female</option>
+                      <option value="other" class="bg-[#182433] text-white">Other</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label class="block text-[11px] font-bold uppercase tracking-[0.1em] text-[#9ca3af] mb-1.5">CASTE CATEGORY:</label>
+                    <select class="w-full bg-[#182433] text-white text-sm font-medium rounded-xl px-4 py-3 border border-[#26364A] focus:outline-none focus:ring-2 focus:ring-[#5AB2FF] focus:bg-[#1E2C3F] transition appearance-none cursor-pointer" required>
+                      <option value="" disabled selected class="bg-[#182433] text-[#5B6B7A]">Select Category</option>
+                      <option value="general" class="bg-[#182433] text-white">General / UR</option>
+                      <option value="obc" class="bg-[#182433] text-white">OBC</option>
+                      <option value="sc" class="bg-[#182433] text-white">SC</option>
+                      <option value="st" class="bg-[#182433] text-white">ST</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label class="block text-[11px] font-bold uppercase tracking-[0.1em] text-[#9ca3af] mb-1.5">REGION:</label>
+                    <select class="w-full bg-[#182433] text-white text-sm font-medium rounded-xl px-4 py-3 border border-[#26364A] focus:outline-none focus:ring-2 focus:ring-[#5AB2FF] focus:bg-[#1E2C3F] transition appearance-none cursor-pointer" required>
+                      <option value="" disabled selected class="bg-[#182433] text-[#5B6B7A]">Select State</option>
+                      <optgroup label="States" class="bg-[#182433] text-[#5AB2FF]">
+                        <option value="Andhra Pradesh" class="bg-[#182433] text-white">Andhra Pradesh</option>
+                        <option value="Arunachal Pradesh" class="bg-[#182433] text-white">Arunachal Pradesh</option>
+                        <option value="Assam" class="bg-[#182433] text-white">Assam</option>
+                        <option value="Bihar" class="bg-[#182433] text-white">Bihar</option>
+                        <option value="Chhattisgarh" class="bg-[#182433] text-white">Chhattisgarh</option>
+                        <option value="Goa" class="bg-[#182433] text-white">Goa</option>
+                        <option value="Gujarat" class="bg-[#182433] text-white">Gujarat</option>
+                        <option value="Haryana" class="bg-[#182433] text-white">Haryana</option>
+                        <option value="Himachal Pradesh" class="bg-[#182433] text-white">Himachal Pradesh</option>
+                        <option value="Jharkhand" class="bg-[#182433] text-white">Jharkhand</option>
+                        <option value="Karnataka" class="bg-[#182433] text-white">Karnataka</option>
+                        <option value="Kerala" class="bg-[#182433] text-white">Kerala</option>
+                        <option value="Madhya Pradesh" class="bg-[#182433] text-white">Madhya Pradesh</option>
+                        <option value="Maharashtra" class="bg-[#182433] text-white">Maharashtra</option>
+                        <option value="Manipur" class="bg-[#182433] text-white">Manipur</option>
+                        <option value="Meghalaya" class="bg-[#182433] text-white">Meghalaya</option>
+                        <option value="Mizoram" class="bg-[#182433] text-white">Mizoram</option>
+                        <option value="Nagaland" class="bg-[#182433] text-white">Nagaland</option>
+                        <option value="Odisha" class="bg-[#182433] text-white">Odisha</option>
+                        <option value="Punjab" class="bg-[#182433] text-white">Punjab</option>
+                        <option value="Rajasthan" class="bg-[#182433] text-white">Rajasthan</option>
+                        <option value="Sikkim" class="bg-[#182433] text-white">Sikkim</option>
+                        <option value="Tamil Nadu" class="bg-[#182433] text-white">Tamil Nadu</option>
+                        <option value="Telangana" class="bg-[#182433] text-white">Telangana</option>
+                        <option value="Tripura" class="bg-[#182433] text-white">Tripura</option>
+                        <option value="Uttar Pradesh" class="bg-[#182433] text-white">Uttar Pradesh</option>
+                        <option value="Uttarakhand" class="bg-[#182433] text-white">Uttarakhand</option>
+                        <option value="West Bengal" class="bg-[#182433] text-white">West Bengal</option>
+                      </optgroup>
+                      <optgroup label="Union Territories" class="bg-[#182433] text-[#5AB2FF]">
+                        <option value="Andaman and Nicobar Islands" class="bg-[#182433] text-white">Andaman and Nicobar Islands</option>
+                        <option value="Chandigarh" class="bg-[#182433] text-white">Chandigarh</option>
+                        <option value="Dadra and Nagar Haveli and Daman and Diu" class="bg-[#182433] text-white">Dadra and Nagar Haveli</option>
+                        <option value="Delhi" class="bg-[#182433] text-white">Delhi</option>
+                        <option value="Lakshadweep" class="bg-[#182433] text-white">Lakshadweep</option>
+                        <option value="Puducherry" class="bg-[#182433] text-white">Puducherry</option>
+                        <option value="Jammu and Kashmir" class="bg-[#182433] text-white">Jammu and Kashmir</option>
+                        <option value="Ladakh" class="bg-[#182433] text-white">Ladakh</option>
+                      </optgroup>
+                    </select>
+                  </div>
+                </div>
+       
+                <button type="submit" class="font-heading w-full mt-4 bg-[#5AB2FF] hover:bg-[#FF87B2] text-[#0A1118] font-extrabold text-sm py-4 px-5 rounded-xl transition-all duration-300 shadow-lg shadow-[#5AB2FF]/30 flex items-center justify-center gap-2 group uppercase tracking-wider">
+                  <span>Login Securely</span>
+                  <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                </button>
+              </form>
+            </div>
+       
+            <div class="mt-5 text-[11px] text-[#5B6B7A] font-semibold tracking-wide uppercase">Empowering Small Business • Access Funds</div>
+          </div>
+       
+          <div class="w-full md:w-[42%] xl:w-[45%] bg-[#090E14] relative overflow-hidden flex flex-col items-center justify-center p-8 sm:p-12 text-white border-t md:border-t-0 md:border-l border-[#2A3B4C]">
+            <div class="absolute inset-0 overflow-hidden pointer-events-none">
+              <div class="absolute -top-10 -right-10 w-48 h-[480px] bg-[#101C29] rounded-full transform rotate-[35deg] opacity-80 shadow-2xl"></div>
+            </div>
+       
+            <div class="relative z-10 text-center max-w-xs space-y-5">
+              <div class="w-24 h-24 mx-auto bg-white/10 backdrop-blur-md rounded-3xl p-3 border border-white/15 shadow-2xl flex items-center justify-center">
+                <svg class="w-full h-full drop-shadow-md" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M 32 114 C 65 114, 115 94, 144 60 C 124 86, 75 110, 32 114 Z" fill="#FF87B2" />
+                  <path d="M 30 114 Q 95 106 145 58 C 137 74, 103 108 30 114 Z" fill="#5AB2FF" />
+                </svg>
+              </div>
+       
+              <h3 class="font-heading font-extrabold text-2xl sm:text-3xl text-white tracking-tight leading-tight">FETCH FUNDS</h3>
+              <p class="text-xs sm:text-sm text-blue-100/70 font-medium leading-relaxed">Empowering Small Business.<br>Access Funds.<br>Grow Your Future.</p>
+            </div>
+          </div>
+        </div>
+    </div>
+
+
+    <!-- ================= 2. APP VIEW (MULTI-STEP DASHBOARD) ================= -->
+    <div id="centered-app-view" class="view-wrapper">
+        <!-- Radial Glow Light Sky Blue Background -->
+        <div class="radial-glow-bg"></div>
+
+        <div class="container">
+            <div id="page-dashboard" class="card-page active">
+                <div id="step-objective" class="fade-step" style="flex-grow: 1;">
+                    <h2 class="font-heading" style="font-size: 26px; margin-bottom: 6px;">Funding Objective</h2>
+                    <p class="intro-text" style="margin-bottom: 12px; font-size: 14px;">Select the primary purpose of your funding to help our AI pinpoint the exact government schemes you qualify for.</p>
+                    
+                    <div class="loan-grid">
+                        <div class="loan-card" onclick="selectLoan('working_capital', this)">
+                            <div class="loan-icon-wrap"><svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+                            <div class="loan-title">Working Capital</div>
+                            <div class="loan-desc">Manage daily operations & inventory.</div>
+                        </div>
+                        <div class="loan-card" onclick="selectLoan('machinery', this)">
+                            <div class="loan-icon-wrap"><svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
+                            <div class="loan-title">Machinery & Tech</div>
+                            <div class="loan-desc">Upgrade equipment or manufacturing assets.</div>
+                        </div>
+                        <div class="loan-card" onclick="selectLoan('agriculture', this)">
+                            <div class="loan-icon-wrap"><svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/><path d="M4 10h16"/></svg></div>
+                            <div class="loan-title">Agriculture Loan</div>
+                            <div class="loan-desc">Farming, allied sectors, and rural agri-business.</div>
+                        </div>
+                        <div class="loan-card" onclick="selectLoan('raw_materials', this)">
+                            <div class="loan-icon-wrap"><svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></div>
+                            <div class="loan-title">Raw Materials</div>
+                            <div class="loan-desc">Bulk procurement of supplies and raw stock.</div>
+                        </div>
+                        <div class="loan-card" onclick="selectLoan('micro', this)">
+                            <div class="loan-icon-wrap"><svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22v-7l-2-2"/><path d="M17 8v.5a3.5 3.5 0 1 1-7 0V8a5 5 0 0 1 10 0v.5a3.5 3.5 0 1 1-7 0V8a5 5 0 0 1 10 0z"/></svg></div>
+                            <div class="loan-title">Micro & Mudra</div>
+                            <div class="loan-desc">Small ticket loans for micro-ventures.</div>
+                        </div>
+                        <div class="loan-card" onclick="selectLoan('infrastructure', this)">
+                            <div class="loan-icon-wrap"><svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"/><path d="M9 21v-4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v4"/></svg></div>
+                            <div class="loan-title">Infrastructure</div>
+                            <div class="loan-desc">Build or expand office and warehouses.</div>
+                        </div>
+                    </div>
+
+                    <button id="btn-continue-details" class="btn font-heading" disabled onclick="goToDetails()">
+                        Continue &rarr;
+                    </button>
+                </div>
+
+                <div id="step-details" class="fade-step" style="display: none; flex-grow: 1;">
+                    <h2 class="font-heading" style="font-size: 26px; margin-bottom: 6px;">Additional Details</h2>
+                    <p class="intro-text" style="margin-bottom: 24px; font-size: 14px;">Provide a few more specifics to ensure our AI matches you with the highest-probability schemes.</p>
+                    
+                    <form onsubmit="submitFinalDetails(event)">
+                        <div class="form-group">
+                            <label>Requested Amount (in ₹)</label>
+                            <input type="number" id="req-amount" placeholder="e.g. 500000" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Occupation</label>
+                            <select id="occupation" required>
+                                <option value="" disabled selected>Select Occupation</option>
+                                <option value="farmer">Farmer / Agriculturist</option>
+                                <option value="business">Business Owner / Self-Employed</option>
+                                <option value="salaried">Salaried Professional</option>
+                                <option value="student">Student</option>
+                                <option value="unemployed">Unemployed</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Annual Income (in ₹)</label>
+                            <input type="number" id="annual-income" placeholder="e.g. 1200000" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Land Holding (in Acres)</label>
+                            <input type="number" id="land-holding" placeholder="e.g. 2.5" step="any" required>
+                        </div>
+
+                        <div style="display: flex; gap: 12px; margin-top: 30px;">
+                            <button type="button" class="btn font-heading" style="background: #E6F0F9; color: var(--text-muted); width: 30%; box-shadow: none;" onclick="goBackToObjective()">Back</button>
+                            <button type="submit" class="btn font-heading" style="width: 70%; margin-top: 10px;">Find My Matches ✨</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div id="results-area" class="fade-step" style="display: none; margin-top: 24px; padding: 32px 24px; background: #F4F8FB; border-radius: 12px; border: 1px solid var(--border);">
+                    <p style="text-align: center; font-weight: 700; color: var(--primary); line-height: 1.6; font-size: 15px;" id="loading-text">Analyzing profile against 100+ schemes...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONSENT MODAL -->
+    <div id="consent-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h2 class="font-heading">Legal & Privacy</h2>
+            <p class="intro-text" style="margin-bottom: 20px;">Before accessing your dashboard, please review our updated policies regarding your data processing.</p>
+
+            <div class="doc-link" onclick="openFullScreenDoc('view-terms')">💼 Terms & Conditions</div>
+            <div class="doc-link" onclick="openFullScreenDoc('view-privacy')">📄 Privacy Policy</div>
+
+            <label class="checkbox-container">
+                <input type="checkbox" id="consent-checkbox" onchange="validateForm()">
+                <span class="checkbox-label">I acknowledge and agree to the Terms & Conditions and Privacy Policy.</span>
+            </label>
+
+            <button id="btn-accept" class="btn font-heading" disabled onclick="acceptConsent()">Accept & Continue</button>
+        </div>
+    </div>
+
+    <!-- FULL SCREEN VIEWS -->
+    <div id="view-terms" class="view-wrapper full-screen-page">
+        <div class="doc-header"><button class="btn-back font-heading" onclick="closeFullScreenDoc()">← Back</button></div>
+        <div class="doc-content"><h2 class="font-heading">Terms & Conditions</h2><div class="document-text"><p><strong>General Usage</strong><br>By accessing FetchFunds, you agree to comply with our terms.</p></div></div>
+    </div>
+
+    <div id="view-privacy" class="view-wrapper full-screen-page">
+        <div class="doc-header"><button class="btn-back font-heading" onclick="closeFullScreenDoc()">← Back</button></div>
+        <div class="doc-content"><h2 class="font-heading">Privacy Policy</h2><div class="document-text"><p><strong>Data We Keep</strong><br>We collect business demographics and financial indicators for scheme matching.</p></div></div>
+    </div>
+
+    <div id="view-policy" class="view-wrapper full-screen-page">
+        <div class="doc-header"><button class="btn-back font-heading" onclick="closeFullScreenDoc()">← Back</button></div>
+        <div class="doc-content"><h2 class="font-heading">Policy Information</h2><div class="document-text"><p><strong>Compliance & Security</strong><br>All data adheres strictly to financial security standards.</p></div></div>
+    </div>
+
+    <div id="view-cookies" class="view-wrapper full-screen-page">
+        <div class="doc-header"><button class="btn-back font-heading" onclick="closeFullScreenDoc()">← Back</button></div>
+        <div class="doc-content"><h2 class="font-heading">Cookie Policy</h2><div class="document-text"><p><strong>Session Tracking</strong><br>We use essential cookies strictly to maintain session state.</p></div></div>
+    </div>
+
+    <script type="module">
+        const PAD = 20;
+
+        const VERT = `#version 300 es
+        in vec2 position;
+        void main() {
+            gl_Position = vec4(position, 0.0, 1.0);
+        }
+        `;
+
+        const FRAG = `#version 300 es
+        precision highp float;
+
+        uniform vec2 uCenter;
+        uniform vec2 uHalfSize;
+        uniform float uRadius;
+        uniform float uAngle;
+        uniform float uPx;
+        uniform vec3 uLineColor;
+        uniform vec3 uBaseColor;
+        uniform float uIntensity;
+        uniform float uShineSize;
+        uniform float uShineFade;
+        uniform float uThickness;
+        uniform float uBaseWidth;
+
+        out vec4 fragColor;
+
+        float sdRoundedRect(vec2 p, vec2 b, float r) {
+            vec2 q = abs(p) - b + r;
+            return length(max(q, 0.0)) + min(max(q.x, q.y), 0.0) - r;
+        }
+
+        float shapeSDF(vec2 p) { return sdRoundedRect(p, uHalfSize, uRadius); }
+
+        float gaussianLine(float d, float sigma) {
+            float x = d / (sigma + 1e-6);
+            float k = mix(1.0, 1.6, smoothstep(0.0, 1.5, x));
+            return exp(-k * x * x);
+        }
+
+        void main() {
+            vec2 p = gl_FragCoord.xy - uCenter;
+            float d = shapeSDF(p);
+            vec2 L = vec2(cos(uAngle), sin(uAngle));
+
+            float base = (1.0 - smoothstep(0.0, uBaseWidth, abs(d))) * 0.45;
+
+            vec2 nEll = normalize(p / (uHalfSize * uHalfSize) + 1e-6);
+            float phi = acos(clamp(abs(dot(nEll, L)), 0.0, 1.0));
+            float rim = 1.0 - smoothstep(uShineSize - uShineFade, uShineSize + uShineFade + 1e-4, phi);
+            float line = gaussianLine(d, uThickness);
+            float edgeClamp = 1.0 - smoothstep(0.5 * uPx, 3.0 * uPx, abs(d));
+            float hi = line * rim * edgeClamp * uIntensity;
+
+            vec3 col = uBaseColor * base + uLineColor * hi;
+            float a = clamp(base + hi, 0.0, 1.0);
+            fragColor = vec4(col, a);
+        }
+        `;
+
+        async function initSpecular() {
+            try {
+                const { Renderer, Program, Mesh, Triangle, Color } = await import('https://esm.sh/ogl@1.0.10');
+
+                class SpecularButton {
+                    constructor(btn, props) {
+                        this.btn = btn;
+                        this.fx = btn.querySelector('.specular-button__fx');
+                        if (!this.fx) return;
+
+                        const dpr = window.devicePixelRatio || 1;
+                        this.renderer = new Renderer({ alpha: true, premultipliedAlpha: true, antialias: true, dpr });
+                        const gl = this.renderer ? this.renderer.gl : null;
+                        if (!gl) return;
+
+                        gl.clearColor(0, 0, 0, 0);
+                        gl.enable(gl.BLEND);
+                        gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+
+                        const geometry = new Triangle(gl);
+                        if (geometry.attributes.uv) delete geometry.attributes.uv;
+
+                        const lineC = new Color(props.lineColor);
+                        const baseC = new Color(props.baseColor);
+
+                        this.program = new Program(gl, {
+                            vertex: VERT,
+                            fragment: FRAG,
+                            uniforms: {
+                                uCenter: { value: [0, 0] },
+                                uHalfSize: { value: [1, 1] },
+                                uRadius: { value: 0 },
+                                uAngle: { value: 2.4 },
+                                uPx: { value: dpr },
+                                uLineColor: { value: [lineC.r, lineC.g, lineC.b] },
+                                uBaseColor: { value: [baseC.r, baseC.g, baseC.b] },
+                                uIntensity: { value: 0 },
+                                uShineSize: { value: (props.shineSize * Math.PI) / 180 },
+                                uShineFade: { value: (props.shineFade * Math.PI) / 180 },
+                                uThickness: { value: props.thickness * dpr },
+                                uBaseWidth: { value: dpr }
+                            }
+                        });
+
+                        this.mesh = new Mesh(gl, { geometry, program: this.program });
+                        this.fx.appendChild(gl.canvas);
+
+                        this.size = { w: 1, h: 1 };
+                        this.resize = () => {
+                            const rect = this.btn.getBoundingClientRect();
+                            const w = rect.width;
+                            const h = rect.height;
+                            this.size.w = w;
+                            this.size.h = h;
+                            this.renderer.setSize(w + PAD * 2, h + PAD * 2);
+                            this.program.uniforms.uCenter.value = [(PAD + w / 2) * dpr, (PAD + h / 2) * dpr];
+                            this.program.uniforms.uHalfSize.value = [(w / 2) * dpr, (h / 2) * dpr];
+                            this.program.uniforms.uRadius.value = Math.min(props.radius, Math.min(w, h) / 2) * dpr;
+                        };
+
+                        this.ro = new ResizeObserver(this.resize);
+                        this.ro.observe(this.btn);
+                        this.resize();
+
+                        this.pointerAngle = null;
+                        this.proximityT = 0;
+                        this.onPointerMove = (e) => {
+                            const rect = this.btn.getBoundingClientRect();
+                            const cx = rect.left + rect.width / 2;
+                            const cy = rect.top + rect.height / 2;
+                            const dx = Math.max(rect.left - e.clientX, 0, e.clientX - rect.right);
+                            const dy = Math.max(rect.top - e.clientY, 0, e.clientY - rect.bottom);
+                            const dist = Math.hypot(dx, dy);
+
+                            if (dist === 0) {
+                                const nx = (e.clientX - cx) / (rect.width / 2);
+                                const ny = (cy - e.clientY) / (rect.height / 2);
+                                this.pointerAngle = Math.atan2(2 / rect.height, -2 / rect.width) + nx * 0.3 + ny * 0.15;
+                            } else {
+                                this.pointerAngle = Math.atan2(cy - e.clientY, e.clientX - cx);
+                            }
+                            const t = Math.max(0, 1 - dist / Math.max(props.proximity, 1));
+                            this.proximityT = t * t * (3 - 2 * t);
+                        };
+                        window.addEventListener('pointermove', this.onPointerMove);
+
+                        this.angle = 2.4;
+                        this.idleAngle = 2.4;
+                        this.bright = 0;
+                        this.lastT = performance.now();
+
+                        this.update = (now) => {
+                            this.raf = requestAnimationFrame(this.update);
+                            const dt = Math.min((now - this.lastT) / 1000, 0.05);
+                            this.lastT = now;
+
+                            this.idleAngle += props.speed * dt;
+                            const steer = props.followMouse && this.pointerAngle !== null && (!props.autoAnimate || this.proximityT > 0);
+                            const target = steer ? this.pointerAngle : this.idleAngle;
+                            const diff = ((target - this.angle + Math.PI * 3) % (Math.PI * 2)) - Math.PI;
+                            this.angle += diff * (1 - Math.exp(-dt * 7));
+
+                            const brightTarget = props.autoAnimate ? 1 : this.proximityT;
+                            this.bright += (brightTarget - this.bright) * (1 - Math.exp(-dt * 8));
+
+                            this.program.uniforms.uAngle.value = this.angle;
+                            this.program.uniforms.uIntensity.value = props.intensity * this.bright;
+
+                            this.renderer.render({ scene: this.mesh });
+                        };
+                        this.raf = requestAnimationFrame(this.update);
+                    }
+                }
+
+                const btnElement = document.getElementById('specular-btn');
+                if (btnElement) {
+                    new SpecularButton(btnElement, {
+                        radius: 40,
+                        lineColor: '#FF87B2', 
+                        baseColor: '#101C29', 
+                        intensity: 1.5, 
+                        shineSize: 10,
+                        shineFade: 40,
+                        thickness: 2,
+                        speed: 0.35,
+                        followMouse: true,
+                        proximity: 250,
+                        autoAnimate: false
+                    });
+                }
+            } catch (err) {
+                console.warn("SpecularButton WebGL renderer fallback mode active:", err);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', initSpecular);
+    </script>
+    
+    <script>
+        let hasConsented = false;
+        let selectedLoanType = null;
+        let isUserLoggedIn = false; 
+        
+        // Variable to ensure a seamless visual transition when interacting with the back buttons 
+        let savedScrollPosition = 0;
+
+        function openLogin() {
+            document.getElementById('view-home').classList.remove('active');
+            document.getElementById('view-login').classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        function submitLogin() {
+            isUserLoggedIn = true;
+            document.getElementById('view-login').classList.remove('active');
+            document.getElementById('centered-app-view').classList.add('active');
+            document.body.classList.add('creme-bg');
+            document.body.style.backgroundColor = ''; 
+            
+            if (!hasConsented) {
+                document.getElementById('consent-modal').classList.add('active');
+            }
+            window.scrollTo(0, 0);
+        }
+
+        function validateForm() {
+            const checkbox = document.getElementById('consent-checkbox');
+            const btnAccept = document.getElementById('btn-accept');
+            btnAccept.disabled = !checkbox.checked;
+        }
+
+        function acceptConsent() {
+            hasConsented = true;
+            document.getElementById('consent-modal').classList.remove('active');
+        }
+
+        function openFullScreenDoc(docId) {
+            // Save the exact Y-axis position before navigating away
+            savedScrollPosition = window.scrollY || document.documentElement.scrollTop;
+            
+            document.getElementById('view-home').classList.remove('active');
+            document.getElementById('view-login').classList.remove('active');
+            document.getElementById('centered-app-view').classList.remove('active');
+            
+            if (document.getElementById('consent-modal').classList.contains('active')) {
+                document.getElementById('consent-modal').classList.remove('active');
+            }
+            document.getElementById(docId).classList.add('active');
+            window.scrollTo(0, 0); 
+        }
+
+        function closeFullScreenDoc() {
+            document.getElementById('view-terms').classList.remove('active');
+            document.getElementById('view-privacy').classList.remove('active');
+            document.getElementById('view-policy').classList.remove('active');
+            document.getElementById('view-cookies').classList.remove('active');
+
+            if (isUserLoggedIn) {
+                document.getElementById('centered-app-view').classList.add('active');
+                if (!hasConsented) {
+                    document.getElementById('consent-modal').classList.add('active');
+                }
+            } else {
+                document.getElementById('view-home').classList.add('active');
+            }
+            
+            // Seamlessly return user to their exact previous location
+            window.scrollTo(0, savedScrollPosition);
+        }
+
+        function selectLoan(type, element) {
+            selectedLoanType = type;
+            const cards = document.querySelectorAll('.loan-card');
+            cards.forEach(card => card.classList.remove('active'));
+            element.classList.add('active');
+            document.getElementById('btn-continue-details').disabled = false;
+        }
+
+        function goToDetails() {
+            if (!selectedLoanType) return;
+            document.getElementById('step-objective').style.display = 'none';
+            document.getElementById('step-details').style.display = 'block';
+        }
+
+        function goBackToObjective() {
+            document.getElementById('step-details').style.display = 'none';
+            document.getElementById('step-objective').style.display = 'block';
+        }
+
+        function submitFinalDetails(event) {
+            event.preventDefault(); 
+            document.getElementById('step-details').style.display = 'none';
+            
+            const resultsArea = document.getElementById('results-area');
+            const loadingText = document.getElementById('loading-text');
+            const loanName = selectedLoanType ? selectedLoanType.replace(/_/g, ' ') : 'selected';
+            
+            resultsArea.style.display = 'block';
+            loadingText.innerHTML = 'Connecting to AI Engine... <br><span style="font-size: 13px; color: var(--text-muted); font-weight: 600; margin-top: 6px; display: inline-block;">(Analyzing profile for ' + loanName + ' schemes)</span>';
+
+            setTimeout(() => {
+                loadingText.innerHTML = '✅ <strong style="font-size: 18px;" class="font-heading">Matches Found!</strong><br><br><span style="color: var(--text-main); font-size: 20px; font-weight: 800;" class="font-heading">Top Pick: Government Scheme Match</span>';
+            }, 2500); 
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const accordionCards = document.querySelectorAll('.accordion-card');
+            if (accordionCards.length > 0) {
+                accordionCards.forEach(card => {
+                    card.addEventListener('mouseenter', () => {
+                        accordionCards.forEach(c => c.classList.remove('active'));
+                        card.classList.add('active');
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+</html>
